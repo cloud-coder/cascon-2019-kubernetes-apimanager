@@ -1,0 +1,21 @@
+[
+{
+    "account_id" : "123",
+    "name" : "Mary Walters",
+    "address" : "819 Walters Ave",
+    "providers" : ["bell", "rogers"]
+},
+{
+    "account_id" : "456",
+    "name" : "Steve Smith",
+    "address" : "823 James Ave",
+    "providers" : ["bell", "telus"]
+},
+{
+    "account_id" : "789",
+    "name" : "Jimmy Jones",
+    "address" : "134 Jones Ave",
+    "providers" : ["telus", "rogers"]
+}
+
+]
