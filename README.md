@@ -42,7 +42,7 @@ The workshop pre-requisites also indicated that creation of the IBM Cloud Kubern
 
 ## Lab 3 Scaling Applications in Kubernetes
 
-[This section](03-scaling-in-kubernetes/03-scaling-kubernetes.md) will explore some of the scaling capabilities in Kubernetes.  It will detail the steps to:
+[This section](03-scaling-in-kubernetes/03-scaling-in-kubernetes.md) will explore some of the scaling capabilities in Kubernetes.  It will detail the steps to:
 * Create a scaled deployment setup
 * Compare temporary versus permanent changes in a Kubernetes deployment
 * Monitor the health of a deployment
