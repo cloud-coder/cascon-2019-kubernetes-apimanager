@@ -4,9 +4,9 @@
 
 * [Overview](#overview)
 * [Lab 1 Setup (Pre-Requisite)](#lab-1-setup-pre-requisite)
-* [Lab 2 Exploring Kubernetes and Creating a Kubernetes Service Deployment]
-* [Lab 3 Scaling Applications in Kubernetes]
-* [Lab 4 API Management]
+* [Lab 2 Exploring Kubernetes and Creating a Kubernetes Service Deployment](#lab-2-exploring-kubernetes-and-creating-a-kubernetes-service-deployment)
+* [Lab 3 Scaling Applications in Kubernetes](#lab-3-scaling-applications-in-kubernetes)
+* [Lab 4 API Management](#lab-4-api-management)
 * [Conclusion](#conclusion)
 
 ## Overview
