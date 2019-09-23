@@ -3,7 +3,7 @@
 ## Table of Contents
 
 * [Overview](#overview)
-* [Lab 1 Setup (Pre-Requisite)](*lab-1-setup-(pre-requisite))
+* [Lab 1 Setup (Pre-Requisite)](#lab-1-setup-(pre-requisite))
 * [Lab 2 Exploring Kubernetes and Creating a Kubernetes Service Deployment]
 * [Lab 3 Scaling Applications in Kubernetes]
 * [Lab 4 API Management]
