@@ -3,9 +3,10 @@
 ## Table of Contents
 
 * [Overview](#overview)
-* [Setup](#setup)
-* [Data Set Analysis Using Jupyter Notebook](#data-set-analysis-using-jupyter-notebook)
-* [Data Set Analysis Using IBM Watson Studio](#data-set-analysis-using-watson-studio)
+* [Lab 1 Setup (Pre-Requisite)]
+* [Lab 2 Exploring Kubernetes and Creating a Kubernetes Service Deployment]
+* [Lab 3 Scaling Applications in Kubernetes]
+* [Lab 4 API Management]
 * [Conclusion](#conclusion)
 
 ## Overview
