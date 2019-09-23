@@ -3,7 +3,7 @@
 ## Table of Contents
 
 * [Overview](#overview)
-* [Lab 1 Setup (Pre-Requisite)](#lab-1-setup-(pre-requisite))
+* [Lab 1 Setup (Pre-Requisite)](#lab-1-setup-pre-requisite)
 * [Lab 2 Exploring Kubernetes and Creating a Kubernetes Service Deployment]
 * [Lab 3 Scaling Applications in Kubernetes]
 * [Lab 4 API Management]
@@ -26,7 +26,7 @@ Microservices can be packaged with all the code and runtime library dependencies
 IBM Cloud API Management allows you to create new APIs or discover existing ones and then run, manage and secure them. Simple API keys and secrets can be created in order to protect and limit access. Rate limits can be established per API key in order to keep usage at a desired level. 
 
 
-## Lab 1 Setup (Pre-Requisite)
+## Lab 1 Setup Pre-Requisite
 
 Follow instructions in [setup section](01-setup/01-setup.md) to sign in to IBM Cloud and set up your account.  You can use a trial account for this purpose.
 
