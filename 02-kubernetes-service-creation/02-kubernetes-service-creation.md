@@ -29,6 +29,7 @@ We will be creating 3 images from this git repository.
 1. For each of the folders, we need to create docker images and deploy them to the registry.
 
     ```
+    cd cascon-2019-kubernetes-apimanager/02-kubernetes-service-creation
     cd account
     ibmcloud cr build -t us.icr.io/cas2019/account:1 .
     cd ../provider
