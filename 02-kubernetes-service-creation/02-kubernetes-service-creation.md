@@ -1,12 +1,11 @@
 # 2 Kubernetes Service Creation 
 
-Deployment Scenario
+## Deployment Scenario
 
 In this exercise we are deploying a website that provides cost comparisons for users across different service providers.  The develop teams have worked independently
 on 3 projects.  
 
 An *account* application provides information about all the users, including the the service providers they subscribe to.  They provide a single REST api:
-
 
     /user=<userId>
 
@@ -126,7 +125,7 @@ what the updated host and port is.  To resolve this, kubernetes provides *servic
 that others can reference which it will direct into an available pod.  If a new pod has generated, the service will be aware of it, and direct traffic there.  The port
 specified below should match what each application port it is listening on.
 
-1. Create Services for the account and provider services as internal services.
+1. Create Services for the *account* and *provider* services as internal services.
 
     ```
     kubectl expose deployment/dep-account --type=ClusterIP --name=account-service --port=8080
@@ -153,14 +152,14 @@ We will expose the last service externally using a type NodePort, which will ass
 
 You should notice that all of the services have assigned internal cluster IPs.  The external port is shown in the 30000+ range.
 
-Our cluster now has all 3 microservices deployed. However the cost application is an application that depends on the other microservices, and somehow needs to
+Our cluster now has all 3 microservices deployed, however the *cost* application is an application that depends on the other microservices, and somehow needs to
 reference them properly.  In order for one pod to discover the other pod, it would be difficult as we have already discovered the IPs are dynamic.  The solution 
 is that pods should reference the appropriate services.  When each pod is deployed, all currently available services are provided to it.  In our steps above,
-the cost pod was created during the deployment creation, but the service creation for account and provider was done afterwards.  This means that the current 
-cost pod is not aware of the 2 new services that were created.  To get around this, all we need to do is delete the cost pod so the new one is provided with
+the *cost* pod was created during the deployment creation, but the service creation for *account* and *provider* was done afterwards.  This means that the current 
+*cost* pod is not aware of the 2 new services that were created.  To get around this, all we need to do is delete the *cost* pod so the new one is provided with
 the new service information.
 
-1. Delete the cost pod
+1. Delete the *cost* pod
     ```
     k get pods -o wide
     k delete pod <cost-pod-xxxxxx>
