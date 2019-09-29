@@ -72,11 +72,13 @@ If you experience quota related issues, you can remove any older images you may 
 
     ibmcloud cr image-rm <image name>
 
-1. Verify the images are available
-
 You should see the three additional images listed using this command.
 
+1. Verify the images are available
+
+    ```
     ibmcloud cr images
+    ```
 
 ## Deploy into the Kubernetes Cluster
 
@@ -92,38 +94,44 @@ For now, we'll create deployments using the default settings.  One pod will be c
     kubectl create deployment dep-cost --image=us.icr.io/cas2019/cost:1
     ```
 
-1. Verify your pod is running.
 A successfully deployed pod will in the *running* status.  Each pod is assigned an IP address in the private network and automatically assigned to a node in your 
 cluster.  In the IBM Cloud Free Tier, the cluster is only allocated one node, so all pods will be deployed there.  
 
+1. Verify your pod is running.
 
     ```
     kubectl get pods -o wide
     ```
 
-Each pod is ephemeral, so using the IP address will only be valid for as long as the pod is alive.  Lets delete a pod and see what happens.
+Each pod is ephemeral, so using the IP address will only be valid for as long as the pod is alive.  
+
+1. Let's delete a pod and see what happens.
 
     ```
     k delete pod <pod-name>
     ```
 
-Now check the pods again.  You may need to repeat this command as the pods may take time to refresh.
+1. Now check the pods again.  You may need to repeat this command as the pods may take time to refresh.
 
+    ```
     kubectl get pods -o wide
+    ```
 
 Notice the original pod name/IP may result in a terminated status, but a new pod is spawn, and a new IP is assigned to it.  Kubernetes attempts to provide you the pod
 specified in the deployment that you created earlier automatically.  This also happens if your container fails (eg. due to a software glitch), and will continue 
 forever to maintain a running deployment.
-
-1. Create Services for the account and provider services as internal services.
 
 As the pods have dynamically assigned private IPs that can change at any time, it would be difficult to expose them to the outside world without telling the user
 what the updated host and port is.  To resolve this, kubernetes provides *services*, an interface that sits in front of pods.  Its job is to give a unique name
 that others can reference which it will direct into an available pod.  If a new pod has generated, the service will be aware of it, and direct traffic there.  The port
 specified below should match what each application port it is listening on.
 
+1. Create Services for the account and provider services as internal services.
+
+    ```
     kubectl expose deployment/dep-account --type=ClusterIP --name=account-service --port=8080
     kubectl expose deployment/dep-provider --type=ClusterIP --name=provider-service --port=8080
+    ```
 
 The services above were defined as "ClusterIP" which means that they are only exposed internally, and not available externally.  As we are considering them backend
 microservices, this is fine.
