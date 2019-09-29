@@ -8,20 +8,15 @@ on 3 projects.
 An *account* application provides information about all the users, including the the service providers they subscribe to.  They provide a single REST api:
 
 
-    ```
     /user=<userId>
-    ```
 
 The *provider* application provides detail on particular costs of their service.  they provide a single REST api:
-    ```
+
     /provider=<providerId>
-    ```
 
 The *cost* application integrates information from the other two applications, and provides a summary of the costs for a specific user.  The endpoint renders an html page and accesses the other applications.
 
-    ```
     /costsForUser=<userId>
-    ```
 
 Our task is to deploy these services to the IBM Cloud using the command-line interface (CLI) tools provided.
 
@@ -65,7 +60,6 @@ Each project
 This is essentially the docker command, but pushes the images to the IBM Cloud Container Registry.  This is the first time submitting these image repositories
 so we will provide it with a tag "1".
 
-    ```
     cd cascon-2019-kubernetes-apimanager/02-kubernetes-service-creation
     cd account
     ibmcloud cr build -t us.icr.io/cas2019/account:1 .
@@ -73,21 +67,16 @@ so we will provide it with a tag "1".
     ibmcloud cr build -t us.icr.io/cas2019/provider:1 .
     cd ../cost
     ibmcloud cr build -t us.icr.io/cas2019/cost:1 .
-    ```
 
 If you experience quota related issues, you can remove any older images you may have.
 
-    ```
     ibmcloud cr image-rm <image name>
-    ```
 
 1. Verify the images are available
 
 You should see the three additional images listed using this command.
 
-    ```
     ibmcloud cr images
-    ```
 
 ## Deploy into the Kubernetes Cluster
 
@@ -118,11 +107,9 @@ Each pod is ephemeral, so using the IP address will only be valid for as long as
     k delete pod <pod-name>
     ```
 
-Nover check the pods again.  You may need to repeat this command as the pods may take time to refresh.
+Now check the pods again.  You may need to repeat this command as the pods may take time to refresh.
 
-    ```
     kubectl get pods -o wide
-    ```
 
 Notice the original pod name/IP may result in a terminated status, but a new pod is spawn, and a new IP is assigned to it.  Kubernetes attempts to provide you the pod
 specified in the deployment that you created earlier automatically.  This also happens if your container fails (eg. due to a software glitch), and will continue 
@@ -135,10 +122,8 @@ what the updated host and port is.  To resolve this, kubernetes provides *servic
 that others can reference which it will direct into an available pod.  If a new pod has generated, the service will be aware of it, and direct traffic there.  The port
 specified below should match what each application port it is listening on.
 
-    ```
     kubectl expose deployment/dep-account --type=ClusterIP --name=account-service --port=8080
     kubectl expose deployment/dep-provider --type=ClusterIP --name=provider-service --port=8080
-    ```
 
 The services above were defined as "ClusterIP" which means that they are only exposed internally, and not available externally.  As we are considering them backend
 microservices, this is fine.
