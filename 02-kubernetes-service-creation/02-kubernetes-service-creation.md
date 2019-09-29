@@ -192,4 +192,4 @@ Check the ports column for the  external value (after the colon).
     eg. http://173.193.92.194:30507
     ```
 
-![lab 2 image](https://raw.githubusercontent.com/cloud-coder/cascon-2019-kubernetes-apimanager/edit/develop/02-kubernetes-service-creation/Lab2Result.png)
+![lab 2 image](https://github.com/cloud-coder/cascon-2019-kubernetes-apimanager/blob/develop/02-kubernetes-service-creation/Lab2Result.png?raw=true)
