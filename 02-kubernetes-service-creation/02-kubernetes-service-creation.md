@@ -107,7 +107,7 @@ Each pod is ephemeral, so using the IP address will only be valid for as long as
 1. Let's delete a pod and see what happens.
 
     ```
-    k delete pod <pod-name>
+    kubectl delete pod <pod-name>
     ```
 
 1. Now check the pods again.  You may need to repeat this command as the pods may take time to refresh.
@@ -161,9 +161,9 @@ the new service information.
 
 1. Delete the *cost* pod
     ```
-    k get pods -o wide
-    k delete pod <cost-pod-xxxxxx>
-    k get pods -o wide
+    kubectl get pods -o wide
+    kubectl delete pod <cost-pod-xxxxxx>
+    kubectl get pods -o wide
     ```
 
 1. Determine the cluster public IP by checking with IBM cloud services.
@@ -176,14 +176,14 @@ the new service information.
 1. As there is only one node in the cluster, the public IP is also shown as the external IP the node.
 
     ```
-    k get nodes -o wide
+    kubectl get nodes -o wide
     ```
 
 1. Determine the port for our external facing cost service.  Because we specified it with type Nodeport, it will be allocated a port in the (30,000-32767) range.  
 Check the ports column for the  external value (after the colon).
 
     ```
-    k get services -o wide
+    kubectl get services -o wide
     ```
 
 1. Access the url from a web browser.
