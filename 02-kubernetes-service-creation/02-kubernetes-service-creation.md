@@ -192,4 +192,6 @@ Check the ports column for the  external value (after the colon).
     eg. http://173.193.92.194:30507
     ```
 
+Here is an example of what should be configured in your cluster.  IP number will differ.
+
 ![lab 2 image](https://github.com/cloud-coder/cascon-2019-kubernetes-apimanager/blob/develop/02-kubernetes-service-creation/Lab2Result.png?raw=true)
