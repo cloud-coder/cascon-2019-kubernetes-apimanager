@@ -83,9 +83,13 @@ You should see the three additional images listed using this command.
 
 ## Deploy into the Kubernetes Cluster
 
-In Kubernetes images are not directly specified to go into containers and deployed to be accessed directly.  Instead, a higher level Kubernetes deployment is created
-that defines how you want pods deployed.  A pod is the smallest deployable unit which may contain one or more containers, a running instance of your image.  
-For now, we'll create deployments using the default settings.  One pod will be created per deployment by downloading the image you specify in the command.
+In Kubernetes images are not directly specified to go into containers and deployed to be accessed directly.  Instead, a desired state is specified and is managed by 
+Kubernetes to deploy using the workers (VM or physical machines) that have been allocated to your cluster.  The IBM Cloud Free Tier allocates a single worker, so 
+everything will be deployed there.  
+
+First, a Kubernetes deployment is needed to define how you want the pods deployed.  A pod is the smallest deployable unit which may contain one or more containers, 
+a running instance of your image.  For now, we'll create deployments using the default settings.  One pod will be created per deployment by downloading the image you 
+specify in the command.
 
 1. Create Deployments
 
@@ -280,7 +284,7 @@ Check the ports column for the  external value (after the colon).
     ```
 
 Note that this scenario is not complete as a deployed set of services in a real-life scenario.  For instance, ports are typically exposed on 80/443, and not a random IP 
-which is hard to remember.  For details see ![Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/).  Note that this is not available in the IBM Cloud Free Tier.
+which is hard to remember.  For details see [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/).  Note that this is not available in the IBM Cloud Free Tier.
 
 Here is an example of what should be configured in your cluster.  IP number will differ.
 
