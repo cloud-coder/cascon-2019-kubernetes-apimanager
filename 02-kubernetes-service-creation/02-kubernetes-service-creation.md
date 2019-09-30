@@ -85,9 +85,12 @@ You should see the three additional images listed using this command.
 
 In Kubernetes images are not directly specified to go into containers and deployed to be accessed directly.  Instead, a desired state is specified and is managed by 
 Kubernetes to deploy using the workers (VM or physical machines) that have been allocated to your cluster.  The IBM Cloud Free Tier allocates a single worker, so 
-everything will be deployed there.  
+everything will be deployed there.  You can see the works that have been allocated from either the ibmcloud or kubectl CLI.
 
-First, a Kubernetes deployment is needed to define how you want the pods deployed.  A pod is the smallest deployable unit which may contain one or more containers, 
+    ibmcloud ks workers <clusterId>
+    kubectl get nodes -o wide
+
+To get started, a Kubernetes deployment is needed to define how you want the pods deployed.  A pod is the smallest deployable unit which may contain one or more containers, 
 a running instance of your image.  For now, we'll create deployments using the default settings.  One pod will be created per deployment by downloading the image you 
 specify in the command.
 
@@ -122,7 +125,7 @@ Each pod is ephemeral, so using the IP address will only be valid for as long as
     kubectl get pods -o wide
     ```
 
-Notice the original pod name/IP may result in a terminated status, but a new pod is spawn, and a new IP is assigned to it.  Kubernetes attempts to provide you the pod
+Notice the original pod name/IP may result in a terminated status, but a new pod will spawn, and a new IP is assigned to it.  Kubernetes attempts to provide you the pod
 specified in the deployment that you created earlier automatically.  This also happens if your container fails (eg. due to a software glitch), and will continue 
 forever to maintain a running deployment.
 
