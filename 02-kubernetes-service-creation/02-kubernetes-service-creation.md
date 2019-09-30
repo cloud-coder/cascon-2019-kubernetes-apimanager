@@ -337,6 +337,7 @@ Now replace the line
       - image: us.icr.io/cas2019/account:1
 
 with
+
       - image: us.icr.io/cas2019/account:2
 
 save then close the file.
