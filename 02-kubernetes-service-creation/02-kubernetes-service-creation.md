@@ -133,6 +133,19 @@ If you make a mistake in creating your deployment, you can also remove deploymen
 
     kubectl delete deployment <deployment-name>
 
+## Logging
+
+By default, each container may send information to the stdout/stderr streams.  These are all managed by Kubernetes and available to you.  To view the logs, you need
+to specify the particular pod name, which means you need to get the current running pod list.
+
+1. View the logs for the provider application.
+    ```
+    kubectl get pods -o wide
+    kubectl logs -f <provider pod name>
+    ```
+
+Press Ctrl-C to end the tail of the log.
+
 ## Creating Services
 
 As the pods have dynamically assigned private IPs that can change at any time, it would be difficult to expose them to the outside world without telling the user
@@ -150,9 +163,9 @@ specified below should match what each application port it is listening on.
 The services above were defined as "ClusterIP" which means that they are only exposed internally, and not available externally by default.  As we are considering them backend
 microservices, this is fine.
 
-1. Expose the last deployment using a NodePort
-We will expose the last service externally using a type NodePort, which will assign it an external port number.
+We will expose the last service externally using a service of type NodePort, which will assign it an external port number.
 
+1. Expose the last deployment using a NodePort
 
     ```
     kubectl expose deployment/dep-cost --type=NodePort --port=8080 --name=cost-service --target-port=8080
@@ -185,10 +198,10 @@ with the container using an interactive shell.  Lets start a session within a co
 1. Locate the cost pod name and create a shell.
     ```
     kubectl get pods
-    kubectl exec -it <pod-name> <cost-pod-name> -- /bin/sh
+    kubectl exec -it <cost-pod-name> -- /bin/sh
     ```
 
-1.  Now in your shell, execute the following:
+1.  Now in your shell, execute the following.  Each one should resolve to the same IP address as they all refer to the same thing:
     ```
     nslookup account-service.default.svc.cluster.local
     nslookup account-service.default.svc
@@ -197,26 +210,30 @@ with the container using an interactive shell.  Lets start a session within a co
     ```
 
 If our microservice are aware of the service name of another microservice, then we can access them directly without needing to expose the service externally, and
-coming back in from the outside.  But the issue we have now is that we do not know which port our other services are running on.  When each pod is deployed, all 
+come back in from the outside.  But the issue we have now, is that we do not know which port our other services are running on.  When each pod is deployed, all 
 currently available services are provided to it in the form of environment variables.  Lets see what is provided to the *cost-service*.
 
-1. List the environment variables (still within the interactive session).
+1. List the environment variables (still within the interactive session), then exit the interacitve shell.
     ```
     printenv | sort
-    ```
-
-If the service was available when the pod was created, you would see a &lt;svcname&gt;_SERVICE_HOST &lt;svcname&gt;_SERVICE_PORT pair of entries.  This is what is being
-used by our code in the *cost* microservice.
-
-In our steps above, the *cost* pod was created during the deployment creation, but the service creation for *account* and *provider* was done afterwards.  This means that the current 
-*cost* pod is not directly aware of the 2 new services that were created and we do not see any entries in the environment variables.
-
-1. Lets exit the interactive shell
-    ```
     exit
     ```
 
-To get around this, all we need to do is delete the *cost* pod so the new one is provided with the new service information.  
+If the service was defined before the pod was created, you would have seen a &lt;svcname&gt;_SERVICE_HOST &lt;svcname&gt;_SERVICE_PORT pair of entries.  This is what is being
+used by our code in the *cost* microservice.
+
+In our steps above, the *cost* pod was created during the deployment creation, but the service creation for *account* and *provider* was done afterwards.  This means that the current 
+*cost* pod is not directly aware of the 2 new services that were created as we do not see any entries in the environment variables.  The code in cost/app.js could have made
+a hard reference to http://account-service.default.svc:8080/ and http://provider-service.default.svc:8080/ but that would rely on the service port being defined as 8080 in the expose command.  
+The NodeJs code in app.js currently references:
+
+    'http://' + process.env.ACCOUNT_SERVICE_SERVICE_HOST + ':' + process.env.ACCOUNT_SERVICE_SERVICE_PORT
+
+The developer and kubernetes administrator should only need to agree upon the service name, and allow the service port to be defined by the administrator.  The development team
+can listen on any port (eg. 80 or 9876) for their own application and code changes would not be necessary while it is being deployed.  The account and provider applications also do not need
+to consider whether they are both listening on the same port while processing their requests.
+
+For the code to work, all we need to do is delete the *cost* pod so the new one is provided with the new service information.  
 
 1. Delete the *cost* pod
     ```
@@ -292,3 +309,44 @@ which is hard to remember.  For details see [Ingress](https://kubernetes.io/docs
 Here is an example of what should be configured in your cluster.  IP number will differ.
 
 ![lab 2 image](https://github.com/cloud-coder/cascon-2019-kubernetes-apimanager/blob/develop/02-kubernetes-service-creation/Lab2Result.png?raw=true)
+
+## Updating the Deployment
+
+Now that we have deployed our services, it may seem like a lot of work to need to repeat all the steps when code is changed.  Fortunately Kubernetes stores all the objects that 
+you created (eg. deployments, services, pods) as *records of intent* so they can be altered, and Kubernetes will take care of bringing the system to the new desired state.  
+To explain this, let's simulate a code change.
+
+1. Open up the account/app.js file in the account directory, and make a change.
+    ```
+    nano account/app.js
+    ```
+
+Now that we have a change, we need to build a new image in the registry.
+
+1. Make a new version 2 of the account application.
+    ```
+    ibmcloud cr build -t us.icr.io/cas2019/account:2 .
+    ```
+
+Now that we have a new image, the Kubernetes administrator can update the deployment.
+
+    kubectl edit deployment/dep-account
+
+Now replace the line
+
+      - image: us.icr.io/cas2019/account:1
+
+with
+      - image: us.icr.io/cas2019/account:2
+
+save then close the file.
+
+You should see the image version reflected in the deployment:
+
+    kubectl get deployments -o wide
+
+As well as the old pod will terminate, and you will see that a new one will be created (verify that the age is younger than the other pods).
+
+    kubectl get pods
+
+And that's it.  After a new image is available, only one change is necessary, and Kubernetes takes care of the rest.
