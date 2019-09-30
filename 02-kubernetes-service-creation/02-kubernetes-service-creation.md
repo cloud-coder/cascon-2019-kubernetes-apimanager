@@ -175,10 +175,10 @@ For instance, the *account* service can be accessed via any of the following hos
 The running containers are built upon a small unix image which are running NodeJs listening on specific ports.  However it is also possible to create a session 
 with the container using an interactive shell.  Lets start a session within a container so we can see the kube-dns in action.
 
-1. Locate the account pod name and create a shell.
+1. Locate the cost pod name and create a shell.
     ```
     kubectl get pods
-    kubectl exec -it <pod-name> <account-pod-name> -- /bin/sh
+    kubectl exec -it <pod-name> <cost-pod-name> -- /bin/sh
     ```
 
 1.  Now in your shell, execute the following:
@@ -191,7 +191,7 @@ with the container using an interactive shell.  Lets start a session within a co
 
 If our microservice are aware of the service name of another microservice, then we can access them directly without needing to expose the service externally, and
 coming back in from the outside.  But the issue we have now is that we do not know which port our other services are running on.  When each pod is deployed, all 
-currently available services are provided to it in the form of environment variables.  Lets see what is provided to the *account-service*.
+currently available services are provided to it in the form of environment variables.  Lets see what is provided to the *cost-service*.
 
 1. List the environment variables (still within the interactive session).
     ```
@@ -202,8 +202,14 @@ If the service was available when the pod was created, you would see a &lt;svcna
 used by our code in the *cost* microservice.
 
 In our steps above, the *cost* pod was created during the deployment creation, but the service creation for *account* and *provider* was done afterwards.  This means that the current 
-*cost* pod is not aware of the 2 new services that were created.  To get around this, all we need to do is delete the *cost* pod so the new one is provided with
-the new service information.
+*cost* pod is not directly aware of the 2 new services that were created and we do not see any entries in the environment variables.
+
+1. Lets exit the interactive shell
+    ```
+    exit
+    ```
+
+To get around this, all we need to do is delete the *cost* pod so the new one is provided with the new service information.  
 
 1. Delete the *cost* pod
     ```
@@ -211,6 +217,39 @@ the new service information.
     kubectl delete pod <cost-pod-xxxxxx>
     kubectl get pods -o wide
     ```
+
+Now lets do an interactive shell with the newly created pod.
+
+1.  Open an interactive shell with the new pod
+    ```
+    kubectl exec -it <NEW-cost-pod-xxxxxx> -- /bin/sh
+    printenv
+    ```
+
+You should be able to see all of the services listed now including its own service (COST_SERVICE) entries.
+
+    ACCOUNT_SERVICE_PORT=tcp://172.21.51.184:8080
+    ACCOUNT_SERVICE_PORT_8080_TCP=tcp://172.21.51.184:8080
+    ACCOUNT_SERVICE_PORT_8080_TCP_ADDR=172.21.51.184
+    ACCOUNT_SERVICE_PORT_8080_TCP_PORT=8080
+    ACCOUNT_SERVICE_PORT_8080_TCP_PROTO=tcp
+    ACCOUNT_SERVICE_SERVICE_HOST=172.21.51.184
+    ACCOUNT_SERVICE_SERVICE_PORT=8080
+    COST_SERVICE_PORT=tcp://172.21.87.157:8080
+    COST_SERVICE_PORT_8080_TCP=tcp://172.21.87.157:8080
+    COST_SERVICE_PORT_8080_TCP_ADDR=172.21.87.157
+    COST_SERVICE_PORT_8080_TCP_PORT=8080
+    COST_SERVICE_PORT_8080_TCP_PROTO=tcp
+    COST_SERVICE_SERVICE_HOST=172.21.87.157
+    COST_SERVICE_SERVICE_PORT=8080
+    PROVIDER_SERVICE_PORT=tcp://172.21.56.13:8080
+    PROVIDER_SERVICE_PORT_8080_TCP=tcp://172.21.56.13:8080
+    PROVIDER_SERVICE_PORT_8080_TCP_ADDR=172.21.56.13
+    PROVIDER_SERVICE_PORT_8080_TCP_PORT=8080
+    PROVIDER_SERVICE_PORT_8080_TCP_PROTO=tcp
+    PROVIDER_SERVICE_SERVICE_HOST=172.21.56.13
+    PROVIDER_SERVICE_SERVICE_PORT=8080
+
 
 ## Accessing from the Outside
 
