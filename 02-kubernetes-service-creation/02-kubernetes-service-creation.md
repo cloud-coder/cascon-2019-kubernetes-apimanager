@@ -1,4 +1,4 @@
-# 2 Kubernetes Service Creation 
+# 2 Exploring Kubernetes and Creating a Kubernetes Service Deployment
 
 ## Deployment Scenario
 
