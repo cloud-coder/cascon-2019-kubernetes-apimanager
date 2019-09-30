@@ -23,7 +23,7 @@ Our task is to deploy these services to the IBM Cloud using the command-line int
 The IBM Cloud Container Registry allows you to store images in your private registry.  See https://cloud.ibm.com/kubernetes/registry/main/start for the WebUI.
 We will be storing 3 images created from code available in this git repository.
 
-### Set up namespace
+### Set up Namespace
 
 Namespaces provide a way to categorize your docker images within the registry.  Note that these are separate from Kubenetes namespaces.  Namespaces not
 found when building images will be added automatically.
@@ -40,7 +40,7 @@ found when building images will be added automatically.
     ibmcloud cr namespace-list
     ```
 
-### Obtain the code
+### Obtain the Code
 
 The cluster we are setting up will contain our 3 projects (i.e. services). For simplicity we've provided them all in this lab's git repository in the subfolders (account, 
 provider, cost).
@@ -126,6 +126,8 @@ If you make a mistake in creating your deployment, you can also remove deploymen
 
     kubectl delete deployment <deployment-name>
 
+## Creating Services
+
 As the pods have dynamically assigned private IPs that can change at any time, it would be difficult to expose them to the outside world without telling the user
 what the updated host and port is.  To resolve this, kubernetes provides *services*, an interface that sits in front of pods.  Its job is to give a unique name
 that others can reference which it will direct into an available pod.  If a new pod has generated, the service will be aware of it, and direct traffic there.  The port
@@ -157,6 +159,8 @@ We will expose the last service externally using a type NodePort, which will ass
     ```
 
 You should notice that all of the services have assigned internal cluster IPs.  The external port is shown in the 30000+ range.
+
+## DNS support for Services and Pods
 
 Our cluster now has all 3 microservices deployed, however the *cost* application is an application that depends on the other microservices, and somehow needs to
 reference them properly.  In order for one pod to discover the other pod, it would be difficult as we have already discovered the IPs are dynamic.  The solution 
@@ -208,6 +212,8 @@ the new service information.
     kubectl get pods -o wide
     ```
 
+## Accessing from the Outside
+
 1. Determine the cluster public IP by checking with IBM cloud services.
 
     ```
@@ -233,6 +239,9 @@ Check the ports column for the  external value (after the colon).
     ```
     eg. http://173.193.92.194:30507
     ```
+
+Note that this scenario is not complete as a deployed set of services in a real-life scenario.  For instance, ports are typically exposed on 80/443, and not a random IP 
+which is hard to remember.  For details see ![Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/).  Note that this is not available in the IBM Cloud Free Tier.
 
 Here is an example of what should be configured in your cluster.  IP number will differ.
 
