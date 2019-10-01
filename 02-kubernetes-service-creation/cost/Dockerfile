@@ -5,5 +5,5 @@ RUN npm install &&\
     apk update &&\
     apk upgrade &&\
     apk add curl
-EXPOSE  8080
+EXPOSE  8082
 CMD node app.js
