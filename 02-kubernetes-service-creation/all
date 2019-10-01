@@ -1,0 +1,984 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "annotations": {
+                    "kubernetes.io/psp": "ibm-privileged-psp"
+                },
+                "creationTimestamp": "2019-10-01T17:28:59Z",
+                "generateName": "dep-account-78bf4d4ddc-",
+                "labels": {
+                    "app": "dep-account",
+                    "pod-template-hash": "78bf4d4ddc"
+                },
+                "name": "dep-account-78bf4d4ddc-j65g9",
+                "namespace": "cas2019ns",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "ReplicaSet",
+                        "name": "dep-account-78bf4d4ddc",
+                        "uid": "f432af5e-e470-11e9-8adc-cea93dda5c42"
+                    }
+                ],
+                "resourceVersion": "149114",
+                "selfLink": "/api/v1/namespaces/cas2019ns/pods/dep-account-78bf4d4ddc-j65g9",
+                "uid": "f4345ca4-e470-11e9-8adc-cea93dda5c42"
+            },
+            "spec": {
+                "containers": [
+                    {
+                        "image": "us.icr.io/cas2019/account:1",
+                        "imagePullPolicy": "IfNotPresent",
+                        "name": "account",
+                        "resources": {},
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                                "name": "default-token-trfpn",
+                                "readOnly": true
+                            }
+                        ]
+                    }
+                ],
+                "dnsPolicy": "ClusterFirst",
+                "enableServiceLinks": true,
+                "nodeName": "10.76.152.18",
+                "priority": 0,
+                "restartPolicy": "Always",
+                "schedulerName": "default-scheduler",
+                "securityContext": {},
+                "serviceAccount": "default",
+                "serviceAccountName": "default",
+                "terminationGracePeriodSeconds": 30,
+                "tolerations": [
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/not-ready",
+                        "operator": "Exists",
+                        "tolerationSeconds": 600
+                    },
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/unreachable",
+                        "operator": "Exists",
+                        "tolerationSeconds": 600
+                    }
+                ],
+                "volumes": [
+                    {
+                        "name": "default-token-trfpn",
+                        "secret": {
+                            "defaultMode": 420,
+                            "secretName": "default-token-trfpn"
+                        }
+                    }
+                ]
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2019-10-01T17:28:59Z",
+                        "status": "True",
+                        "type": "Initialized"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2019-10-01T17:29:01Z",
+                        "status": "True",
+                        "type": "Ready"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2019-10-01T17:29:01Z",
+                        "status": "True",
+                        "type": "ContainersReady"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2019-10-01T17:28:59Z",
+                        "status": "True",
+                        "type": "PodScheduled"
+                    }
+                ],
+                "containerStatuses": [
+                    {
+                        "containerID": "containerd://a7a911f6febd17fecb0e3a46978b244f2f97212c535ac28bed36ba8322dc9f78",
+                        "image": "us.icr.io/cas2019/account:1",
+                        "imageID": "us.icr.io/cas2019/account@sha256:89ea2a1dd8a27f258943b93bf2b849970e5063d621b1a3b2b62bb50c2297551e",
+                        "lastState": {},
+                        "name": "account",
+                        "ready": true,
+                        "restartCount": 0,
+                        "state": {
+                            "running": {
+                                "startedAt": "2019-10-01T17:29:00Z"
+                            }
+                        }
+                    }
+                ],
+                "hostIP": "10.76.152.18",
+                "phase": "Running",
+                "podIP": "172.30.168.52",
+                "qosClass": "BestEffort",
+                "startTime": "2019-10-01T17:28:59Z"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "annotations": {
+                    "kubernetes.io/psp": "ibm-privileged-psp"
+                },
+                "creationTimestamp": "2019-10-01T17:31:15Z",
+                "generateName": "dep-cost-665cc8d6cf-",
+                "labels": {
+                    "app": "dep-cost",
+                    "pod-template-hash": "665cc8d6cf"
+                },
+                "name": "dep-cost-665cc8d6cf-rfq5j",
+                "namespace": "cas2019ns",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "ReplicaSet",
+                        "name": "dep-cost-665cc8d6cf",
+                        "uid": "f4b144f2-e470-11e9-8adc-cea93dda5c42"
+                    }
+                ],
+                "resourceVersion": "149197",
+                "selfLink": "/api/v1/namespaces/cas2019ns/pods/dep-cost-665cc8d6cf-rfq5j",
+                "uid": "4560f9cd-e471-11e9-8adc-cea93dda5c42"
+            },
+            "spec": {
+                "containers": [
+                    {
+                        "image": "us.icr.io/cas2019/cost:1",
+                        "imagePullPolicy": "IfNotPresent",
+                        "name": "cost",
+                        "resources": {},
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                                "name": "default-token-trfpn",
+                                "readOnly": true
+                            }
+                        ]
+                    }
+                ],
+                "dnsPolicy": "ClusterFirst",
+                "enableServiceLinks": true,
+                "nodeName": "10.76.152.18",
+                "priority": 0,
+                "restartPolicy": "Always",
+                "schedulerName": "default-scheduler",
+                "securityContext": {},
+                "serviceAccount": "default",
+                "serviceAccountName": "default",
+                "terminationGracePeriodSeconds": 30,
+                "tolerations": [
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/not-ready",
+                        "operator": "Exists",
+                        "tolerationSeconds": 600
+                    },
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/unreachable",
+                        "operator": "Exists",
+                        "tolerationSeconds": 600
+                    }
+                ],
+                "volumes": [
+                    {
+                        "name": "default-token-trfpn",
+                        "secret": {
+                            "defaultMode": 420,
+                            "secretName": "default-token-trfpn"
+                        }
+                    }
+                ]
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2019-10-01T17:31:15Z",
+                        "status": "True",
+                        "type": "Initialized"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2019-10-01T17:31:17Z",
+                        "status": "True",
+                        "type": "Ready"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2019-10-01T17:31:17Z",
+                        "status": "True",
+                        "type": "ContainersReady"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2019-10-01T17:31:15Z",
+                        "status": "True",
+                        "type": "PodScheduled"
+                    }
+                ],
+                "containerStatuses": [
+                    {
+                        "containerID": "containerd://c8ba41eef653d63c288d66a5e812e65c3055b0ee70b26bd79c2f0a68ace71eb3",
+                        "image": "us.icr.io/cas2019/monthlycost:7",
+                        "imageID": "us.icr.io/cas2019/monthlycost@sha256:102adcbf3a26f0763e807bd7df18a173f2a479dcd75f97ca00c49087404d8a54",
+                        "lastState": {},
+                        "name": "cost",
+                        "ready": true,
+                        "restartCount": 0,
+                        "state": {
+                            "running": {
+                                "startedAt": "2019-10-01T17:31:17Z"
+                            }
+                        }
+                    }
+                ],
+                "hostIP": "10.76.152.18",
+                "phase": "Running",
+                "podIP": "172.30.168.55",
+                "qosClass": "BestEffort",
+                "startTime": "2019-10-01T17:31:15Z"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "annotations": {
+                    "kubernetes.io/psp": "ibm-privileged-psp"
+                },
+                "creationTimestamp": "2019-10-01T17:29:00Z",
+                "generateName": "dep-provider-7b5b6cbf5-",
+                "labels": {
+                    "app": "dep-provider",
+                    "pod-template-hash": "7b5b6cbf5"
+                },
+                "name": "dep-provider-7b5b6cbf5-rmw7f",
+                "namespace": "cas2019ns",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "ReplicaSet",
+                        "name": "dep-provider-7b5b6cbf5",
+                        "uid": "f472242f-e470-11e9-8adc-cea93dda5c42"
+                    }
+                ],
+                "resourceVersion": "149110",
+                "selfLink": "/api/v1/namespaces/cas2019ns/pods/dep-provider-7b5b6cbf5-rmw7f",
+                "uid": "f4738748-e470-11e9-8adc-cea93dda5c42"
+            },
+            "spec": {
+                "containers": [
+                    {
+                        "image": "us.icr.io/cas2019/provider:1",
+                        "imagePullPolicy": "IfNotPresent",
+                        "name": "provider",
+                        "resources": {},
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                                "name": "default-token-trfpn",
+                                "readOnly": true
+                            }
+                        ]
+                    }
+                ],
+                "dnsPolicy": "ClusterFirst",
+                "enableServiceLinks": true,
+                "nodeName": "10.76.152.18",
+                "priority": 0,
+                "restartPolicy": "Always",
+                "schedulerName": "default-scheduler",
+                "securityContext": {},
+                "serviceAccount": "default",
+                "serviceAccountName": "default",
+                "terminationGracePeriodSeconds": 30,
+                "tolerations": [
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/not-ready",
+                        "operator": "Exists",
+                        "tolerationSeconds": 600
+                    },
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/unreachable",
+                        "operator": "Exists",
+                        "tolerationSeconds": 600
+                    }
+                ],
+                "volumes": [
+                    {
+                        "name": "default-token-trfpn",
+                        "secret": {
+                            "defaultMode": 420,
+                            "secretName": "default-token-trfpn"
+                        }
+                    }
+                ]
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2019-10-01T17:29:00Z",
+                        "status": "True",
+                        "type": "Initialized"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2019-10-01T17:29:01Z",
+                        "status": "True",
+                        "type": "Ready"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2019-10-01T17:29:01Z",
+                        "status": "True",
+                        "type": "ContainersReady"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2019-10-01T17:29:00Z",
+                        "status": "True",
+                        "type": "PodScheduled"
+                    }
+                ],
+                "containerStatuses": [
+                    {
+                        "containerID": "containerd://c93286be6c78f1a35d95b0c0a681ba3897f7e64436e038c56ca90e2bea7248c0",
+                        "image": "us.icr.io/cas2019/provider:1",
+                        "imageID": "us.icr.io/cas2019/provider@sha256:8d95181bfac98a8e91871fb3b85d04aeeb5bfb8ad5328c02d9b00aca0c6498c4",
+                        "lastState": {},
+                        "name": "provider",
+                        "ready": true,
+                        "restartCount": 0,
+                        "state": {
+                            "running": {
+                                "startedAt": "2019-10-01T17:29:01Z"
+                            }
+                        }
+                    }
+                ],
+                "hostIP": "10.76.152.18",
+                "phase": "Running",
+                "podIP": "172.30.168.53",
+                "qosClass": "BestEffort",
+                "startTime": "2019-10-01T17:29:00Z"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Service",
+            "metadata": {
+                "creationTimestamp": "2019-10-01T17:30:29Z",
+                "labels": {
+                    "app": "dep-account"
+                },
+                "name": "account-service",
+                "namespace": "cas2019ns",
+                "resourceVersion": "149153",
+                "selfLink": "/api/v1/namespaces/cas2019ns/services/account-service",
+                "uid": "29a00ca4-e471-11e9-8adc-cea93dda5c42"
+            },
+            "spec": {
+                "clusterIP": "172.21.46.165",
+                "ports": [
+                    {
+                        "port": 8080,
+                        "protocol": "TCP",
+                        "targetPort": 8080
+                    }
+                ],
+                "selector": {
+                    "app": "dep-account"
+                },
+                "sessionAffinity": "None",
+                "type": "ClusterIP"
+            },
+            "status": {
+                "loadBalancer": {}
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Service",
+            "metadata": {
+                "creationTimestamp": "2019-10-01T17:30:41Z",
+                "labels": {
+                    "app": "dep-cost"
+                },
+                "name": "cost-service",
+                "namespace": "cas2019ns",
+                "resourceVersion": "149164",
+                "selfLink": "/api/v1/namespaces/cas2019ns/services/cost-service",
+                "uid": "31398d48-e471-11e9-8adc-cea93dda5c42"
+            },
+            "spec": {
+                "clusterIP": "172.21.241.90",
+                "externalTrafficPolicy": "Cluster",
+                "ports": [
+                    {
+                        "nodePort": 31535,
+                        "port": 8080,
+                        "protocol": "TCP",
+                        "targetPort": 8080
+                    }
+                ],
+                "selector": {
+                    "app": "dep-cost"
+                },
+                "sessionAffinity": "None",
+                "type": "NodePort"
+            },
+            "status": {
+                "loadBalancer": {}
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Service",
+            "metadata": {
+                "creationTimestamp": "2019-10-01T17:30:29Z",
+                "labels": {
+                    "app": "dep-provider"
+                },
+                "name": "provider-service",
+                "namespace": "cas2019ns",
+                "resourceVersion": "149156",
+                "selfLink": "/api/v1/namespaces/cas2019ns/services/provider-service",
+                "uid": "29e4b3e6-e471-11e9-8adc-cea93dda5c42"
+            },
+            "spec": {
+                "clusterIP": "172.21.250.146",
+                "ports": [
+                    {
+                        "port": 8080,
+                        "protocol": "TCP",
+                        "targetPort": 8080
+                    }
+                ],
+                "selector": {
+                    "app": "dep-provider"
+                },
+                "sessionAffinity": "None",
+                "type": "ClusterIP"
+            },
+            "status": {
+                "loadBalancer": {}
+            }
+        },
+        {
+            "apiVersion": "apps/v1",
+            "kind": "Deployment",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/revision": "1"
+                },
+                "creationTimestamp": "2019-10-01T17:28:59Z",
+                "generation": 1,
+                "labels": {
+                    "app": "dep-account"
+                },
+                "name": "dep-account",
+                "namespace": "cas2019ns",
+                "resourceVersion": "149116",
+                "selfLink": "/apis/apps/v1/namespaces/cas2019ns/deployments/dep-account",
+                "uid": "f430b8f8-e470-11e9-8adc-cea93dda5c42"
+            },
+            "spec": {
+                "progressDeadlineSeconds": 600,
+                "replicas": 1,
+                "revisionHistoryLimit": 10,
+                "selector": {
+                    "matchLabels": {
+                        "app": "dep-account"
+                    }
+                },
+                "strategy": {
+                    "rollingUpdate": {
+                        "maxSurge": "25%",
+                        "maxUnavailable": "25%"
+                    },
+                    "type": "RollingUpdate"
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "dep-account"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "image": "us.icr.io/cas2019/account:1",
+                                "imagePullPolicy": "IfNotPresent",
+                                "name": "account",
+                                "resources": {},
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File"
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "terminationGracePeriodSeconds": 30
+                    }
+                }
+            },
+            "status": {
+                "availableReplicas": 1,
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2019-10-01T17:29:01Z",
+                        "lastUpdateTime": "2019-10-01T17:29:01Z",
+                        "message": "Deployment has minimum availability.",
+                        "reason": "MinimumReplicasAvailable",
+                        "status": "True",
+                        "type": "Available"
+                    },
+                    {
+                        "lastTransitionTime": "2019-10-01T17:28:59Z",
+                        "lastUpdateTime": "2019-10-01T17:29:01Z",
+                        "message": "ReplicaSet \"dep-account-78bf4d4ddc\" has successfully progressed.",
+                        "reason": "NewReplicaSetAvailable",
+                        "status": "True",
+                        "type": "Progressing"
+                    }
+                ],
+                "observedGeneration": 1,
+                "readyReplicas": 1,
+                "replicas": 1,
+                "updatedReplicas": 1
+            }
+        },
+        {
+            "apiVersion": "apps/v1",
+            "kind": "Deployment",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/revision": "1"
+                },
+                "creationTimestamp": "2019-10-01T17:29:00Z",
+                "generation": 1,
+                "labels": {
+                    "app": "dep-cost"
+                },
+                "name": "dep-cost",
+                "namespace": "cas2019ns",
+                "resourceVersion": "149200",
+                "selfLink": "/apis/apps/v1/namespaces/cas2019ns/deployments/dep-cost",
+                "uid": "f4b011c5-e470-11e9-8adc-cea93dda5c42"
+            },
+            "spec": {
+                "progressDeadlineSeconds": 600,
+                "replicas": 1,
+                "revisionHistoryLimit": 10,
+                "selector": {
+                    "matchLabels": {
+                        "app": "dep-cost"
+                    }
+                },
+                "strategy": {
+                    "rollingUpdate": {
+                        "maxSurge": "25%",
+                        "maxUnavailable": "25%"
+                    },
+                    "type": "RollingUpdate"
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "dep-cost"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "image": "us.icr.io/cas2019/cost:1",
+                                "imagePullPolicy": "IfNotPresent",
+                                "name": "cost",
+                                "resources": {},
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File"
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "terminationGracePeriodSeconds": 30
+                    }
+                }
+            },
+            "status": {
+                "availableReplicas": 1,
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2019-10-01T17:29:00Z",
+                        "lastUpdateTime": "2019-10-01T17:29:02Z",
+                        "message": "ReplicaSet \"dep-cost-665cc8d6cf\" has successfully progressed.",
+                        "reason": "NewReplicaSetAvailable",
+                        "status": "True",
+                        "type": "Progressing"
+                    },
+                    {
+                        "lastTransitionTime": "2019-10-01T17:31:17Z",
+                        "lastUpdateTime": "2019-10-01T17:31:17Z",
+                        "message": "Deployment has minimum availability.",
+                        "reason": "MinimumReplicasAvailable",
+                        "status": "True",
+                        "type": "Available"
+                    }
+                ],
+                "observedGeneration": 1,
+                "readyReplicas": 1,
+                "replicas": 1,
+                "updatedReplicas": 1
+            }
+        },
+        {
+            "apiVersion": "apps/v1",
+            "kind": "Deployment",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/revision": "1"
+                },
+                "creationTimestamp": "2019-10-01T17:29:00Z",
+                "generation": 1,
+                "labels": {
+                    "app": "dep-provider"
+                },
+                "name": "dep-provider",
+                "namespace": "cas2019ns",
+                "resourceVersion": "149112",
+                "selfLink": "/apis/apps/v1/namespaces/cas2019ns/deployments/dep-provider",
+                "uid": "f4710ef8-e470-11e9-8adc-cea93dda5c42"
+            },
+            "spec": {
+                "progressDeadlineSeconds": 600,
+                "replicas": 1,
+                "revisionHistoryLimit": 10,
+                "selector": {
+                    "matchLabels": {
+                        "app": "dep-provider"
+                    }
+                },
+                "strategy": {
+                    "rollingUpdate": {
+                        "maxSurge": "25%",
+                        "maxUnavailable": "25%"
+                    },
+                    "type": "RollingUpdate"
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "dep-provider"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "image": "us.icr.io/cas2019/provider:1",
+                                "imagePullPolicy": "IfNotPresent",
+                                "name": "provider",
+                                "resources": {},
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File"
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "terminationGracePeriodSeconds": 30
+                    }
+                }
+            },
+            "status": {
+                "availableReplicas": 1,
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2019-10-01T17:29:01Z",
+                        "lastUpdateTime": "2019-10-01T17:29:01Z",
+                        "message": "Deployment has minimum availability.",
+                        "reason": "MinimumReplicasAvailable",
+                        "status": "True",
+                        "type": "Available"
+                    },
+                    {
+                        "lastTransitionTime": "2019-10-01T17:29:00Z",
+                        "lastUpdateTime": "2019-10-01T17:29:01Z",
+                        "message": "ReplicaSet \"dep-provider-7b5b6cbf5\" has successfully progressed.",
+                        "reason": "NewReplicaSetAvailable",
+                        "status": "True",
+                        "type": "Progressing"
+                    }
+                ],
+                "observedGeneration": 1,
+                "readyReplicas": 1,
+                "replicas": 1,
+                "updatedReplicas": 1
+            }
+        },
+        {
+            "apiVersion": "apps/v1",
+            "kind": "ReplicaSet",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/desired-replicas": "1",
+                    "deployment.kubernetes.io/max-replicas": "2",
+                    "deployment.kubernetes.io/revision": "1"
+                },
+                "creationTimestamp": "2019-10-01T17:28:59Z",
+                "generation": 1,
+                "labels": {
+                    "app": "dep-account",
+                    "pod-template-hash": "78bf4d4ddc"
+                },
+                "name": "dep-account-78bf4d4ddc",
+                "namespace": "cas2019ns",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "Deployment",
+                        "name": "dep-account",
+                        "uid": "f430b8f8-e470-11e9-8adc-cea93dda5c42"
+                    }
+                ],
+                "resourceVersion": "149115",
+                "selfLink": "/apis/apps/v1/namespaces/cas2019ns/replicasets/dep-account-78bf4d4ddc",
+                "uid": "f432af5e-e470-11e9-8adc-cea93dda5c42"
+            },
+            "spec": {
+                "replicas": 1,
+                "selector": {
+                    "matchLabels": {
+                        "app": "dep-account",
+                        "pod-template-hash": "78bf4d4ddc"
+                    }
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "dep-account",
+                            "pod-template-hash": "78bf4d4ddc"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "image": "us.icr.io/cas2019/account:1",
+                                "imagePullPolicy": "IfNotPresent",
+                                "name": "account",
+                                "resources": {},
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File"
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "terminationGracePeriodSeconds": 30
+                    }
+                }
+            },
+            "status": {
+                "availableReplicas": 1,
+                "fullyLabeledReplicas": 1,
+                "observedGeneration": 1,
+                "readyReplicas": 1,
+                "replicas": 1
+            }
+        },
+        {
+            "apiVersion": "apps/v1",
+            "kind": "ReplicaSet",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/desired-replicas": "1",
+                    "deployment.kubernetes.io/max-replicas": "2",
+                    "deployment.kubernetes.io/revision": "1"
+                },
+                "creationTimestamp": "2019-10-01T17:29:00Z",
+                "generation": 1,
+                "labels": {
+                    "app": "dep-cost",
+                    "pod-template-hash": "665cc8d6cf"
+                },
+                "name": "dep-cost-665cc8d6cf",
+                "namespace": "cas2019ns",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "Deployment",
+                        "name": "dep-cost",
+                        "uid": "f4b011c5-e470-11e9-8adc-cea93dda5c42"
+                    }
+                ],
+                "resourceVersion": "149199",
+                "selfLink": "/apis/apps/v1/namespaces/cas2019ns/replicasets/dep-cost-665cc8d6cf",
+                "uid": "f4b144f2-e470-11e9-8adc-cea93dda5c42"
+            },
+            "spec": {
+                "replicas": 1,
+                "selector": {
+                    "matchLabels": {
+                        "app": "dep-cost",
+                        "pod-template-hash": "665cc8d6cf"
+                    }
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "dep-cost",
+                            "pod-template-hash": "665cc8d6cf"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "image": "us.icr.io/cas2019/cost:1",
+                                "imagePullPolicy": "IfNotPresent",
+                                "name": "cost",
+                                "resources": {},
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File"
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "terminationGracePeriodSeconds": 30
+                    }
+                }
+            },
+            "status": {
+                "availableReplicas": 1,
+                "fullyLabeledReplicas": 1,
+                "observedGeneration": 1,
+                "readyReplicas": 1,
+                "replicas": 1
+            }
+        },
+        {
+            "apiVersion": "apps/v1",
+            "kind": "ReplicaSet",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/desired-replicas": "1",
+                    "deployment.kubernetes.io/max-replicas": "2",
+                    "deployment.kubernetes.io/revision": "1"
+                },
+                "creationTimestamp": "2019-10-01T17:29:00Z",
+                "generation": 1,
+                "labels": {
+                    "app": "dep-provider",
+                    "pod-template-hash": "7b5b6cbf5"
+                },
+                "name": "dep-provider-7b5b6cbf5",
+                "namespace": "cas2019ns",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "Deployment",
+                        "name": "dep-provider",
+                        "uid": "f4710ef8-e470-11e9-8adc-cea93dda5c42"
+                    }
+                ],
+                "resourceVersion": "149111",
+                "selfLink": "/apis/apps/v1/namespaces/cas2019ns/replicasets/dep-provider-7b5b6cbf5",
+                "uid": "f472242f-e470-11e9-8adc-cea93dda5c42"
+            },
+            "spec": {
+                "replicas": 1,
+                "selector": {
+                    "matchLabels": {
+                        "app": "dep-provider",
+                        "pod-template-hash": "7b5b6cbf5"
+                    }
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "dep-provider",
+                            "pod-template-hash": "7b5b6cbf5"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "image": "us.icr.io/cas2019/provider:1",
+                                "imagePullPolicy": "IfNotPresent",
+                                "name": "provider",
+                                "resources": {},
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File"
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "terminationGracePeriodSeconds": 30
+                    }
+                }
+            },
+            "status": {
+                "availableReplicas": 1,
+                "fullyLabeledReplicas": 1,
+                "observedGeneration": 1,
+                "readyReplicas": 1,
+                "replicas": 1
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": "",
+        "selfLink": ""
+    }
+}

@@ -23,7 +23,7 @@ Our task is to deploy these services to the IBM Cloud using the command-line int
 The IBM Cloud Container Registry allows you to store images in your private registry.  See https://cloud.ibm.com/kubernetes/registry/main/start for the WebUI.
 We will be storing 3 images created from code available in this git repository.
 
-### Set up Namespace
+### Set up Registry Namespace
 
 Namespaces provide a way to categorize your docker images within the registry.  Note that these are separate from Kubenetes namespaces.  Namespaces not
 found when building images will be added automatically.
@@ -89,6 +89,18 @@ everything will be deployed there.  You can see the works that have been allocat
 
     ibmcloud ks workers <clusterId>
     kubectl get nodes -o wide
+
+Before we begin we should set up a Kubernetes Namespace.  This allows us to group all our Kubernetes objects together under our project, and separate
+them from other potential projects on the same cluster.  By default, the 'default' namespace is used, but by using a custom one, it gives us 
+flexibility in managing it later.
+
+1. Create a Kubernetes Namespace and use it in the current context.
+
+    ```
+    kubectl create ns cas2019ns
+    kubectl config set-context --current --namespace=cas2019ns
+    kubectl config get-contexts
+    ```
 
 To get started, a Kubernetes deployment is needed to define how you want the pods deployed.  A pod is the smallest deployable unit which may contain one or more containers, 
 a running instance of your image.  For now, we'll create deployments using the default settings.  One pod will be created per deployment by downloading the image you 
@@ -351,3 +363,26 @@ As well as the old pod will terminate, and you will see that a new one will be c
     kubectl get pods
 
 And that's it.  After a new image is available, only one change is necessary, and Kubernetes takes care of the rest.
+
+## Backing up Configuration
+
+Internally, Kubernetes holds the desired and actual state of your entire cluster in etcd, a distributed database that stored the configuration.  Whenever you 
+query or update using the kubectl commands, you are actually updating etcd, which then Kubernetes uses to apply on the workers to build nodes, services etc.  
+Kubernetes is extremely flexible in providing you an interface to interact with the state.  Along with the command line options, we can also update via YAML 
+(as seen in the previous instructions), JSON, and interfacing with the UI.  Let's finally see how we can reapply the configuration easily in a new cluster.
+
+1. Pull all the configuration for your deployments and services for this namespace.
+   ```
+   kubectl get all  -n cas2019ns -o json > myproject.json
+   ```
+
+1. Delete all the deployments and services
+   ```
+   kubectl delete --all deployments -n cas2019ns
+   kubectl delete --all services -n cas2019ns
+   ```
+
+1. In your new cluster you can reapply your configuration with this command
+   ```
+   kubectl apply -f myproject.json
+   ```
