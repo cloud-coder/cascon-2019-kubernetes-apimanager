@@ -3,7 +3,7 @@ var express = require('express')
 var os = require("os");
 var hostname = os.hostname();
 var app = express()
-var listenPort = process.env.PROVIDER_SERVICE_PORT;
+var listenPort = process.env.PROVIDER_SERVICE_SERVICE_PORT;
 var fs = require('fs');
 
 app.get('/provider', function(req, res) {

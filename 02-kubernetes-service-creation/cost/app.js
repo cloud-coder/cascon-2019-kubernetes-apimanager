@@ -4,7 +4,7 @@ var request = require('request');
 var os = require("os");
 var hostname = os.hostname();
 var app = express();
-var listenPort = process.env.COST_SERVICE_PORT;
+var listenPort = process.env.COST_SERVICE_SERVICE_PORT;
 
 
 app.get('/cost', function(req, res) {
@@ -35,12 +35,12 @@ app.get('/cost/:accountId', function(req, res) {
         try {
             console.log('Retrieving the account information for the account ' + accountId);
 
-            var accountDetails = await callURL('http://'+process.env.ACCOUNT_SERVICE_HOST+':'+process.env.ACCOUNT_SERVICE_PORT+'/account/'+accountId)
+            var accountDetails = await callURL('http://'+process.env.ACCOUNT_SERVICE_SERVICE_HOST+':'+process.env.ACCOUNT_SERVICE_SERVICE_PORT+'/account/'+accountId)
             var providers = JSON.parse(accountDetails).providers;
             var cost = 0;
             for (var i=0 ; i < providers.length ; i++) {
               console.log('This user subscribes to ' + providers[i]);
-              var provider = await callURL('http://'+process.env.PROVIDER_SERVICE_HOST+':'+process.env.PROVIDER_SERVICE_PORT+'/provider/'+providers[i]);
+              var provider = await callURL('http://'+process.env.PROVIDER_SERVICE_SERVICE_HOST+':'+process.env.PROVIDER_SERVICE_SERVICE_PORT+'/provider/'+providers[i]);
               var providerObject = JSON.parse(provider);
               console.log('Retrieved a cost of ' + providerObject.cost + ' for the provider ' +providerObject.provider_id);
               cost += providerObject.cost;

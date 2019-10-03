@@ -85,7 +85,7 @@ You should see the three additional images listed using this command.
     ibmcloud cr images
     ```
 
-## Deploy into the Kubernetes Cluster
+## Kubernetes Nodes
 
 In Kubernetes images are not directly specified to go into containers and deployed to be accessed directly.  Instead, a desired state is specified and is managed by 
 Kubernetes to deploy using the workers (VM or physical machines) that have been allocated to your cluster.  The IBM Cloud Free Tier allocates a single worker, so 
@@ -94,9 +94,12 @@ everything will be deployed there.  You can see the works that have been allocat
     ibmcloud ks workers <clusterId>
     kubectl get nodes -o wide
 
+## Kubernetes Namepaces
+
 Before we begin we should set up a Kubernetes Namespace.  This allows us to group all our Kubernetes objects together under our project, and separate
 them from other potential projects on the same cluster.  By default, the 'default' namespace is used, but by using a custom one, it gives us 
-flexibility in managing it later.
+flexibility in managing it later.  When we use a non-default namespace, we need to migrate all the secrets over so that the tokens use to authenticate
+agains the Cloud Container Register are available when we pull images.
 
 1. Create a Kubernetes Namespace and use it in the current context.
 
@@ -104,7 +107,10 @@ flexibility in managing it later.
     kubectl create ns cas2019ns
     kubectl config set-context --current --namespace=cas2019ns
     kubectl config get-contexts
+    kubectl get secrets -n default -o yaml | sed 's/default/cas2019ns/g' | kubectl -n cas2019ns create -f -
     ```
+
+## Deploy into the Kubernetes Cluster
 
 To get started, a Kubernetes deployment is needed to define how you want the pods deployed.  A pod is the smallest deployable unit which may contain one or more containers, 
 a running instance of your image.  For now, we'll create deployments using the default settings.  One pod will be created per deployment by downloading the image you 
@@ -117,6 +123,36 @@ specify in the command.
     kubectl create deployment dep-provider --image=us.icr.io/cas2019/provider:1
     kubectl create deployment dep-cost --image=us.icr.io/cas2019/cost:1
     ```
+
+1. Update the imagePullSecrets
+
+Because we are using a non-default namespace for Kubernetes, the credentials to pull images from the Container Register are not specified.  We need to update the deployment
+so that the correct secret is used.  Update the account deployment.
+
+    kubectl edit deployment/dep-account
+
+When the editor opens add the *imagePullSecrets* and the name as below:
+
+    ```
+    spec:
+      containers:
+      - image: us.icr.io/cas2019/account:1
+        imagePullPolicy: IfNotPresent
+        name: account
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: default-us-icr-io
+    ``` 
+
+1. Repeat the steps for the provide and cost
+
+    ``` 
+    kubectl edit deployment/dep-provider
+    kubectl edit deployment/dep-cost
+    ``` 
 
 A successfully deployed pod will in the *running* status.  Each pod is assigned an IP address in the private network and automatically assigned to a node in your 
 cluster.  In the IBM Cloud Free Tier, the cluster is only allocated one node, so all pods will be deployed there.  
@@ -268,28 +304,39 @@ Now lets do an interactive shell with the newly created pod.
 
 You should be able to see all of the services listed now including its own service (COST_SERVICE) entries.
 
-    ACCOUNT_SERVICE_PORT=tcp://172.21.51.184:8080
-    ACCOUNT_SERVICE_PORT_8080_TCP=tcp://172.21.51.184:8080
-    ACCOUNT_SERVICE_PORT_8080_TCP_ADDR=172.21.51.184
+    ACCOUNT_SERVICE_PORT=tcp://172.21.149.218:8080
+    ACCOUNT_SERVICE_PORT_8080_TCP=tcp://172.21.149.218:8080
+    ACCOUNT_SERVICE_PORT_8080_TCP_ADDR=172.21.149.218
     ACCOUNT_SERVICE_PORT_8080_TCP_PORT=8080
     ACCOUNT_SERVICE_PORT_8080_TCP_PROTO=tcp
-    ACCOUNT_SERVICE_SERVICE_HOST=172.21.51.184
+    ACCOUNT_SERVICE_SERVICE_HOST=172.21.149.218
     ACCOUNT_SERVICE_SERVICE_PORT=8080
-    COST_SERVICE_PORT=tcp://172.21.87.157:8080
-    COST_SERVICE_PORT_8080_TCP=tcp://172.21.87.157:8080
-    COST_SERVICE_PORT_8080_TCP_ADDR=172.21.87.157
-    COST_SERVICE_PORT_8080_TCP_PORT=8080
-    COST_SERVICE_PORT_8080_TCP_PROTO=tcp
-    COST_SERVICE_SERVICE_HOST=172.21.87.157
-    COST_SERVICE_SERVICE_PORT=8080
-    PROVIDER_SERVICE_PORT=tcp://172.21.56.13:8080
-    PROVIDER_SERVICE_PORT_8080_TCP=tcp://172.21.56.13:8080
-    PROVIDER_SERVICE_PORT_8080_TCP_ADDR=172.21.56.13
-    PROVIDER_SERVICE_PORT_8080_TCP_PORT=8080
-    PROVIDER_SERVICE_PORT_8080_TCP_PROTO=tcp
-    PROVIDER_SERVICE_SERVICE_HOST=172.21.56.13
-    PROVIDER_SERVICE_SERVICE_PORT=8080
-
+    COST_SERVICE_PORT=tcp://172.21.159.241:8082
+    COST_SERVICE_PORT_8082_TCP=tcp://172.21.159.241:8082
+    COST_SERVICE_PORT_8082_TCP_ADDR=172.21.159.241
+    COST_SERVICE_PORT_8082_TCP_PORT=8082
+    COST_SERVICE_PORT_8082_TCP_PROTO=tcp
+    COST_SERVICE_SERVICE_HOST=172.21.159.241
+    COST_SERVICE_SERVICE_PORT=8082
+    HOME=/root
+    HOSTNAME=dep-cost-665cc8d6cf-gf85p
+    KUBERNETES_PORT=tcp://172.21.0.1:443
+    KUBERNETES_PORT_443_TCP=tcp://172.21.0.1:443
+    KUBERNETES_PORT_443_TCP_ADDR=172.21.0.1
+    KUBERNETES_PORT_443_TCP_PORT=443
+    KUBERNETES_PORT_443_TCP_PROTO=tcp
+    KUBERNETES_SERVICE_HOST=172.21.0.1
+    KUBERNETES_SERVICE_PORT=443
+    KUBERNETES_SERVICE_PORT_HTTPS=443
+    NODE_VERSION=9.4.0
+    PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    PROVIDER_SERVICE_PORT=tcp://172.21.12.109:8081
+    PROVIDER_SERVICE_PORT_8081_TCP=tcp://172.21.12.109:8081
+    PROVIDER_SERVICE_PORT_8081_TCP_ADDR=172.21.12.109
+    PROVIDER_SERVICE_PORT_8081_TCP_PORT=8081
+    PROVIDER_SERVICE_PORT_8081_TCP_PROTO=tcp
+    PROVIDER_SERVICE_SERVICE_HOST=172.21.12.109
+    PROVIDER_SERVICE_SERVICE_PORT=8081
 
 ## Accessing from the Outside
 
