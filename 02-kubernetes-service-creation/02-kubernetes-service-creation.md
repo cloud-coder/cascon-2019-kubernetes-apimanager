@@ -437,3 +437,39 @@ Kubernetes is extremely flexible in providing you an interface to interact with 
    ```
    kubectl apply -f myproject.json
    ```
+
+## ConfigMaps and Secrets
+
+Somtimes you may have information that needs to be updated regularly and you do not want to find and update code directly.  The ConfigMaps provides
+a key/value storage that can be exposed as environment variables to your pods.  This may be external host names, configuration settings etc.  Secrets
+work in the same way, but the values are usually passwords or tokens that shouldn't normally be shown.
+
+1. Create a config map with some literal values
+
+   ```
+   kubectl create configmap myconfigmap --from-literal=value1=testvalue1 --from-literal=value2=testvalue2
+   ```
+
+1.  Next edit the deployment so that the pods will be exposed to these new config map values.
+
+   ```
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: dep-account
+    spec:
+      containers:
+      - envFrom:
+        - configMapRef:
+            name: myconfigmap
+   ```
+
+1. Then delete the account pod to allow it to pick up the values, check the new pod that is regenerated, and check the environment variables.
+
+   ```
+   kubectl delete pod dep-account-???
+   kubectl get pods
+   kubectl exec -it dep-account-??? -- /bin/sh
+   printenv
+   ```
