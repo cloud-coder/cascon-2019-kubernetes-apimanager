@@ -5,17 +5,21 @@
 In this exercise we are deploying a website that provides cost comparisons for users across different service providers.  The development teams have worked independently
 on 3 projects.  
 
-An *account* application provides information about all the users, including the the service providers they subscribe to.  They provide a single REST api:
+An *account* application provides information about all the users, including the the service providers they subscribe to.  They provide the REST api:
 
-    /user=<userId>
+    GET /account           # Returns a health message
+    GET /account/<acct_id> # Returns the specific account detail in JSON
 
-The *provider* application provides detail on particular costs of their service.  they provide a single REST api:
+The *provider* application provides detail on particular costs of their service.  they provide the REST api:
 
-    /provider=<providerId>
+    GET /provider                # Returns a health message
+    GET /provider/<provider_id>  # Returns specific provider cost in JSON
 
 The *cost* application integrates information from the other two applications, and provides a summary of the costs for a specific user.  The endpoint renders an html page and accesses the other applications.
 
-    /costsForUser=<userId>
+    GET /cost            # Returns a health message
+    GET /cost/<cost_id>  # calls the account service to see which providers are associated to the account, then calls each provider to get each cost.  Returns total cost for all providers in JSON
+
 
 Our task is to deploy these services to the IBM Cloud using the command-line interface (CLI) tools provided.
 
@@ -169,7 +173,7 @@ specified below should match what each application port it is listening on.
 
     ```
     kubectl expose deployment/dep-account --type=ClusterIP --name=account-service --port=8080
-    kubectl expose deployment/dep-provider --type=ClusterIP --name=provider-service --port=8080
+    kubectl expose deployment/dep-provider --type=ClusterIP --name=provider-service --port=8081
     ```
 
 The services above were defined as "ClusterIP" which means that they are only exposed internally, and not available externally by default.  As we are considering them backend
@@ -180,7 +184,7 @@ We will expose the last service externally using a service of type NodePort, whi
 1. Expose the last deployment using a NodePort
 
     ```
-    kubectl expose deployment/dep-cost --type=NodePort --port=8080 --name=cost-service --target-port=8080
+    kubectl expose deployment/dep-cost --type=NodePort --port=8082 --name=cost-service
     ```
 
 1. Verify everything is running.
