@@ -62,7 +62,7 @@ Each project
 
 This is essentially the docker command (www.docker.com), but pushes the images to the IBM Cloud Container Registry.  The images are built with the corresponding Dockerfile and contains
 all of the necessary software packages needed to run the microservices (eg. NodeJs, business logic).  By creating an image, it allows us the flexibility of reusing it to deploy several
-times without needing to recompile the code.  This is the first time submitting these image repositories so we will provide it with a tag "1".  Ensure you specify the trailing "." 
+times without needing to recompile the code.  This is the first time we are submitting these image repositories so we will provide it with an initial tag "1".  Ensure you specify the trailing "." 
 which references the location of the Dockerfile.
 
     cd cascon-2019-kubernetes-apimanager/02-kubernetes-service-creation
@@ -88,8 +88,8 @@ You should see the three additional images listed using this command.
 ## Kubernetes Nodes
 
 In Kubernetes images are not directly specified to go into containers and deployed to be accessed directly.  Instead, a desired state is specified and is managed by 
-Kubernetes to deploy using the workers (VM or physical machines) that have been allocated to your cluster.  The IBM Cloud Free Tier allocates a single worker, so 
-everything will be deployed there.  You can see the works that have been allocated from either the ibmcloud or kubectl CLI.
+Kubernetes to deploy using the node/workers (VM or physical machines) that have been allocated to your cluster.  The IBM Cloud Free Tier allocates a single worker, so 
+everything will be deployed there.  You can see the workers that have been allocated by using either the ibmcloud or kubectl CLI.
 
     ibmcloud ks workers <clusterId>
     kubectl get nodes -o wide
@@ -97,9 +97,9 @@ everything will be deployed there.  You can see the works that have been allocat
 ## Kubernetes Namepaces
 
 Before we begin we should set up a Kubernetes Namespace.  This allows us to group all our Kubernetes objects together under our project, and separate
-them from other potential projects on the same cluster.  By default, the 'default' namespace is used, but by using a custom one, it gives us 
+them from other potential projects on the same cluster.  By default, the *default* namespace is used, but by using a custom one, it gives us 
 flexibility in managing it later.  When we use a non-default namespace, we need to migrate all the secrets over so that the tokens use to authenticate
-agains the Cloud Container Register are available when we pull images.
+against the Cloud Container Register are available when we pull images.
 
 1. Create a Kubernetes Namespace and use it in the current context.
 
@@ -133,7 +133,6 @@ so that the correct secret is used.  Update the account deployment.
 
 When the editor opens add the *imagePullSecrets* and the name as below:
 
-    ```
     spec:
       containers:
       - image: us.icr.io/cas2019/account:1
@@ -145,7 +144,6 @@ When the editor opens add the *imagePullSecrets* and the name as below:
       dnsPolicy: ClusterFirst
       imagePullSecrets:
       - name: default-us-icr-io
-    ``` 
 
 1. Repeat the steps for the provide and cost
 
@@ -179,7 +177,7 @@ Each pod is ephemeral, so using the IP address will only be valid for as long as
 
 Notice the original pod name/IP may result in a terminated status, but a new pod will spawn, and a new IP is assigned to it.  Kubernetes attempts to provide you the pod
 specified in the deployment that you created earlier automatically.  This also happens if your container fails (eg. due to a software glitch), and will continue 
-forever to maintain a running deployment.
+forever in attempting to maintain a running deployment.
 
 If you make a mistake in creating your deployment, you can also remove deployments using the command.
 
@@ -202,8 +200,8 @@ Press Ctrl-C to end the tail of the log.
 
 As the pods have dynamically assigned private IPs that can change at any time, it would be difficult to expose them to the outside world without telling the user
 what the updated host and port is.  To resolve this, kubernetes provides *services*, an interface that sits in front of pods.  Its job is to give a unique name
-that others can reference which it will direct into an available pod.  If a new pod has generated, the service will be aware of it, and direct traffic there.  The port
-specified below should match what each application port it is listening on.
+that others can reference which it will allow traffic to be served by an available pod.  If a new pod has generated or terminatin, the service will be aware of it, and 
+direct traffic appropriately.  The port specified below should match what each application port it is listening on.
 
 1. Create Services for the *account* and *provider* services as internal services.
 
@@ -213,7 +211,7 @@ specified below should match what each application port it is listening on.
     ```
 
 The services above were defined as "ClusterIP" which means that they are only exposed internally, and not available externally by default.  As we are considering them backend
-microservices, this is fine.
+microservices, this is a good default type to use.
 
 We will expose the last service externally using a service of type NodePort, which will assign it an external port number.
 
@@ -230,7 +228,8 @@ We will expose the last service externally using a service of type NodePort, whi
     kubectl get deployments -o wide
     ```
 
-You should notice that all of the services have assigned internal cluster IPs.  The external port is shown in the 30000+ range.
+You should notice that all of the services have internal cluster IPs assigned.  The external port is shown in the 30000+ range for the cost service which the NodePort type
+provides.  
 
 ## DNS support for Services and Pods
 
@@ -244,8 +243,8 @@ For instance, the *account* service can be accessed via any of the following hos
     account-service.default
     account-service
 
-The running containers are built upon a small unix image which are running NodeJs listening on specific ports.  However it is also possible to create a session 
-with the container using an interactive shell.  Lets start a session within a container so we can see the kube-dns in action.
+The running application containers are built upon a small unix image which are running NodeJs listening on specific ports.  However it is also possible to create a session 
+with the container using an interactive shell.  Lets start a session with it so we can see the kube-dns in action.
 
 1. Locate the cost pod name and create a shell.
     ```
@@ -276,10 +275,13 @@ used by our code in the *cost* microservice.
 
 In our steps above, the *cost* pod was created during the deployment creation, but the service creation for *account* and *provider* was done afterwards.  This means that the current 
 *cost* pod is not directly aware of the 2 new services that were created as we do not see any entries in the environment variables.  The code in cost/app.js could have made
-a hard reference to http://account-service.default.svc:8080/ and http://provider-service.default.svc:8080/ but that would rely on the service port being defined as 8080 in the expose command.  
-The NodeJs code in app.js currently references:
+a hard reference to http://account-service.default.svc:8080/ and http://provider-service.default.svc:8081/ but that would rely on the services' port being defined as 8080/8081 
+in the expose command.  The NodeJs code in app.js currently references:
 
-    'http://' + process.env.ACCOUNT_SERVICE_SERVICE_HOST + ':' + process.env.ACCOUNT_SERVICE_SERVICE_PORT
+    process.env.ACCOUNT_SERVICE_SERVICE_HOST
+    process.env.ACCOUNT_SERVICE_SERVICE_PORT
+    process.env.PROVIDER_SERVICE_SERVICE_HOST
+    process.env.PROVIDER_SERVICE_SERVICE_PORT
 
 The developer and kubernetes administrator should only need to agree upon the service name, and allow the service port to be defined by the administrator.  The development team
 can listen on any port (eg. 80 or 9876) for their own application and code changes would not be necessary while it is being deployed.  The account and provider applications also do not need
@@ -473,3 +475,5 @@ work in the same way, but the values are usually passwords or tokens that should
    kubectl exec -it dep-account-??? -- /bin/sh
    printenv
    ```
+
+You should see the environment variables for value1 and value2.
