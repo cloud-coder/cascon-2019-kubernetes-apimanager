@@ -9,7 +9,7 @@ var fs = require('fs');
 app.get('/provider', function(req, res) {
 
       var str = 'Provider Service<br/>';
-      str += 'I am running on hostname: ' + hostname + '<br/>';
+      str += 'I am running the provider service on hostname: ' + hostname + '<br/>';
       res.send(str);
 })
 

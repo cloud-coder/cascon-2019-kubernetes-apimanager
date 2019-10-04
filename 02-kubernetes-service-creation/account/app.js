@@ -10,7 +10,7 @@ var fs = require('fs');
 app.get('/account', function(req, res) {
 
   var str = 'Account Service<br/>';
-  str += 'I am running on hostname: ' + hostname + '<br/>';
+  str += 'I am running the account service on hostname: ' + hostname + '<br/>';
   res.send(str);
 })
 

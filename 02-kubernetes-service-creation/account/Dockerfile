@@ -1,6 +1,6 @@
 FROM node:9.4.0-alpine
 COPY app.js .
-COPY .env .
+COPY accounts.json .
 COPY package.json .
 RUN npm install &&\
     apk update &&\
