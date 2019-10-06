@@ -55,6 +55,10 @@ spec:
 ```  
 Save changes and exit edit mode.  
 
+Another option to scale a deployment is by specifying the desired number of replicas directly via the command. Instead of editing the provider deployment configuration to add 3 replicas, you can run the command
+```kubectl scale deployment/dep-provider --replicas=3```
+
+
 1.3. To scale the dep-cost service by adding 2 replicas via the IBM Cloud Kubernetes Dashboard, launch the dashboard from your Kubernetes service cluster and navigate to Deployments view. 
 ![](./images/kube-cluster-dashboard.png)  
 
