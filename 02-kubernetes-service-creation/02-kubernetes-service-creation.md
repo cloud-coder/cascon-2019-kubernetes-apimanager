@@ -108,34 +108,6 @@ specify in the command.
     kubectl create deployment dep-cost --image=us.icr.io/cas2019/cost:1
     ```
 
-1. Update the imagePullSecrets
-
-Because we are using a non-default namespace for Kubernetes, the credentials to pull images from the Container Register are not specified.  We need to update the deployment
-so that the correct secret is used.  Update the account deployment.
-
-    kubectl edit deployment/dep-account
-
-When the editor opens add the *imagePullSecrets* and the name as below:
-
-    spec:
-      containers:
-      - image: us.icr.io/cas2019/account:1
-        imagePullPolicy: IfNotPresent
-        name: account
-        resources: {}
-        terminationMessagePath: /dev/termination-log
-        terminationMessagePolicy: File
-      dnsPolicy: ClusterFirst
-      imagePullSecrets:
-      - name: default-us-icr-io
-
-1. Repeat the steps for the provide and cost
-
-    ``` 
-    kubectl edit deployment/dep-provider
-    kubectl edit deployment/dep-cost
-    ``` 
-
 A successfully deployed pod will in the *running* status.  Each pod is assigned an IP address in the private network and automatically assigned to a node in your 
 cluster.  In the IBM Cloud Free Tier, the cluster is only allocated one node, so all pods will be deployed there.  
 
@@ -474,3 +446,21 @@ against the Cloud Container Register are available when we pull images.  Normall
     kubectl config get-contexts
     kubectl get secrets -n default -o yaml | sed 's/default/cas2019ns/g' | kubectl -n cas2019ns create -f -
     ```
+
+1. Update the imagePullSecrets
+
+Because we are using a non-default namespace for Kubernetes, the credentials to pull images from the Container Register are not specified in this namespace.  
+We need to update the deployment so that the correct secret is used.  You can add the imagePullSecrets key by updating the deployment descriptors:
+
+    spec:
+      containers:
+      - image: us.icr.io/cas2019/account:1
+        imagePullPolicy: IfNotPresent
+        name: account
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: default-us-icr-io
+
