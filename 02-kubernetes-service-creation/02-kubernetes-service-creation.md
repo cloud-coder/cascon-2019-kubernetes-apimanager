@@ -3,19 +3,19 @@
 ## Deployment Scenario
 
 In this exercise we are deploying a website that provides cost comparisons for users across different service providers.  The development teams have worked independently
-on 3 projects.  
+on 3 microservice projects.  
 
-An *account* application provides information about all the users, including the the service providers they subscribe to.  They provide the REST api:
+An *account* microservice provides information about all the users, including the the service providers they subscribe to.  They provide the REST api:
 
     GET /account           # Returns a health message
     GET /account/<acct_id> # Returns the specific account detail in JSON
 
-The *provider* application provides detail on particular costs of their service.  they provide the REST api:
+The *provider* microservice provides detail on particular costs of their service.  they provide the REST api:
 
     GET /provider                # Returns a health message
     GET /provider/<provider_id>  # Returns specific provider cost in JSON
 
-The *cost* application integrates information from the other two applications, and provides a summary of the costs for a specific user.  The endpoint renders an html page and accesses the other applications.
+The *cost* microservice integrates information from the other two microservices, and provides a summary of the costs for a specific user.  The endpoint renders an html page and accesses the other microservices.
 
     GET /cost            # Returns a health message
     GET /cost/<cost_id>  # calls the account service to see which providers are associated to the account, then calls each provider to get each cost.  Returns total cost for all providers in JSON
@@ -29,13 +29,13 @@ We will be storing 3 images created from code available in this git repository.
 
 ### Set up Registry Namespace
 
-Namespaces provide a way to categorize your docker images within the registry.  Note that these are separate from Kubenetes namespaces.  Namespaces not
+Namespaces provide a way to categorize your Docker images within the registry.  Note that these are different than Kubenetes namespaces.  Namespaces must be unique across the entire Registry. Namespaces not
 found when building images will be added automatically.
 
-1. Create a namespace in the container registry to associate the images you will load into the directory.
+1. Create a unique namespace in the container registry to associate the images you will load into the directory.  eg. Here we are using the suffix jd40  (John Doe, age 40) to provide uniqueness.
 
     ```
-    ibmcloud cr namespace-add cas2019
+    ibmcloud cr namespace-add cas2019jd40
     ```
 
 2. Verify that is was correctly added.
@@ -50,7 +50,8 @@ The cluster we are setting up will contain our 3 projects (i.e. services). For s
 provider, cost).
 Each project
 
-1. Clone this repository with git.
+1. Clone this repository with git.  
+For more information on choosing either ssh/https methods, see [github](https://help.github.com/en/articles/which-remote-url-should-i-use)
 
     ```
     git clone git@github.com:cloud-coder/cascon-2019-kubernetes-apimanager.git (ssh)
@@ -58,20 +59,23 @@ Each project
     ```
 
 ### Create Images
-1. For each of the folders, we need to create docker images and deploy them to the registry.
+1. For each of the folders, we need to create Docker images and deploy them to the registry.
 
-This is essentially the docker command (www.docker.com), but pushes the images to the IBM Cloud Container Registry.  The images are built with the corresponding Dockerfile and contains
-all of the necessary software packages needed to run the microservices (eg. NodeJs, business logic).  By creating an image, it allows us the flexibility of reusing it to deploy several
-times without needing to recompile the code.  This is the first time we are submitting these image repositories so we will provide it with an initial tag "1".  Ensure you specify the trailing "." 
+This is essentially the Docker command (www.docker.com), but pushes the images to the IBM Cloud Container Registry.  Docker is a tool designed to make it easier to create, 
+deploy, and run applications by using containers.  The images are built with the corresponding Dockerfile and contains all of the necessary software packages needed to run 
+the microservices (eg. NodeJs, business logic).  By creating an image, it allows us the flexibility of reusing it to deploy several times without needing to recompile the code.  
+This is the first time we are submitting these image repositories so we will provide it with an initial tag "1".  Ensure you specify the trailing "." 
 which references the location of the Dockerfile.
 
     cd cascon-2019-kubernetes-apimanager/02-kubernetes-service-creation
     cd account
-    ibmcloud cr build -t us.icr.io/cas2019/account:1 .
+    ibmcloud cr build --no-cache -t us.icr.io/cas2019jd40/account:1 .
     cd ../provider
-    ibmcloud cr build -t us.icr.io/cas2019/provider:1 .
+    ibmcloud cr build --no-cache -t us.icr.io/cas2019jd40/provider:1 .
     cd ../cost
-    ibmcloud cr build -t us.icr.io/cas2019/cost:1 .
+    ibmcloud cr build --no-cache -t us.icr.io/cas2019jd40/cost:1 .
+
+The --no-cache allows you to make a clean build of an image every time, but optional.
 
 If you experience quota related issues, you can remove any older images you may have.
 
@@ -103,9 +107,9 @@ specify in the command.
 1. Create Deployments
 
     ```
-    kubectl create deployment dep-account --image=us.icr.io/cas2019/account:1
-    kubectl create deployment dep-provider --image=us.icr.io/cas2019/provider:1
-    kubectl create deployment dep-cost --image=us.icr.io/cas2019/cost:1
+    kubectl create deployment dep-account --image=us.icr.io/cas2019jd40/account:1
+    kubectl create deployment dep-provider --image=us.icr.io/cas2019jd40/provider:1
+    kubectl create deployment dep-cost --image=us.icr.io/cas2019jd40/cost:1
     ```
 
 A successfully deployed pod will in the *running* status.  Each pod is assigned an IP address in the private network and automatically assigned to a node in your 
@@ -117,7 +121,7 @@ cluster.  In the IBM Cloud Free Tier, the cluster is only allocated one node, so
     kubectl get pods -o wide
     ```
 
-Each pod is ephemeral, so using the IP address will only be valid for as long as the pod is alive.  
+Deployments exists until they are explicitly removed, but each pod is ephemeral, so using the IP address will only be valid for as long as the pod is alive.  
 
 1. Let's delete a pod and see what happens.
 
@@ -155,9 +159,10 @@ Press Ctrl-C to end the tail of the log.
 ## Creating Services
 
 As the pods have dynamically assigned private IPs that can change at any time, it would be difficult to expose them to the outside world without telling the user
-what the updated host and port is.  To resolve this, kubernetes provides *services*, an interface that sits in front of pods.  Its job is to give a unique name
+what the updated host and port is.  To resolve this, Kubernetes provides *services*, an interface that sits in front of pods.  Its job is to give a unique name
 that others can reference which it will allow traffic to be served by an available pod.  If a new pod has generated or terminated, the service will be aware of it, and 
-direct traffic appropriately.  The port specified below should match what each application port it is listening on.
+direct traffic appropriately.  The port specified below should match what each application port it is listening on.  Services are not ephemeral so they are will always
+exist unless explicitly removed, but its existence is not affected by the number of pods associated with it.
 
 1. Create Services for the *account* *provider* and *cost* microservices
 
@@ -233,7 +238,7 @@ in the expose command.  The NodeJs code in app.js currently references:
     process.env.PROVIDER_SERVICE_SERVICE_HOST
     process.env.PROVIDER_SERVICE_SERVICE_PORT
 
-The developer and kubernetes administrator should only need to agree upon the service name, and allow the service port to be defined by the administrator.  The development team
+The developer and Kubernetes administrator should only need to agree upon the service name, and allow the service port to be defined by the administrator.  The development team
 can listen on any port (eg. 80 or 9876) for their own application and code changes would not be necessary while it is being deployed.  The account and provider applications also do not need
 to consider whether they are both listening on the same port while processing their requests.
 
@@ -290,6 +295,11 @@ You should be able to see all of the services listed now including its own servi
     PROVIDER_SERVICE_SERVICE_HOST=172.21.12.109
     PROVIDER_SERVICE_SERVICE_PORT=8081
 
+Just to be sure, we can delete all the pods to ensure they are all aware of these environment variables.
+    ```
+    kubectl delete pods --all
+    ```
+
 ## Accessing from the Outside
 
 1. Determine the cluster public IP by checking with IBM cloud services.
@@ -315,9 +325,6 @@ Check the ports column for the  external value (after the colon).
 1. Access the urls from a web browser.
 
     ```
-    eg. http://173.193.92.194:31234
-    eg. http://173.193.92.194:31323
-    eg. http://173.193.92.194:30507
     eg. http://173.193.92.194:31234/account
     eg. http://173.193.92.194:30507/account/123
     eg. http://173.193.92.194:31323/provider
@@ -348,7 +355,7 @@ Now that we have a change, we need to build a new image in the registry.
 
 1. Make a new version 2 of the account application.
     ```
-    ibmcloud cr build -t us.icr.io/cas2019/account:2 .
+    ibmcloud cr build -t us.icr.io/cas2019jd40/account:2 .
     ```
 
 Now that we have a new image, the Kubernetes administrator can update the deployment.
@@ -357,11 +364,11 @@ Now that we have a new image, the Kubernetes administrator can update the deploy
 
 Now replace the line
 
-      - image: us.icr.io/cas2019/account:1
+      - image: us.icr.io/cas2019jd40/account:1
 
 with
 
-      - image: us.icr.io/cas2019/account:2
+      - image: us.icr.io/cas2019jd40/account:2
 
 save then close the file.
 
@@ -384,7 +391,7 @@ Kubernetes is extremely flexible in providing you an interface to interact with 
 
 1. Pull all the configuration for your deployments and services for this namespace.
    ```
-   kubectl get all  -n cas2019ns -o json > myproject.json
+   kubectl get all  -o json > myproject.json
    ```
 
 1. Delete all the deployments and services
