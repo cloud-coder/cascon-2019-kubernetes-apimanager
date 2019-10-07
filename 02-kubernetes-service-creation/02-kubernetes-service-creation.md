@@ -312,10 +312,12 @@ Check the ports column for the  external value (after the colon).
     kubectl get services -o wide
     ```
 
-1. Access the url from a web browser.
+1. Access the urls from a web browser.
 
     ```
     eg. http://173.193.92.194:30507
+    eg. http://173.193.92.194:31234
+    eg. http://173.193.92.194:31323
     ```
 
 Note that this scenario is not complete as a deployed set of services in a real-life scenario.  For instance, ports are typically exposed on 80/443, and not a random IP 
