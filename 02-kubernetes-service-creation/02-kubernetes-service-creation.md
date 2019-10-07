@@ -1,4 +1,4 @@
-# 2 Exploring Kubernetes and Creating a Kubernetes Service Deployment
+# Lab 2 Exploring Kubernetes and Creating a Kubernetes Service Deployment
 
 ## Deployment Scenario
 
@@ -94,22 +94,6 @@ everything will be deployed there.  You can see the workers that have been alloc
     ibmcloud ks workers <clusterId>
     kubectl get nodes -o wide
 
-## Kubernetes Namepaces
-
-Before we begin we should set up a Kubernetes Namespace.  This allows us to group all our Kubernetes objects together under our project, and separate
-them from other potential projects on the same cluster.  By default, the *default* namespace is used, but by using a custom one, it gives us 
-flexibility in managing it later.  When we use a non-default namespace, we need to migrate all the secrets over so that the tokens use to authenticate
-against the Cloud Container Register are available when we pull images.
-
-1. Create a Kubernetes Namespace and use it in the current context.
-
-    ```
-    kubectl create ns cas2019ns
-    kubectl config set-context --current --namespace=cas2019ns
-    kubectl config get-contexts
-    kubectl get secrets -n default -o yaml | sed 's/default/cas2019ns/g' | kubectl -n cas2019ns create -f -
-    ```
-
 ## Deploy into the Kubernetes Cluster
 
 To get started, a Kubernetes deployment is needed to define how you want the pods deployed.  A pod is the smallest deployable unit which may contain one or more containers, 
@@ -200,26 +184,20 @@ Press Ctrl-C to end the tail of the log.
 
 As the pods have dynamically assigned private IPs that can change at any time, it would be difficult to expose them to the outside world without telling the user
 what the updated host and port is.  To resolve this, kubernetes provides *services*, an interface that sits in front of pods.  Its job is to give a unique name
-that others can reference which it will allow traffic to be served by an available pod.  If a new pod has generated or terminatin, the service will be aware of it, and 
+that others can reference which it will allow traffic to be served by an available pod.  If a new pod has generated or terminated, the service will be aware of it, and 
 direct traffic appropriately.  The port specified below should match what each application port it is listening on.
 
 1. Create Services for the *account* and *provider* services as internal services.
 
     ```
-    kubectl expose deployment/dep-account --type=ClusterIP --name=account-service --port=8080
-    kubectl expose deployment/dep-provider --type=ClusterIP --name=provider-service --port=8081
+    kubectl expose deployment/dep-account --type=NodePort --name=account-service --port=8080
+    kubectl expose deployment/dep-provider --type=NodePort --name=provider-service --port=8081
+    kubectl expose deployment/dep-cost --type=NodePort --name=cost-service --port=8082
     ```
 
-The services above were defined as "ClusterIP" which means that they are only exposed internally, and not available externally by default.  As we are considering them backend
-microservices, this is a good default type to use.
-
-We will expose the last service externally using a service of type NodePort, which will assign it an external port number.
-
-1. Expose the last deployment using a NodePort
-
-    ```
-    kubectl expose deployment/dep-cost --type=NodePort --port=8082 --name=cost-service
-    ```
+The services above are defined here as "NodePort", which means each service is provided a port 30000+ which makes them directly accessible externally.  We could have also
+used the type "ClusterIP" which means that they would only be exposed internally, and not available externally by default.  In configuring real microservices we may
+consider using this type instead.
 
 1. Verify everything is running.
 
@@ -228,7 +206,7 @@ We will expose the last service externally using a service of type NodePort, whi
     kubectl get deployments -o wide
     ```
 
-You should notice that all of the services have internal cluster IPs assigned.  The external port is shown in the 30000+ range for the cost service which the NodePort type
+You should notice that all of the services have internal and external cluster IPs assigned.  The external port is shown in the 30000+ range for the cost service which the NodePort type
 provides.  
 
 ## DNS support for Services and Pods
@@ -431,8 +409,8 @@ Kubernetes is extremely flexible in providing you an interface to interact with 
 
 1. Delete all the deployments and services
    ```
-   kubectl delete --all deployments -n cas2019ns
-   kubectl delete --all services -n cas2019ns
+   kubectl delete --all deployments
+   kubectl delete --all services
    ```
 
 1. In your new cluster you can reapply your configuration with this command
@@ -477,3 +455,22 @@ work in the same way, but the values are usually passwords or tokens that should
    ```
 
 You should see the environment variables for value1 and value2.
+
+
+# More Information
+
+## Kubernetes Namepaces
+
+You can also use Kubernetes Namespace.  This allows us to group all our Kubernetes objects together under our project, and separate
+them from other potential projects on the same cluster.  By default, the *default* namespace is used, but by using a custom one, it gives us 
+flexibility in managing it later.  When we use a non-default namespace, we need to migrate all the secrets over so that the tokens use to authenticate
+against the Cloud Container Register are available when we pull images.  Normally this would have been done before any deployments were created.
+
+1. Create a Kubernetes Namespace and use it in the current context.
+
+    ```
+    kubectl create ns cas2019ns
+    kubectl config set-context --current --namespace=cas2019ns
+    kubectl config get-contexts
+    kubectl get secrets -n default -o yaml | sed 's/default/cas2019ns/g' | kubectl -n cas2019ns create -f -
+    ```
