@@ -133,7 +133,7 @@ Each pod is ephemeral, so using the IP address will only be valid for as long as
 
 Notice the original pod name/IP may result in a terminated status, but a new pod will spawn, and a new IP is assigned to it.  Kubernetes attempts to provide you the pod
 specified in the deployment that you created earlier automatically.  This also happens if your container fails (eg. due to a software glitch), and will continue 
-forever in attempting to maintain a running deployment.
+forever in attempting to have a successfully running deployment.
 
 If you make a mistake in creating your deployment, you can also remove deployments using the command.
 
@@ -159,7 +159,7 @@ what the updated host and port is.  To resolve this, kubernetes provides *servic
 that others can reference which it will allow traffic to be served by an available pod.  If a new pod has generated or terminated, the service will be aware of it, and 
 direct traffic appropriately.  The port specified below should match what each application port it is listening on.
 
-1. Create Services for the *account* and *provider* services as internal services.
+1. Create Services for the *account* *provider* and *cost* microservices
 
     ```
     kubectl expose deployment/dep-account --type=NodePort --name=account-service --port=8080
@@ -315,9 +315,15 @@ Check the ports column for the  external value (after the colon).
 1. Access the urls from a web browser.
 
     ```
-    eg. http://173.193.92.194:30507
     eg. http://173.193.92.194:31234
     eg. http://173.193.92.194:31323
+    eg. http://173.193.92.194:30507
+    eg. http://173.193.92.194:31234/account
+    eg. http://173.193.92.194:30507/account/123
+    eg. http://173.193.92.194:31323/provider
+    eg. http://173.193.92.194:31323/provider/bell
+    eg. http://173.193.92.194:30507/cost
+    eg. http://173.193.92.194:30507/cost/123
     ```
 
 Note that this scenario is not complete as a deployed set of services in a real-life scenario.  For instance, ports are typically exposed on 80/443, and not a random IP 
