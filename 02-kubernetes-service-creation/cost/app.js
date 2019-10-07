@@ -9,7 +9,7 @@ var listenPort = process.env.COST_SERVICE_SERVICE_PORT;
 
 app.get('/cost', function(req, res) {
 
-  var str = 'Account Service<br/>';
+  var str = 'Cost Service<br/>';
   str += 'I am running the cost service on hostname: ' + hostname + '<br/>';
   res.send(str);
 })
