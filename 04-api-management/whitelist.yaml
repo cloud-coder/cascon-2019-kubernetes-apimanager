@@ -1,0 +1,28 @@
+ apiVersion: projectcalico.org/v3
+ kind: GlobalNetworkPolicy
+ metadata:
+   name: whitelist
+ spec:
+   applyOnForward: true
+   preDNAT: true
+   ingress:
+   - action: Allow
+     destination:
+       nets:
+       - 173.193.99.247/32
+       ports:
+       - 32482
+     protocol: TCP
+     source:
+       nets:
+       - 172.18.34.81/32
+       - 9.26.119.121/32
+       - 199.246.40.54/32
+       - 169.46.27.163/32
+       - 169.48.243.2/32
+       - 169.60.186.186/32
+       - 169.46.27.162/32
+   selector: ibm.role=='worker_public'
+   order: 500
+   types:
+   - Ingress
