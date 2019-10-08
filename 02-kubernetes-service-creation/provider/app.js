@@ -15,7 +15,7 @@ var listenPort = process.env.PROVIDER_SERVICE_SERVICE_PORT;
 var fs = require('fs');
 
 function pullDetails(name, req){
-  var details = {name: name, hostname: hostname, listenPort : listenPort, reqHostname : req.hostname, reqPath : req.path };
+  var details = {name: name, hostname: hostname, listenPort : listenPort, reqHostname : req.hostname, reqPath : req.path, headers : JSON.stringify(req.headers)  };
   return details;
 }
 
