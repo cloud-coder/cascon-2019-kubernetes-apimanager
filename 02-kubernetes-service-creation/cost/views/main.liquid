@@ -1,0 +1,101 @@
+<html>
+<style>
+
+.blue {
+background: #cff0ff;
+font-weight: bold
+}
+
+.green {
+background: #cff0ee;
+}
+
+.code {
+padding: 4px 12px;
+margin-bottom: 0;
+font-size: 15px;
+width: 50%;
+border: 1px solid #B4DCED;
+border-bottom: none;
+border-radius: 3px 3px 0 0;
+}
+
+h2 {
+font-size: 1.75rem;
+line-height: 1.25;
+font-weight: 300;
+}
+
+body {
+font-family: "ibm-plex-sans",Helvetica Neue,Arial,sans-serif;
+}
+
+.im {
+vertical-align: middle;
+}
+
+a:visited, a:link, a:active {
+text-decoration: none;
+color:blue
+}
+
+</style>
+
+<body>
+	<div>
+		<a target=cascon href="http://www-01.ibm.com/ibm/cas/cascon/">
+		<img class="im" width=200 src="https://pheedloop.s3.amazonaws.com/media/events/EVEFZMZOYNUIB/files/xASWiBlRkUFJZdN_284243.png">
+		&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+		</a>
+
+		<a target=ibmcloud href="https://cloud.ibm.com"> 
+		<img class="im" width=30 src="https://www.ibm.com/cloud-computing/images/new-cloud/img/cloud.png"> IBM Cloud </a>
+
+		<a target=iccr href="https://cloud.ibm.com/kubernetes/registry/main/start">
+		<img class="im" width=30 src="https://cloud.ibm.com/kubernetes/img/registry-logo-2b24575740.svg"> Container Registry
+		</a>
+
+		<a target=k8s href="https://cloud.ibm.com/kubernetes/clusters">
+		<img class="im" width=30 src="https://cache.globalcatalog.cloud.ibm.com/api/v1/containers-kubernetes/artifacts/cache/7e87826329af635ee4540b8e40e957cf-public/containers-kubernetes/img/container-service-logo-3aec89a836.svg"> Kubernetes Cluster
+		</a>
+
+		<a target=apim href="https://cloud.ibm.com/apis/managed?env_id=ibm:yp:us-east">
+		<svg class="im" fill-rule="evenodd" height="24" name="apis" role="img" viewBox="0 0 25 24" width="25" aria-label="Provide a description that will be used as the title" alt="Provide a description that will be used as the title"><title>Provide a description that will be used as the title</title><path d="M23.4 24H.6c-.3 0-.6-.3-.6-.6s.3-.6.6-.6h22.8c.3 0 .6.3.6.6s-.3.6-.6.6zM9.5 9.7c0 .3.1.4.3.4h.3v.8c-.2 0-.6.1-.8.1-.5 0-.8-.2-.9-.6-.4.4-1.1.6-1.7.6-.9 0-1.7-.5-1.7-1.5C5 8.3 6 8.1 6.9 8c.8-.2 1.5 0 1.5-.7 0-.6-.6-.7-1-.7-.6 0-1.1.3-1.1.8H5.2c.1-1.3 1.2-1.7 2.3-1.7 1 0 2 .4 2 1.5v2.5zM8.4 8.3c-.4.3-.9.3-1.4.3-.5.1-.9.3-.9.9 0 .5.6.6 1 .6.5 0 1.2-.3 1.2-1v-.8h.1zM11 6h1.1v.7c.3-.6.9-.8 1.6-.8 1.6 0 2.4 1.2 2.4 2.7 0 1.4-.7 2.6-2.2 2.6-.6 0-1.3-.2-1.7-.8v2.5H11V6zm2.5.8c-.9 0-1.4.7-1.4 1.8 0 1 .5 1.8 1.4 1.8 1 0 1.4-.9 1.4-1.8 0-1-.5-1.8-1.4-1.8zM17 4h1v1h-1V4zm0 2h1v5h-1V6z"></path><path d="M22 1.2c.4 0 .8.3.8.8v14c0 .4-.3.8-.8.8H2c-.4 0-.8-.3-.8-.8V2c0-.4.3-.8.8-.8h20zM22 0H2C.9 0 0 .9 0 2v14c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V2c0-1.1-.9-2-2-2z"></path></svg>
+		API Management
+		</a>
+
+		<a target=gh href="https://github.com/cloud-coder/cascon-2019-kubernetes-apimanager">
+		<img class="im" width=40 src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png">
+		Github
+		</a>
+
+	</div>
+
+<h2>Build, deploy and administer microservices using Kubernetes and IBM Cloud API Management</h2>
+
+<p class="blue code">Microservice</p> 
+<div class="green code">{{name | capitalize | append " Service" }}</div>
+
+<p class="blue code">Hostname</p> 
+<div class="green code">{{hostname }}</div>
+
+<p class="blue code">Listening Port </p> 
+<div class="green code">{{listenPort }}</div>
+
+<p class="blue code">Request Hostname</p> 
+<div class="green code">{{reqHostname}}</div>
+
+<p class="blue code">Request Path</p> 
+<div class="green code">{{reqPath}}</div>
+
+<p class="blue code">Microservice Response</p> 
+<div class="green code">
+
+<b>
+ The total cost for the account [{{ accountId }}] is [{{ cost }}]. <br/>
+</b>
+
+</div>
+
+</body>
+</html>

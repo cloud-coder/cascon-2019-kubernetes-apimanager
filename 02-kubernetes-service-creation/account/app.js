@@ -1,4 +1,12 @@
 require('dotenv').config();
+var { Liquid } = require('liquidjs');
+var engine = new Liquid(
+{
+    root: 'views/',
+    extname: '.liquid'
+}
+
+);
 var express = require('express');
 var os = require("os");
 var hostname = os.hostname();
@@ -6,12 +14,20 @@ var app = express();
 var listenPort = process.env.ACCOUNT_SERVICE_SERVICE_PORT;
 var fs = require('fs');
 
+function pullDetails(name, req){
+  var details = {name: name, hostname: hostname, listenPort : listenPort, reqHostname : req.hostname, reqPath : req.path };
+  return details;
+}
+
+app.get('/',function(req,res){
+    res.redirect('/account')
+});
 
 app.get('/account', function(req, res) {
 
-  var str = 'Account Service<br/>';
-  str += 'I am running the account service on hostname: ' + hostname + '<br/>';
-  res.send(str);
+  engine
+    .renderFile("main", pullDetails('account', req))
+    .then(html => res.send(html))
 })
 
 app.get('/account/:accountId', function(req, res) {
@@ -24,8 +40,9 @@ app.get('/account/:accountId', function(req, res) {
       if (account === "none") {
         account = '{}';
       }
-      
+      var details = pullDetails('account', req);
       res.send(account);
+
 })
 
 function findElement(array, name, value) {

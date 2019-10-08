@@ -1,4 +1,12 @@
 require('dotenv').config();
+var { Liquid } = require('liquidjs');
+var engine = new Liquid(
+{
+    root: 'views/',
+    extname: '.liquid'
+}
+
+);
 var express = require('express');
 var request = require('request');
 var os = require("os");
@@ -6,16 +14,23 @@ var hostname = os.hostname();
 var app = express();
 var listenPort = process.env.COST_SERVICE_SERVICE_PORT;
 
+function pullDetails(name, req){
+  var details = {name: name, hostname: hostname, listenPort : listenPort, reqHostname : req.hostname, reqPath : req.path };
+  return details;
+}
+
+app.get('/',function(req,res){  
+    res.redirect('/cost')
+});
 
 app.get('/cost', function(req, res) {
 
-  var str = 'Cost Service<br/>';
-  str += 'I am running the cost service on hostname: ' + hostname + '<br/>';
-  res.send(str);
+  engine
+    .renderFile("main", pullDetails('cost', req))   
+    .then(html => res.send(html))
 })
 
 app.get('/cost/:accountId', function(req, res) {
-
       var accountId = req.params.accountId;
 
       // wrap a request in an promise
@@ -23,7 +38,9 @@ app.get('/cost/:accountId', function(req, res) {
         return new Promise((resolve, reject) => {
             request(url, (error, response, body) => {
                 if (error) reject(error);
-                if (response.statusCode != 200) {
+		if (response == null) {
+                    reject('Invalid status code <invalid>');
+		} else if (response.statusCode != 200) {
                     reject('Invalid status code <' + response.statusCode + '>');
                 }
                 resolve(body);
@@ -51,14 +68,19 @@ app.get('/cost/:accountId', function(req, res) {
         }
       }
 
-      //hold thee response until all data is collected
+      //hold the response until all data is collected
       new Promise(function(resolve, reject) {
         var cost = retrieveAccountDetails(accountId);
         resolve(cost); 
       }).then(function(cost) { 
         if (cost === undefined) cost = 'Account not found';
         console.log('The total cost for the account ' + accountId + ' is ' + cost);
-        res.send('{"account_id":"'+accountId+'", "totalCost":"' + cost + '"}');
+        details = pullDetails('cost', req);
+        details['accountId'] = accountId;
+        details['cost'] = cost;
+        engine
+          .renderFile("main", details)
+          .then(html => res.send(html))
       });
   
 })
