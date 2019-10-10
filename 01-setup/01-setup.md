@@ -42,7 +42,7 @@ vi.	Contact method (Optional)
 ![](images/prereq2.png)
 
 
-You will receive an email titled *“Action required: Confirm your IBM Cloud account”* in your inbox.
+You will receive an email titled _*Action required: Confirm your IBM Cloud account*_ in your inbox.
 
 Open the email and click on the `Confirm Account` button.
 
@@ -98,12 +98,14 @@ For this lab, we will be using the free Kubernetes cluster available to IBM Clou
 
 ![](images/prereq10.png)
 
-10.	Kubernetes is the preselected default Cluster type for the free plan, where the latest stable version is listed inside the tile (eg. V1.14.6).
+10.	`Kubernetes` is the preselected default Cluster type for the free plan, where the latest stable version is listed inside the tile (eg. V1.14.6).
 
 11. Fill in the required info:
 
 i. Cluster name
 
+    Enter a name for your cluster
+    
 ii.	Tags
     
     Optionally, enter any tags for this cluster or leave blank
@@ -152,8 +154,8 @@ We will need to install the IBM Cloud CLI (Command Line Interface) and the Kuber
 
 For Mac and Linux, run:
     
-```curl -sL https://ibm.biz/idt-installer |bash
-```
+          curl -sL https://ibm.biz/idt-installer |bash
+
         
 For Windows 10, run this as an administrator:
 
