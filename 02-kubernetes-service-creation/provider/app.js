@@ -1,16 +1,34 @@
 require('dotenv').config();
+var { Liquid } = require('liquidjs');
+var engine = new Liquid(
+{
+    root: 'views/',
+    extname: '.liquid'
+}
+
+);
 var express = require('express')
 var os = require("os");
 var hostname = os.hostname();
 var app = express()
-var listenPort = process.env.PROVIDER_SERVICE_PORT;
+var listenPort = process.env.PROVIDER_SERVICE_SERVICE_PORT;
 var fs = require('fs');
+
+function pullDetails(name, req){
+  var details = {name: name, hostname: hostname, listenPort : listenPort, reqHostname : req.hostname, reqPath : req.path, headers : JSON.stringify(req.headers)  };
+  return details;
+}
+
+app.get('/',function(req,res){
+    res.redirect('/provider')
+});
 
 app.get('/provider', function(req, res) {
 
-      var str = 'Provider Service<br/>';
-      str += 'I am running on hostname: ' + hostname + '<br/>';
-      res.send(str);
+  engine
+    .renderFile("main", pullDetails('provider', req))
+    .then(html => res.send(html))
+
 })
 
 app.get('/provider/:providerId', function(req, res) {
