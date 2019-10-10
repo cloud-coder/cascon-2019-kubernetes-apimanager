@@ -11,7 +11,7 @@
        nets:
        - 173.193.99.247/32
        ports:
-       - 32482
+       - 32711
      protocol: TCP
      source: {}
    - action: Deny
@@ -19,7 +19,7 @@
        nets:
        - 173.193.99.247/32
        ports:
-       - 32482
+       - 32711
      protocol: UDP
      source: {}
    selector: ibm.role=='worker_public'
