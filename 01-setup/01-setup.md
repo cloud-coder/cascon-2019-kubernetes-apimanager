@@ -21,7 +21,7 @@ i.	Email
 
 ii.	First Name
 
-iii. Last Name
+iii.      Last Name
 
 iv.	Country or Region
 
@@ -110,21 +110,22 @@ ii.	Tags
 
 iii.	Resource group
 
-    Select `Default` from the drop down
+    Select "Default" from the drop down
 
 iv.	Geography
 
-    Select `North America` from the drop down
+    Select "North America" from the drop down
 
 
 v.	Metro
 
-    Select `Dallas` from the drop down
+    Select "Dallas" from the drop down
 
 
 12.	Click on the `Create cluster` button.
 
-13.	You will see a green bar with status *Requesting creation…*
+
+13.	You will see a green progress bar with status info:  *Requesting creation…*
 
 ![](images/prereq11.png)
 
@@ -149,11 +150,12 @@ We will need to install the IBM Cloud CLI (Command Line Interface) and the Kuber
 
 1.	Open a terminal or command line window.
 
-    For Mac and Linux, run:
+For Mac and Linux, run:
     
-           curl -sL https://ibm.biz/idt-installer |bash
-          
-    For Windows 10, run this as an administrator:
+```curl -sL https://ibm.biz/idt-installer |bash
+```
+        
+For Windows 10, run this as an administrator:
 
 ```
 [Net.ServicePointManager]::SecurityProtocol = "Tls12"; iex(New-Object  Net.WebClient).DownloadString('https://ibm.biz/idt-win-installer')
@@ -215,7 +217,7 @@ Next, verify the service plug-in are installed properly.
 ![](images/prereq16.png)
 
 
-### 3.1 Set up KubeConfig
+### 3.3 Set up KubeConfig
 
 After your cluster is provisioned from Section 2, we can complete the kubeconfig set up.
 
@@ -266,6 +268,7 @@ You can also run the get pods command to ensure that it runs although we have no
 ```
 kubectl get pods
 ```
+
 
 
 ## Section 4 - Other Tools
