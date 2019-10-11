@@ -1,28 +1,28 @@
-# ***DRAFT***
 # 3. Scaling Microservices in Kubernetes
 In this lab, learn how to scale a microservice running in Kubernetes using replicas and how to safely roll up an update to the number of replicas.
 
 Deployments in Kubernetes can be horizontally scaled using replicas. A replica is a copy of a pod that contains a running service. To scale your Kubernetes application horizontally, create multiple replicas which ensure that multiple running copies of your application are available to handled increased workloads.  
 
-You can scale your Kubernetes application running on the IBM Cloud Kubernetes service by specifying the number of replicas via the:
+You can scale your Kubernetes application running on the IBM Cloud Kubernetes service by specifying the number of replicas by:
 
-* kubectl scale command
-* deployment configuration file
-* Deployments view in the IBM Cloud Kubernetes service dashboard
+* Running the ```kubectl scale``` command
+* Using a deployment configuration file
+* Navigating to the deployments view in the IBM Cloud Kubernetes service dashboard and modifying the configuration
 
 ## Horizontal Scaling with Replicas
 1. Scaling account, provider and cost service deployments  
-In this step you will scale the account deployment by adding 5 replicas, the provider depolment with 3 replicas and the cost deployment with 2 replicas.  
+In this step you will scale the account deployment by adding 2 replicas, the provider depolment with 4 replicas and the cost deployment with 8 replicas.  
 
-1.1. Scale the dep-account depolyment by adding 5 replicas using the kubectl scale command by running  
+1.1. Scale the dep-account depolyment by adding 2 replicas ***using the kubectl scale command*** by running  
 ```
-$ kubectl scale --replicas=5 deployment dep-account  
+$ kubectl scale --replicas=2 deployment dep-account  
 deployment "dep-account" scaled 
 ```
   
-Kubernetes will now add 5 new pods for the dep-account service.  
+Kubernetes will now add 2 new pods for the dep-account service. You can verify this by running the ``` kubectl get pods``` command. Notice that 2 new pods for the dep-account were created. Now try deleting one of the account pods using the command ```kubectl delete pods dep-account-xxx```. Kubernetes will delete the pod and re-create a new one to satisfy the deployment configuration that specified 2 replicas for the deployment, dep-account. You can verify this by running the ``` kubectl get pods``` command and notice the name of the newly created dep-account-xxx pod.
 
-1.2.  Scale the dep-provider depolyment by adding 3 replicas by editing the deployment configuration running the command below and modifying the replicas property value under the spec property. You can also edit the deployment configuration via the Kubernetes dashboard.
+
+1.2.  Scale the dep-provider depolyment by adding 4 replicas by ***editing the deployment configuration*** running the command below and modifying the *replicas* property value under the spec property. You can also edit the deployment configuration via the Kubernetes dashboard.
  
 ``` 
 kubectl edit deployment/dep-provider
@@ -49,21 +49,18 @@ metadata:
   uid: 2e86236f-e1f5-11e9-86a5-022c994165ef
 spec:
   progressDeadlineSeconds: 2147483647
-  replicas: 3
+  replicas: 4
   revisionHistoryLimit: 2147483647
 ...
 ```  
-Save changes and exit edit mode.  
-
-Another option to scale a deployment is by specifying the desired number of replicas directly via the command. Instead of editing the provider deployment configuration to add 3 replicas, you can run the command
-```kubectl scale deployment/dep-provider --replicas=3```
+Save changes and exit edit mode. Verify that 4 new provider service pods were created by running the command ``` kubectl get pods```.  
 
 
-1.3. To scale the dep-cost service by adding 2 replicas via the IBM Cloud Kubernetes Dashboard, launch the dashboard from your Kubernetes service cluster and navigate to Deployments view. 
-![](./images/kube-cluster-dashboard.png)  
+1.3. To scale the dep-cost service by adding 8 replicas via the ***IBM Cloud Kubernetes Dashboard***, launch the dashboard from your Kubernetes service cluster and navigate to Deployments view. 
+![](./images/kube-cluster.png)  
 
 
-Click on the Scale menu option against the dep-cost service and add 2 replicas. 
+Click on the Scale menu option against the dep-cost service and add 8 replicas. 
 ![](./images/kube-cluster-dashboard-depolyments-view.png)  
 
 
@@ -75,11 +72,8 @@ kubectl rollout status deployment/dep-cost
 ```
 *The rollout might occur so quickly that the following messages might not display:*
 ```
-Waiting for rollout to finish: 1 of 5 updated replicas are available...
-Waiting for rollout to finish: 2 of 5 updated replicas are available...
-Waiting for rollout to finish: 3 of 5 updated replicas are available...
-Waiting for rollout to finish: 4 of 5 updated replicas are available...
-Waiting for rollout to finish: 5 of 5 updated replicas are available..
+Waiting for rollout to finish: 1 of 2 updated replicas are available...
+Waiting for rollout to finish: 2 of 2 updated replicas are available...
 deployment "dep-account" successfully rolled out
 ...
 ...
@@ -93,38 +87,47 @@ kubectl get pods
 NAME                                    READY     STATUS    RESTARTS   AGE
 dep-account-b78dfd57d-cpjp7             1/1       Running   0          36m
 dep-account-b78dfd57d-dbt9d             1/1       Running   0          18h
-dep-account-b78dfd57d-jntzx             1/1       Running   0          36m
-dep-account-b78dfd57d-p49xg             1/1       Running   0          36m
-dep-account-b78dfd57d-p4rvh             1/1       Running   0          36m
 dep-cost-5dcd9b5c7f-kppcj        1/1       Running   0          23h
 dep-cost-5dcd9b5c7f-lv5tw        1/1       Running   0          8m
+dep-cost-5dcd9b5c7f-kaccj        1/1       Running   0          21h
+dep-cost-5dcd9b5c7f-de5tw        1/1       Running   0          12m
+dep-cost-5dcd9b5c7f-werft        1/1       Running   0          13h
+dep-cost-5dcd9b5c7f-ppiuo        1/1       Running   0          19m
+dep-cost-5dcd9b5c7f-yuabj        1/1       Running   0          20h
+dep-cost-5dcd9b5c7f-sinae        1/1       Running   0          11m
 dep-provider-6c897669cb-fzzsc           1/1       Running   0          23h
 dep-provider-6c897669cb-jfjbz           1/1       Running   0          7m
 dep-provider-6c897669cb-lcbbg           1/1       Running   0          7m
+dep-provider-6c897669cb-cdfgy           1/1       Running   0          9m
 
 ```
   
-4. A ReplicaSet is a Kubernetes object whose purpose is to maintain a stable set of replicated Pods running at any given time. To view the ReplicaSets and the number of replicas that were created after scaling run:
+4. A ReplicaSet is a Kubernetes object whose purpose is to maintain a stable set of replicated Pods running at any given time. Kubernetes should have craeted 2 replicasets for the pods running the account service, 8 for the cost service and 4 for the provider. To view the ReplicaSets and the number of replicas that were created after scaling run:
 ```
 kubectl get replicasets
 ```
 ```
 NAME                              DESIRED   CURRENT   READY     AGE
-dep-account-b78dfd57d             5         5         5         18h
-dep-cost-5dcd9b5c7f        2         2         2         23h
-dep-provider-6c897669cb           3         3         3         23h
+dep-account-b78dfd57d             2         2         2         18h
+dep-cost-5dcd9b5c7f               8         8         8         23h
+dep-provider-6c897669cb           4         4         4         23h
 ```
   
-5. Now let's go back to the browser and see the updates in the Kubernetes dashboard.  Click "Kubernetes Dashboard" button on your cluster page.
-
-Note the number of pods currently running for each of the services.  You can see the status of all of the pods running (green checkmarks). There are now 10 instances of the app running in this deployment.  
+5. Now let's go back to the browser and verify the number of pods that were created by navigating once again to the Kubernetes dashboard.  Click "Kubernetes Dashboard" button on your IBM Cloud Kubernetes cluster page as before. This action would launch the Kubernetes dashboard. Navigate to the Workloads tab on the dashboard. Notice the number of pods currently running for each of the services.  You can see the status of all of the pods running (green checkmarks). There are now 14 instances of the app running in this deployment.  
 
 ![](./images/kube-cluster-dashboard-workloads-view.png)
 
   
-6. Use curl or browser to hit the URL Of your app again, from step 8 of the last section (eg. http://173.193.112.134:32761), you should see your app being served by the different pods each time you hit it:  
-
-
+6. Test any of services that were created using either cURL or from your browser.
+```
+eg. http://173.190.91.194:31234/account
+eg. http://173.190.91.194:30507/account/123
+eg. http://173.190.91.194:31323/provider
+eg. http://173.190.91.194:31323/provider/bell
+eg. http://173.190.91.194:30507/cost
+eg. http://173.190.91.194:30507/cost/123
+```
+Notice that each time you hit the same service, the service request is handled from a different pod running the service. This can be verified by checking the hostname from the service response. Just as you scaled up the number of replicas, you can even scale them down.  
 
 
 
