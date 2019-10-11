@@ -1,4 +1,3 @@
-# ***DRAFT***
 # 3. Scaling Microservices in Kubernetes
 In this lab, learn how to scale a microservice running in Kubernetes using replicas and how to safely roll up an update to the number of replicas.
 
@@ -119,9 +118,16 @@ dep-provider-6c897669cb           4         4         4         23h
 ![](./images/kube-cluster-dashboard-workloads-view.png)
 
   
-6. Use curl or browser to hit the URL Of your app again, from step 8 of the last section (eg. http://173.193.112.134:32761), you should see your app being served by the different pods each time you hit it:  
-
-
+6. Test any of services that were created using either cURL or from your browser.
+```
+eg. http://173.190.91.194:31234/account
+eg. http://173.190.91.194:30507/account/123
+eg. http://173.190.91.194:31323/provider
+eg. http://173.190.91.194:31323/provider/bell
+eg. http://173.190.91.194:30507/cost
+eg. http://173.190.91.194:30507/cost/123
+```
+Notice that each time you hit the same service, the service request is handled from a different pod running the service. This can be verified by checking the hostname from the service response. Just as you scaled up the number of replicas, you can even scale them down.  
 
 
 
