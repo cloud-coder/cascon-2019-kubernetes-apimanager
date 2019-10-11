@@ -58,7 +58,7 @@ Save changes and exit edit mode. Verify that 4 new provider service pods were cr
 
 
 1.3. To scale the dep-cost service by adding 8 replicas via the ***IBM Cloud Kubernetes Dashboard***, launch the dashboard from your Kubernetes service cluster and navigate to Deployments view. 
-![](./images/kube-cluster-dashboard.png)  
+![](./images/kube-cluster.png)  
 
 
 Click on the Scale menu option against the dep-cost service and add 8 replicas. 
@@ -88,31 +88,33 @@ kubectl get pods
 NAME                                    READY     STATUS    RESTARTS   AGE
 dep-account-b78dfd57d-cpjp7             1/1       Running   0          36m
 dep-account-b78dfd57d-dbt9d             1/1       Running   0          18h
-dep-account-b78dfd57d-jntzx             1/1       Running   0          36m
-dep-account-b78dfd57d-p49xg             1/1       Running   0          36m
-dep-account-b78dfd57d-p4rvh             1/1       Running   0          36m
 dep-cost-5dcd9b5c7f-kppcj        1/1       Running   0          23h
 dep-cost-5dcd9b5c7f-lv5tw        1/1       Running   0          8m
+dep-cost-5dcd9b5c7f-kaccj        1/1       Running   0          21h
+dep-cost-5dcd9b5c7f-de5tw        1/1       Running   0          12m
+dep-cost-5dcd9b5c7f-werft        1/1       Running   0          13h
+dep-cost-5dcd9b5c7f-ppiuo        1/1       Running   0          19m
+dep-cost-5dcd9b5c7f-yuabj        1/1       Running   0          20h
+dep-cost-5dcd9b5c7f-sinae        1/1       Running   0          11m
 dep-provider-6c897669cb-fzzsc           1/1       Running   0          23h
 dep-provider-6c897669cb-jfjbz           1/1       Running   0          7m
 dep-provider-6c897669cb-lcbbg           1/1       Running   0          7m
+dep-provider-6c897669cb-cdfgy           1/1       Running   0          9m
 
 ```
   
-4. A ReplicaSet is a Kubernetes object whose purpose is to maintain a stable set of replicated Pods running at any given time. To view the ReplicaSets and the number of replicas that were created after scaling run:
+4. A ReplicaSet is a Kubernetes object whose purpose is to maintain a stable set of replicated Pods running at any given time. Kubernetes should have craeted 2 replicasets for the pods running the account service, 8 for the cost service and 4 for the provider. To view the ReplicaSets and the number of replicas that were created after scaling run:
 ```
 kubectl get replicasets
 ```
 ```
 NAME                              DESIRED   CURRENT   READY     AGE
-dep-account-b78dfd57d             5         5         5         18h
-dep-cost-5dcd9b5c7f        2         2         2         23h
-dep-provider-6c897669cb           3         3         3         23h
+dep-account-b78dfd57d             2         2         2         18h
+dep-cost-5dcd9b5c7f               8         8         8         23h
+dep-provider-6c897669cb           4         4         4         23h
 ```
   
-5. Now let's go back to the browser and see the updates in the Kubernetes dashboard.  Click "Kubernetes Dashboard" button on your cluster page.
-
-Note the number of pods currently running for each of the services.  You can see the status of all of the pods running (green checkmarks). There are now 10 instances of the app running in this deployment.  
+5. Now let's go back to the browser and verify the number of pods that were created by navigating once again to the Kubernetes dashboard.  Click "Kubernetes Dashboard" button on your IBM Cloud Kubernetes cluster page as before. This action would launch the Kubernetes dashboard. Navigate to the Workloads tab on the dashboard. Notice the number of pods currently running for each of the services.  You can see the status of all of the pods running (green checkmarks). There are now 14 instances of the app running in this deployment.  
 
 ![](./images/kube-cluster-dashboard-workloads-view.png)
 
