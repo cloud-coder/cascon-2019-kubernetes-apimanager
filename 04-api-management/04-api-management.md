@@ -139,3 +139,4 @@ If you run the following command
 
 You can still access the API.
 
+We need to secure cluster network access, which we will do in *04b-securing-with-calico*
