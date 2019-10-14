@@ -23,6 +23,8 @@ The *cost* microservice integrates information from the other two microservices,
     GET /cost            # Returns a health message
     GET /cost/<cost_id>  # calls the account service to see which providers are associated to the account, then calls each provider to get each cost.  Returns total cost for all providers in JSON
 
+***
+
 </details>
 
 Our task is to deploy these services to the IBM Cloud using the command-line interface (CLI) tools provided.
@@ -56,6 +58,8 @@ found when building images will be added automatically.
     ibmcloud cr namespace-list
     ```
 
+***
+
 </details>
 
 ### Obtain the Code
@@ -73,6 +77,8 @@ For more information on choosing either ssh/https methods, see [github](https://
     git clone git@github.com:cloud-coder/cascon-2019-kubernetes-apimanager.git (ssh)
     git clone https://github.com/cloud-coder/cascon-2019-kubernetes-apimanager.git (https)
     ```
+
+***
 
 </details>
 
@@ -113,6 +119,8 @@ You should see the three additional images listed using this command.
     ibmcloud cr images
     ```
 
+***
+
 </details>
 </details>
 
@@ -126,6 +134,10 @@ everything will be deployed there.  You can see the workers that have been alloc
     kubectl get nodes -o wide
 
 ## Setting up into the Kubernetes Cluster
+
+
+<details>
+<summary>Instructions</summary>
 
 ### Deployments 
 To get started, a Kubernetes deployment is needed to define how you want the pods deployed.  A pod is the smallest deployable unit which may contain one or more containers, 
@@ -174,6 +186,8 @@ If you make a mistake in creating your deployment, you can also remove deploymen
 
     kubectl delete deployment <deployment-name>
 
+***
+
 </details>
 
 ### Logging and Events
@@ -192,6 +206,8 @@ to specify the particular pod name, which means you need to get the current runn
     ```
 
 Press Ctrl-C to end the tail of the log.
+
+***
 
 </details>
 <details>
@@ -233,6 +249,8 @@ consider using this type instead.
 
 You should notice that all of the services have internal and external cluster IPs assigned.  The external port is shown in the 30000+ range for the cost service which the NodePort type
 provides.  
+
+***
 
 </details>
 
@@ -360,6 +378,11 @@ Just to be sure, we can delete all the pods to ensure they are all aware of thes
 
 ### Accessing from the Outside
 
+Now we finally need to see how we can access this from the outside.
+
+<details>
+<summary>Instructions</summary>
+
 1. Determine the cluster public IP by checking with IBM cloud services.
 
     ```
@@ -397,6 +420,9 @@ which is hard to remember.  For details see [Ingress](https://kubernetes.io/docs
 Here is an example of what should be configured in your cluster.  IP number will differ.
 
 ![lab 2 image](https://github.com/cloud-coder/cascon-2019-kubernetes-apimanager/blob/develop/02-kubernetes-service-creation/Lab2Result.png?raw=true)
+
+</details>
+</details>
 
 ## Updating the Deployment
 
