@@ -124,14 +124,40 @@ You should see the three additional images listed using this command.
 </details>
 </details>
 
-## C. Kubernetes Nodes
+## C. Intro to Kubernetes and kubectl
 
-In Kubernetes images are not directly specified to go into containers and deployed to be accessed directly.  Instead, a desired state is specified and is managed by 
-Kubernetes to deploy using the node/workers (VM or physical machines) that have been allocated to your cluster.  The IBM Cloud Free Tier allocates a single worker, so 
-everything will be deployed there.  You can see the workers that have been allocated by using either the ibmcloud or kubectl CLI.
+Kubernetes is a system for deploying, scaling and managing containerized applications.  Rather than deploying to physical machines directly and configuring them using
+OS level processes, networking and tools, we are using the IBM Cloud.  Kubernetes introduces a whole set of terminology to describe all of the resources needed and it is
+up to the cloud provider (IBM Cloud) to map them on to physical systems.
+
+<details>
+<summary>Details</summary>
+
+At the highest level, we have a *cluster* which is the complete system that is allocated by the cloud provider to deploy your assets.  This may consist of multiple 
+physical machines, or VMs and may be connected to various services (NFS, databases etc.).  The machines themselves are referred to as *nodes* (or workers or minions).
+This abstraction allows us to build our cluster independently of physical systems, and makes the deployment portable to different geographies, or providers, as long as
+Kubernetes is supported.  
+
+Next, within the nodes, most processes are run within *pods*.  A pod is the smallest deployable unit which may contain one or more containers, a running instance of your image
+that was uploaded in the previous steps.  Pods can be run on any node that has sufficient resources, and multiple replicas can run to provide scaling.  
+
+Because the pods are running processes that may fail, there are resources which can define how pods are deployed (*deployments*), how they are accessed (*services*), how
+many are available (*replicasets*) and even if they are short term processes (*jobs*, *cronjobs*).
+
+Information can be provided to pods in different ways, known as a *volume*, similar to a mounted file system.  This can be simple as using a *configmap* or *secrets* which 
+is a dictionary of values, or it can connect to a physical storage known as a *persistentvolume* which require *persistentvolumeclaims*.
+
+In Kubernetes, actions are not done directly on the nodes, but implement a "desired state" concept which is specified by the administrator and eventually scheduled
+by the *scheduler*.  All of the configuration is stored in *etcd* which is a key/value storage that is replicated across all the nodes.  To add a configuration, a specification for
+the resources mentioned above is built, and then it is sent through the Kubernetes REST API.  The most common method is to use the *kubectl* client, which is a CLI that provides
+access into the cluster to deploy and monitor activities.  There are other client available, including the Kubernetes UI, but in this lab we will be focused on the kubectl CLI.
+
+The IBM Cloud Free Tier allocates a single worker, so everything will be deployed there.  You can see the workers that have been allocated by using either the ibmcloud or kubectl CLI.
 
     ibmcloud ks workers <clusterId>
     kubectl get nodes -o wide
+
+</details>
 
 ## D. Setting up into the Kubernetes Cluster
 
@@ -141,9 +167,8 @@ This will guide you how to move the images into the cluster and configure them s
 <summary>Instructions</summary>
 
 ### Deployments 
-To get started, a Kubernetes deployment is needed to define how you want the pods deployed.  A pod is the smallest deployable unit which may contain one or more containers, 
-a running instance of your image.  For now, we'll create deployments using the default settings.  One pod will be created per deployment by downloading the image you 
-specify in the command.
+To get started, a Kubernetes deployment is needed to define how you want the pods deployed.  For now, we'll create deployments using the default settings.  One pod will be 
+created per deployment by downloading the image you specify in the command.
 
 <details>
 <summary>Create Deployment</summary>
