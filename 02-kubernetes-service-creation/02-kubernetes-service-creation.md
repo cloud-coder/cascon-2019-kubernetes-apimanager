@@ -34,15 +34,20 @@ found when building images will be added automatically.
 
 <details>
 <summary>Instructions</summary>
+
 1. Create a unique namespace in the container registry to associate the images you will load into the directory.  eg. Here we are using the suffix jd40  (John Doe, age 40) to provide uniqueness.
 
+    ```
     export CRNS=cas2019jd40
     export CRLOC=us.icr.io
     ibmcloud cr namespace-add $CRNS
+    ```
 
 2. Verify that is was correctly added.
 
+    ```
     ibmcloud cr namespace-list
+    ```
 
 </details>
 
