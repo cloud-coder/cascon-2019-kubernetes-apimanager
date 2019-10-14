@@ -354,7 +354,7 @@ Just to be sure, we can delete all the pods to ensure they are all aware of thes
     kubectl delete pods --all
     ```
 
-![divider](https://github.com/cloud-coder/cascon-2019-kubernetes-apimanager/blob/develop/02-kubernetes-service-creation/divider.png?raw=true)
+***
 
 </details>
 
