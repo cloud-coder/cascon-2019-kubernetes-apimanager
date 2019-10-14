@@ -125,11 +125,15 @@ everything will be deployed there.  You can see the workers that have been alloc
     ibmcloud ks workers <clusterId>
     kubectl get nodes -o wide
 
-## Deploy into the Kubernetes Cluster
+## Setting up into the Kubernetes Cluster
 
+### Deployments 
 To get started, a Kubernetes deployment is needed to define how you want the pods deployed.  A pod is the smallest deployable unit which may contain one or more containers, 
 a running instance of your image.  For now, we'll create deployments using the default settings.  One pod will be created per deployment by downloading the image you 
 specify in the command.
+
+<details>
+<summary>Create Deployment</summary>
 
 1. Create Deployments
 
@@ -170,12 +174,18 @@ If you make a mistake in creating your deployment, you can also remove deploymen
 
     kubectl delete deployment <deployment-name>
 
-## Logging
+</details>
+
+### Logging and Events
 
 By default, each container may send information to the stdout/stderr streams.  These are all managed by Kubernetes and available to you.  To view the logs, you need
-to specify the particular pod name, which means you need to get the current running pod list.
+to specify the particular pod name, which means you need to get the current running pod list.  To view state changes, you can use Kubernetes Events 
+
+<details>
+<summary>Logging</summary>
 
 1. View the logs for the provider application.
+
     ```
     kubectl get pods -o wide
     kubectl logs -f <provider pod name>
@@ -183,13 +193,24 @@ to specify the particular pod name, which means you need to get the current runn
 
 Press Ctrl-C to end the tail of the log.
 
-## Creating Services
+</details>
+<details>
+<summary>Events</summary>
+    ```
+    kubectl get events
+    ```
+</details>
+
+### Services
 
 As the pods have dynamically assigned private IPs that can change at any time, it would be difficult to expose them to the outside world without telling the user
 what the updated host and port is.  To resolve this, Kubernetes provides *services*, an interface that sits in front of pods.  Its job is to give a unique name
 that others can reference which it will allow traffic to be served by an available pod.  If a new pod has generated or terminated, the service will be aware of it, and 
 direct traffic appropriately.  The port specified below should match what each application port it is listening on.  Services are not ephemeral so they are will always
 exist unless explicitly removed, but its existence is not affected by the number of pods associated with it.
+
+<details>
+<summary>Creating Services</summary>
 
 1. Create Services for the *account* *provider* and *cost* microservices
 
@@ -213,7 +234,9 @@ consider using this type instead.
 You should notice that all of the services have internal and external cluster IPs assigned.  The external port is shown in the 30000+ range for the cost service which the NodePort type
 provides.  
 
-## DNS support for Services and Pods
+</details>
+
+### DNS support for Services and Pods
 
 Our cluster now has all 3 microservices deployed, however the *cost* application is an application that depends on the other microservices, and somehow needs to
 reference them properly.  In order for one pod to discover the other pod, it would be difficult as we have already discovered the IPs are dynamic.  The solution 
