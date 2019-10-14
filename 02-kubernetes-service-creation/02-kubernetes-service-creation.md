@@ -5,6 +5,9 @@
 In this exercise we are deploying a website that provides cost comparisons for users across different service providers.  The development teams have worked independently
 on 3 microservice projects.  
 
+<details>
+<summary>Microservice Details</summary>
+
 An *account* microservice provides information about all the users, including the the service providers they subscribe to.  They provide the REST api:
 
     GET /account           # Returns a health message
@@ -20,12 +23,16 @@ The *cost* microservice integrates information from the other two microservices,
     GET /cost            # Returns a health message
     GET /cost/<cost_id>  # calls the account service to see which providers are associated to the account, then calls each provider to get each cost.  Returns total cost for all providers in JSON
 
+</details>
 
 Our task is to deploy these services to the IBM Cloud using the command-line interface (CLI) tools provided.
 
 ## Loading the IBM Cloud Container Registry
 The IBM Cloud Container Registry allows you to store images in your private registry.  See https://cloud.ibm.com/kubernetes/registry/main/start for the WebUI.
 We will be storing 3 images created from code available in this git repository.
+
+<details>
+<summary>Instructions</summary>
 
 ### Set up Registry Namespace
 
@@ -55,7 +62,9 @@ found when building images will be added automatically.
 
 The cluster we are setting up will contain our 3 projects (i.e. services). For simplicity we've provided them all in this lab's git repository in the subfolders (account, 
 provider, cost).
-Each project
+
+<details>
+<summary>Instructions</summary>
 
 1. Clone this repository with git.  
 For more information on choosing either ssh/https methods, see [github](https://help.github.com/en/articles/which-remote-url-should-i-use)
@@ -65,15 +74,19 @@ For more information on choosing either ssh/https methods, see [github](https://
     git clone https://github.com/cloud-coder/cascon-2019-kubernetes-apimanager.git (https)
     ```
 
+</details>
+
 ### Create Images
-1. For each of the folders, we need to create Docker images and deploy them to the registry.
 
 This is essentially the Docker command (www.docker.com), but pushes the images to the IBM Cloud Container Registry.  Docker is a tool designed to make it easier to create, 
 deploy, and run applications by using containers.  The images are built with the corresponding Dockerfile and contains all of the necessary software packages needed to run 
 the microservices (eg. NodeJs, business logic).  By creating an image, it allows us the flexibility of reusing it to deploy several times without needing to recompile the code.  
-This is the first time we are submitting these image repositories so we will provide it with an initial tag "1".  Ensure you specify the trailing "." 
-which references the location of the Dockerfile.
 
+<details>
+<summary>Create Images </summary>
+1. For each of the folders, we need to create Docker images and deploy them to the registry.
+
+    ```
     cd cascon-2019-kubernetes-apimanager/02-kubernetes-service-creation
     cd account
     ibmcloud cr build --no-cache -t $CRLOC/$CRNS/account:1 .
@@ -81,6 +94,10 @@ which references the location of the Dockerfile.
     ibmcloud cr build --no-cache -t $CRLOC/$CRNS/provider:1 .
     cd ../cost
     ibmcloud cr build --no-cache -t $CRLOC/$CRNS/cost:1 .
+    ```
+
+This is the first time we are submitting these image repositories so we will provide it with an initial tag "1".  Ensure you specify the trailing "." 
+which references the location of the Dockerfile.
 
 The --no-cache allows you to make a clean build of an image every time, but optional.
 
@@ -95,6 +112,9 @@ You should see the three additional images listed using this command.
     ```
     ibmcloud cr images
     ```
+
+</details>
+</details>
 
 ## Kubernetes Nodes
 
