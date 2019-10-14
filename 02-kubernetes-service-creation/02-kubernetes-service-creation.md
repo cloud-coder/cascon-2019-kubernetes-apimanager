@@ -212,7 +212,7 @@ exist unless explicitly removed, but its existence is not affected by the number
 <details>
 <summary>Creating Services</summary>
 
-1. Create Services for the *account* *provider* and *cost* microservices
+1. Create Services for the *account*, *provider* and *cost* microservices
 
     ```
     kubectl expose deployment/dep-account --type=NodePort --name=account-service --port=8080
@@ -241,6 +241,10 @@ provides.
 Our cluster now has all 3 microservices deployed, however the *cost* application is an application that depends on the other microservices, and somehow needs to
 reference them properly.  In order for one pod to discover the other pod, it would be difficult as we have already discovered the IPs are dynamic.  The solution 
 is that pods should reference the appropriate services.  Kubernetes by default comes with kube-dns, a way to resolve services by simply using their service name.
+
+<details>
+<summary>DNS support</summary>
+
 For instance, the *account* service can be accessed via any of the following hostnames:
 
     account-service.default.svc.cluster.local
@@ -301,12 +305,11 @@ For the code to work, all we need to do is delete the *cost* pod so the new one 
     kubectl get pods -o wide
     ```
 
-Now lets do an interactive shell with the newly created pod.
+Now let's check the environment variables with the newly created pod.
 
-1.  Open an interactive shell with the new pod
+1.  Execute the printenv directly on the pod.
     ```
-    kubectl exec -it <NEW-cost-pod-xxxxxx> -- /bin/sh
-    printenv
+    kubectl exec -it <NEW-cost-pod-xxxxxx> -- printenv
     ```
 
 You should be able to see all of the services listed now including its own service (COST_SERVICE) entries.
@@ -346,11 +349,16 @@ You should be able to see all of the services listed now including its own servi
     PROVIDER_SERVICE_SERVICE_PORT=8081
 
 Just to be sure, we can delete all the pods to ensure they are all aware of these environment variables.
+
     ```
     kubectl delete pods --all
     ```
 
-## Accessing from the Outside
+![divider](https://github.com/cloud-coder/cascon-2019-kubernetes-apimanager/blob/develop/02-kubernetes-service-creation/divider.png?raw=true)
+
+</details>
+
+### Accessing from the Outside
 
 1. Determine the cluster public IP by checking with IBM cloud services.
 
