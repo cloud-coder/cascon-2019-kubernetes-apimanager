@@ -32,10 +32,14 @@ We will be storing 3 images created from code available in this git repository.
 Namespaces provide a way to categorize your Docker images within the registry.  Note that these are different than Kubenetes namespaces.  Namespaces must be unique across the entire Registry. Namespaces not
 found when building images will be added automatically.
 
+<details>
+<summary>Instructions</summary>
 1. Create a unique namespace in the container registry to associate the images you will load into the directory.  eg. Here we are using the suffix jd40  (John Doe, age 40) to provide uniqueness.
 
     ```
-    ibmcloud cr namespace-add cas2019jd40
+    export CRNS=cas2019jd40
+    export CRLOC=us.icr.io
+    ibmcloud cr namespace-add $CRNS
     ```
 
 2. Verify that is was correctly added.
@@ -43,6 +47,7 @@ found when building images will be added automatically.
     ```
     ibmcloud cr namespace-list
     ```
+</details>
 
 ### Obtain the Code
 
@@ -69,11 +74,11 @@ which references the location of the Dockerfile.
 
     cd cascon-2019-kubernetes-apimanager/02-kubernetes-service-creation
     cd account
-    ibmcloud cr build --no-cache -t us.icr.io/cas2019jd40/account:1 .
+    ibmcloud cr build --no-cache -t $CRLOC/$CRNS/account:1 .
     cd ../provider
-    ibmcloud cr build --no-cache -t us.icr.io/cas2019jd40/provider:1 .
+    ibmcloud cr build --no-cache -t $CRLOC/$CRNS/provider:1 .
     cd ../cost
-    ibmcloud cr build --no-cache -t us.icr.io/cas2019jd40/cost:1 .
+    ibmcloud cr build --no-cache -t $CRLOC/$CRNS/cost:1 .
 
 The --no-cache allows you to make a clean build of an image every time, but optional.
 
@@ -107,9 +112,9 @@ specify in the command.
 1. Create Deployments
 
     ```
-    kubectl create deployment dep-account --image=us.icr.io/cas2019jd40/account:1
-    kubectl create deployment dep-provider --image=us.icr.io/cas2019jd40/provider:1
-    kubectl create deployment dep-cost --image=us.icr.io/cas2019jd40/cost:1
+    kubectl create deployment dep-account --image=$CRLOC/$CRNS/account:1
+    kubectl create deployment dep-provider --image=$CRLOC/$CRNS/provider:1
+    kubectl create deployment dep-cost --image=$CRLOC/$CRNS/cost:1
     ```
 
 A successfully deployed pod will in the *running* status.  Each pod is assigned an IP address in the private network and automatically assigned to a node in your 
@@ -355,7 +360,7 @@ Now that we have a change, we need to build a new image in the registry.
 
 1. Make a new version 2 of the account application.
     ```
-    ibmcloud cr build -t us.icr.io/cas2019jd40/account:2 .
+    ibmcloud cr build -t $CRLOC/cas2019jd40/account:2 .
     ```
 
 Now that we have a new image, the Kubernetes administrator can update the deployment.
@@ -364,11 +369,11 @@ Now that we have a new image, the Kubernetes administrator can update the deploy
 
 Now replace the line
 
-      - image: us.icr.io/cas2019jd40/account:1
+      - image: $CRLOC/cas2019jd40/account:1
 
 with
 
-      - image: us.icr.io/cas2019jd40/account:2
+      - image: $CRLOC/cas2019jd40/account:2
 
 save then close the file.
 
