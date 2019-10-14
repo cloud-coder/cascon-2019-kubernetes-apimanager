@@ -196,9 +196,9 @@ Press Ctrl-C to end the tail of the log.
 </details>
 <details>
 <summary>Events</summary>
-    ```
+
     kubectl get events
-    ```
+
 </details>
 
 ### Services

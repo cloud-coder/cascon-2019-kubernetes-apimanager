@@ -11,7 +11,7 @@ var express = require('express')
 var os = require("os");
 var hostname = os.hostname();
 var app = express()
-var listenPort = process.env.PROVIDER_SERVICE_SERVICE_PORT;
+var listenPort = 8081;
 var fs = require('fs');
 
 function pullDetails(name, req){

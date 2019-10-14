@@ -12,7 +12,7 @@ var request = require('request');
 var os = require("os");
 var hostname = os.hostname();
 var app = express();
-var listenPort = process.env.COST_SERVICE_SERVICE_PORT;
+var listenPort = 8082; 
 
 function pullDetails(name, req){
   var details = {name: name, hostname: hostname, listenPort : listenPort, reqHostname : req.hostname, reqPath : req.path, headers : JSON.stringify(req.headers) };
