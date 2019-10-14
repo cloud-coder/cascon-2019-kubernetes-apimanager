@@ -1,6 +1,6 @@
 # Lab 2 Exploring Kubernetes and Creating a Kubernetes Service Deployment
 
-## Deployment Scenario
+## A. Deployment Scenario
 
 In this exercise we are deploying a website that provides cost comparisons for users across different service providers.  The development teams have worked independently
 on 3 microservice projects.  
@@ -29,7 +29,7 @@ The *cost* microservice integrates information from the other two microservices,
 
 Our task is to deploy these services to the IBM Cloud using the command-line interface (CLI) tools provided.
 
-## Loading the IBM Cloud Container Registry
+## B. Loading the IBM Cloud Container Registry
 The IBM Cloud Container Registry allows you to store images in your private registry.  See https://cloud.ibm.com/kubernetes/registry/main/start for the WebUI.
 We will be storing 3 images created from code available in this git repository.
 
@@ -124,7 +124,7 @@ You should see the three additional images listed using this command.
 </details>
 </details>
 
-## Kubernetes Nodes
+## C. Kubernetes Nodes
 
 In Kubernetes images are not directly specified to go into containers and deployed to be accessed directly.  Instead, a desired state is specified and is managed by 
 Kubernetes to deploy using the node/workers (VM or physical machines) that have been allocated to your cluster.  The IBM Cloud Free Tier allocates a single worker, so 
@@ -133,7 +133,7 @@ everything will be deployed there.  You can see the workers that have been alloc
     ibmcloud ks workers <clusterId>
     kubectl get nodes -o wide
 
-## Setting up into the Kubernetes Cluster
+## D. Setting up into the Kubernetes Cluster
 
 This will guide you how to move the images into the cluster and configure them so they can be accessible from the outside.
 
@@ -425,9 +425,12 @@ Here is an example of what should be configured in your cluster.  IP number will
 </details>
 </details>
 
-## More Information
+## E. More Information
 
 The following set of instructions explore further into some of the other aspects that Kubernetes provides that you may need to consider in a typical deployment.
+
+<details>
+<summary>Instructions</summary>
 
 ### Updating the Deployment
 
@@ -586,4 +589,5 @@ We need to update the deployment so that the correct secret is used.  You can ad
       imagePullSecrets:
       - name: default-us-icr-io
 
+</details>
 </details>
