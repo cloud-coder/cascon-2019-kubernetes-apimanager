@@ -135,6 +135,7 @@ everything will be deployed there.  You can see the workers that have been alloc
 
 ## Setting up into the Kubernetes Cluster
 
+This will guide you how to move the images into the cluster and configure them so they can be accessible from the outside.
 
 <details>
 <summary>Instructions</summary>
@@ -424,22 +425,31 @@ Here is an example of what should be configured in your cluster.  IP number will
 </details>
 </details>
 
-## Updating the Deployment
+## More Information
+
+The following set of instructions explore further into some of the other aspects that Kubernetes provides that you may need to consider in a typical deployment.
+
+### Updating the Deployment
 
 Now that we have deployed our services, it may seem like a lot of work to need to repeat all the steps when code is changed.  Fortunately Kubernetes stores all the objects that 
 you created (eg. deployments, services, pods) as *records of intent* so they can be altered, and Kubernetes will take care of bringing the system to the new desired state.  
+
+<details>
+<summary>Instructions</summary>
+
 To explain this, let's simulate a code change.
 
-1. Open up the account/app.js file in the account directory, and make a change.
+1. Open up the account/app.js file in the account directory with your favorite text editor, and make a change.
+
     ```
-    nano account/app.js
+    account/app.js
     ```
 
 Now that we have a change, we need to build a new image in the registry.
 
 1. Make a new version 2 of the account application.
     ```
-    ibmcloud cr build -t $CRLOC/cas2019jd40/account:2 .
+    ibmcloud cr build -t $CRLOC/$CRNS/account:2 .
     ```
 
 Now that we have a new image, the Kubernetes administrator can update the deployment.
@@ -448,11 +458,11 @@ Now that we have a new image, the Kubernetes administrator can update the deploy
 
 Now replace the line
 
-      - image: $CRLOC/cas2019jd40/account:1
+      - image: us.icr.io/cas2019jd40/account:1
 
 with
 
-      - image: $CRLOC/cas2019jd40/account:2
+      - image: us.icr.io/cas2019jd40/account:2
 
 save then close the file.
 
@@ -466,12 +476,18 @@ As well as the old pod will terminate, and you will see that a new one will be c
 
 And that's it.  After a new image is available, only one change is necessary, and Kubernetes takes care of the rest.
 
-## Backing up Configuration
+</details>
+
+### Backing up the Configuration
 
 Internally, Kubernetes holds the desired and actual state of your entire cluster in etcd, a distributed database that stored the configuration.  Whenever you 
 query or update using the kubectl commands, you are actually updating etcd, which then Kubernetes uses to apply on the workers to build nodes, services etc.  
 Kubernetes is extremely flexible in providing you an interface to interact with the state.  Along with the command line options, we can also update via YAML 
-(as seen in the previous instructions), JSON, and interfacing with the UI.  Let's finally see how we can reapply the configuration easily in a new cluster.
+(as seen in the previous instructions), JSON, and interfacing with the UI.  
+
+<details>
+<summary>Instructions</summary>
+Let's finally see how we can reapply the configuration easily in a new cluster.
 
 1. Pull all the configuration for your deployments and services for this namespace.
    ```
@@ -489,11 +505,16 @@ Kubernetes is extremely flexible in providing you an interface to interact with 
    kubectl apply -f myproject.json
    ```
 
-## ConfigMaps and Secrets
+</details>
+
+### ConfigMaps and Secrets
 
 Somtimes you may have information that needs to be updated regularly and you do not want to find and update code directly.  The ConfigMaps provides
 a key/value storage that can be exposed as environment variables to your pods.  This may be external host names, configuration settings etc.  Secrets
 work in the same way, but the values are usually passwords or tokens that shouldn't normally be shown.
+
+<details>
+<summary>Instructions</summary>
 
 1. Create a config map with some literal values
 
@@ -527,15 +548,17 @@ work in the same way, but the values are usually passwords or tokens that should
 
 You should see the environment variables for value1 and value2.
 
+</details>
 
-# More Information
-
-## Kubernetes Namepaces
+### Kubernetes Namepaces
 
 You can also use Kubernetes Namespace.  This allows us to group all our Kubernetes objects together under our project, and separate
 them from other potential projects on the same cluster.  By default, the *default* namespace is used, but by using a custom one, it gives us 
 flexibility in managing it later.  When we use a non-default namespace, we need to migrate all the secrets over so that the tokens use to authenticate
 against the Cloud Container Register are available when we pull images.  Normally this would have been done before any deployments were created.
+
+<details>
+<summary>Instructions</summary>
 
 1. Create a Kubernetes Namespace and use it in the current context.
 
@@ -563,3 +586,4 @@ We need to update the deployment so that the correct secret is used.  You can ad
       imagePullSecrets:
       - name: default-us-icr-io
 
+</details>
