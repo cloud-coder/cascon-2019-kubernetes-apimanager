@@ -1,4 +1,4 @@
-## API Management
+# API Management
 
 So far, we have created services, deployed them to a kubernetes cluster and we have exposed one of these services via a NodePort which assigns a random port to the service.
 
