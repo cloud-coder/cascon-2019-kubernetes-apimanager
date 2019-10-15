@@ -150,7 +150,7 @@ is a dictionary of values, or it can connect to a physical storage known as a *p
 In Kubernetes, actions are not done directly on the nodes, but implement a "desired state" concept which is specified by the administrator and eventually scheduled
 by the *scheduler*.  All of the configuration is stored in *etcd* which is a key/value storage that is replicated across all the nodes.  To add a configuration, a specification for
 the resources mentioned above is built, and then it is sent through the Kubernetes REST API.  The most common method is to use the *kubectl* client, which is a CLI that provides
-access into the cluster to deploy and monitor activities.  There are other client available, including the Kubernetes UI, but in this lab we will be focused on the kubectl CLI.
+access into the cluster to deploy and monitor activities.  There are other clients available, including the Kubernetes UI, but in this lab we will be focused on the kubectl CLI.
 
 The IBM Cloud Free Tier allocates a single worker, so everything will be deployed there.  You can see the workers that have been allocated by using either the ibmcloud or kubectl CLI.
 
@@ -409,14 +409,7 @@ Now we finally need to see how we can access this from the outside.
 <details>
 <summary>Instructions</summary>
 
-1. Determine the cluster public IP by checking with IBM cloud services.
-
-    ```
-    ibmcloud ks cluster ls
-    ibmcloud ks workers <clusterid>
-    ```
-
-1. As there is only one node in the cluster, the public IP is also shown as the external IP the node.
+1. Determine the node's external IPs addresses. The IBM Cloud Free Tier should only contain a single node for this cluster.
 
     ```
     kubectl get nodes -o wide
@@ -440,12 +433,21 @@ Check the ports column for the  external value (after the colon).
     eg. http://173.193.92.194:30507/cost/123
     ```
 
-Note that this scenario is not complete as a deployed set of services in a real-life scenario.  For instance, ports are typically exposed on 80/443, and not a random IP 
-which is hard to remember.  For details see [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/).  Note that this is not available in the IBM Cloud Free Tier.
-
 Here is an example of what should be configured in your cluster.  IP number will differ.
 
 ![lab 2 image](https://github.com/cloud-coder/cascon-2019-kubernetes-apimanager/blob/develop/02-kubernetes-service-creation/Lab2Result.png?raw=true)
+
+Note that this scenario is not complete as a deployed set of services in a real-life scenario, but we've set it up so that we can access everything directly for testing.  
+Regarding the services, we already know that we can use the type "ClusterIP" to prevent the pod from being directly accessed from the outside.  
+
+If we were to expose several services but did not want several endpoints (or ports) for the user to know about, we could also configure this as well.
+For instance, ports are typically exposed on 80/443, and not a random IP which is hard to remember.  We could set up an *Ingress* controller which would direct a single IP
+(eg. http://173.193.92.194:80 to direct traffic to any of our 3 microservices based on the path of the uri (eg. /cost, /provider, /account).
+For details see [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/).  Note that this is not available in the IBM Cloud Free Tier.
+
+If we had several nodes, the services would still be able to be accessed in a similar way using any of the node's external IP addresses (eg. http://<node1ExternalIP>:servicePort,
+http://<Node2ExternalIp>:servicePort.  However this would not be feasible for users because they only know our endpoint as a single address.  In this case, we would use the 
+type "LoadBalancer" to distribute the load to each of the nodes in our cluster (configured for the service).
 
 </details>
 </details>
@@ -570,8 +572,7 @@ work in the same way, but the values are usually passwords or tokens that should
    ```
    kubectl delete pod dep-account-???
    kubectl get pods
-   kubectl exec -it dep-account-??? -- /bin/sh
-   printenv
+   kubectl exec -it dep-account-??? -- printenv
    ```
 
 You should see the environment variables for value1 and value2.
