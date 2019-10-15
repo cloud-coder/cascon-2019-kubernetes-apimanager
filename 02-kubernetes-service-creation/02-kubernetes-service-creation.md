@@ -445,8 +445,8 @@ For instance, ports are typically exposed on 80/443, and not a random IP which i
 (eg. http://173.193.92.194:80 to direct traffic to any of our 3 microservices based on the path of the uri (eg. /cost, /provider, /account).
 For details see [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/).  Note that this is not available in the IBM Cloud Free Tier.
 
-If we had several nodes, the services would still be able to be accessed in a similar way using any of the node's external IP addresses (eg. http://<node1ExternalIP>:servicePort,
-http://<Node2ExternalIp>:servicePort.  However this would not be feasible for users because they only know our endpoint as a single address.  In this case, we would use the 
+If we had several nodes, the services would still be able to be accessed in a similar way using any of the node's external IP addresses (eg. http://&lt;node1ExternalIP>:servicePort,
+http://&lt;Node2ExternalIp>:servicePort.  However this would not be feasible for users because they only know our endpoint as a single address.  In this case, we would use the 
 type "LoadBalancer" to distribute the load to each of the nodes in our cluster (configured for the service).
 
 </details>
