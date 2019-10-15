@@ -3,12 +3,6 @@ In this lab, learn how to scale a microservice running in Kubernetes using repli
 
 Deployments in Kubernetes can be horizontally scaled using replicas. A replica is a copy of a pod that contains a running service. To scale your Kubernetes application horizontally, create multiple replicas which ensure that multiple running copies of your application are available to handled increased workloads.  
 
-You can scale your Kubernetes application running on the IBM Cloud Kubernetes service by specifying the number of replicas by:
-
-* Running the ```kubectl scale``` command
-* Using a deployment configuration file
-* Navigating to the deployments view in the IBM Cloud Kubernetes service dashboard and modifying the configuration
-
 ## Manual Scaling with Replicas
 
 By default when a deployment is created, a single pod is created.  The deployment has a *replicaset* resource which manages the fact that a running single pod is needed.  If the pod is terminated, the replicaset
@@ -17,6 +11,12 @@ Horizontal Scaling.
 
 <details>
 <summary>Instructions</summary>
+
+You can scale your Kubernetes application running on the IBM Cloud Kubernetes service by specifying the number of replicas by:
+
+* Running the ```kubectl scale``` command
+* Using a deployment configuration file
+* Navigating to the deployments view in the IBM Cloud Kubernetes service dashboard and modifying the configuration
 
 1. Scaling account, provider and cost service deployments  
 In this step you will scale the account deployment by adding 2 replicas, the provider deploment with 4 replicas and the cost deployment with 8 replicas.  
