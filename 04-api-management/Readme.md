@@ -3,7 +3,9 @@
 This lab will be split into multiple parts.
 
 [Securing your API with Calico](04b-securing-with-calico.md)
+
 [Improving the API Management Security](04d-improving-apim-security.md)
+
 [Configuring the other end points](04e-configuring-other-end-points.md)
 
 ## Summary of previous steps
