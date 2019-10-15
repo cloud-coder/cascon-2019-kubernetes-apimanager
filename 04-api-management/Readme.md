@@ -58,7 +58,7 @@ Sample output:
 $ curl http://173.197.99.247:32482
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-100   166  100   166    0     0   1185      0 --:--:-- --:--:-- --:--:--  1185Private MonthlyCost Application<br/>I am hostname: dep-monthlycost-69fc59959c-fbg8w<br/>Your app is up and running in a cluster!<br/>No Accounts<br/>No Providers<br/>
+100    27  100    27    0     0    245      0 --:--:-- --:--:-- --:--:--   245Found. Redirecting to /cost
 
 ```
 
@@ -76,24 +76,26 @@ In your IBM Cloud account,
 
 The page that comes up allows you to create an API proxy. The simplest way to achive this is by filling in the information for
 - API Name, this is just a user firendly name to identify the API
-- Base path for API, this is what you want. Often a version is used, for example `/v1`
+- Base path for API, this is what you want. Often a version is used, for example `/v1` followed by the name of the endpoint `/cost` for a resulting: `/v1/cost`
 - External endpoint, this will be the public IP of your kubernetes cluster with the port used by your NodePort
 ![](images/04-API-Info.png)
+
+**Note**: that our apps currently redirect the `/` to `/cost` by default. To avoid this redirect we should specify the end point directly
 
 With those pieces of information filled in, scroll to the bottom and click the blue *Create* button.
 
 If you go on the *Summary* tab, you will see the Route you have just created.
 ![](images/05-Summary.png)
 
-In our case the route is `https://1883da9e.us-south.apiconnect.appdomain.cloud/v1`
+In our case the route is `https://1883da9e.us-south.apiconnect.appdomain.cloud/v1/cost`
 
 You should now be able to test the new end point:
-```
-curl https://1883da9e.us-south.apiconnect.appdomain.cloud/v1
+```bash
+curl https://1883da9e.us-south.apiconnect.appdomain.cloud/v1/cost
 ```
 
-```
-$ curl https://1883da9e.us-south.apiconnect.appdomain.cloud/v1
+```bash
+$ curl https://1883da9e.us-south.apiconnect.appdomain.cloud/v1/cost
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100   166  100   166    0     0    322      0 --:--:-- --:--:-- --:--:--   322Private MonthlyCost Application<br/>I am hostname: dep-monthlycost-69fc59959c-fbg8w<br/>Your app is up and running in a cluster!<br/>No Accounts<br/>No Providers<br/>
@@ -109,4 +111,6 @@ If you run the following command
 
 You can still access the API.
 
-We need to secure cluster network access, which we will do in *04b-securing-with-calico*
+## Next step
+
+We need to secure cluster network access, which we will do in [Securing your API with Calico](04b-securing-with-calico.md)

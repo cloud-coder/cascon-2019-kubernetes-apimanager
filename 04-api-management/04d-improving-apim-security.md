@@ -14,7 +14,7 @@ Now that our API is accessible via the API Management, we can start enabling som
     - Parameter name of API key: X-IBM-Client-Id
 - Scroll to the bottom and click *Save*
 
-If you re-run `curl https://1883da9d.us-south.apiconnect.appdomain.cloud/v1` you will now get an error:
+If you re-run `curl https://1883da9d.us-south.apiconnect.appdomain.cloud/v1/cost` you will now get an error:
 ```json
 {"status":401,"message":"Error: Unauthorized"}
 ```
@@ -39,11 +39,11 @@ You now have an API key that you can use. As per the configurations selected in 
 
 The curl command would look something like: 
 
-`curl https://1883da9e.us-south.apiconnect.appdomain.cloud/v1 -H "X-IBM-Client-Id: <API_KEY>"`
+`curl https://1883da9e.us-south.apiconnect.appdomain.cloud/v1/cost -H "X-IBM-Client-Id: <API_KEY>"`
 
 Sample output
 ```
-$ curl https://1883da9e.us-south.apiconnect.appdomain.cloud/v1 -H "X-IBM-Client-Id: 74259d6f-20a8-4e0a-ac16-12d96b9b36d2"
+$ curl https://1883da9e.us-south.apiconnect.appdomain.cloud/v1/cost -H "X-IBM-Client-Id: 74259d6f-20a8-4e0a-ac16-12d96b9b36d2"
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100   166  100   166    0     0    272      0 --:--:-- --:--:-- --:--:--   272Private MonthlyCost Application<br/>I am hostname: dep-monthlycost-69fc59959c-fbg8w<br/>Your app is up and running in a cluster!<br/>No Accounts<br/>No Providers<br/>
@@ -84,4 +84,8 @@ it will work for the first 5 calls, but will respond with a
 error once you have exceeded the number of calls in that particular minute.
 
 Of course this configuration is mostly for demonstration purposes, and you would want to configure it to your specific requirements.
+
+## Next step
+
+We can now continue with [Configuring the other end points](04e-configuring-other-end-points.md)
 

@@ -167,3 +167,7 @@ If you need help finding the IP addresses for API Management, refer to this docu
 ## Removing our own IP from the configuration
 
 Now that we have enabled the IPs for the API Management, you should remove your own IP from the whitelist so that all traffic can only come through the API Management link.
+
+## Next step
+
+Next we need to improve our API Management Security in [Improving the API Management Security](04d-improving-apim-security.md)
