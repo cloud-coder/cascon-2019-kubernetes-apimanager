@@ -56,8 +56,11 @@ $ curl http://173.197.99.247:32482
 
 In your IBM Cloud account, 
 - Top left menu, then select *API Management*
+![](images/01-API-Management.png)
 - Then in the left menu select *Managed APIs*
+![](images/02-Managed-APIs.png)
 - On the right click the blue button *Create Managed API* and select the *API Proxy* option
+![](images/03-API-Proxy.png)
 
 ### Creating your first API proxy
 
@@ -65,10 +68,12 @@ The page that comes up allows you to create an API proxy. The simplest way to ac
 - API Name, this is just a user firendly name to identify the API
 - Base path for API, this is what you want. Often a version is used, for example `/v1`
 - External endpoint, this will be the public IP of your kubernetes cluster with the port used by your NodePort
+![](images/04-API-Info.png)
 
 With those pieces of information filled in, scroll to the bottom and click the blue *Create* button.
 
 If you go on the *Summary* tab, you will see the Route you have just created.
+![](images/05-Summary.png)
 
 In our case the route is `https://1883da9e.us-south.apiconnect.appdomain.cloud/v1`
 
@@ -84,52 +89,7 @@ $ curl https://1883da9e.us-south.apiconnect.appdomain.cloud/v1
 100   166  100   166    0     0    322      0 --:--:-- --:--:-- --:--:--   322Private MonthlyCost Application<br/>I am hostname: dep-monthlycost-69fc59959c-fbg8w<br/>Your app is up and running in a cluster!<br/>No Accounts<br/>No Providers<br/>
 
 ```
-# Securing our API
 
-## Enabling Security and Rate Limiting
-
-Now that our API is accessible via the API Management, we can start enabling some of the security features included.
-
-- Go to the *Definition" tab
-- Scroll to *Security and Rate Limiting*
-- On the right, enable the *Require applications to authenticate via API key* option
-    - Method: API key only
-    - Location of API key and secret: Header
-    - Parameter name of API key: X-IBM-Client-Id
-- Scroll to the bottom and click *Save*
-
-If you re-run `curl https://1883da9d.us-south.apiconnect.appdomain.cloud/v1` you will now get an error:
-```json
-{"status":401,"message":"Error: Unauthorized"}
-```
-
-### Creating an API Key
-
-In order to be able to access our API, we now need to create an API Key and start using it.
-
-- At the top select the *Sharing & keys* tab
-- In the *Sharing Outside of Cloud Foundry organization* section, click the blue button *Create API key*
-    - Descriptive name: First API Key
-    - API key: *Use generated key*
-- Click the blue *Create* button
-
-
-### Calling the API using the API Key
-
-You now have an API key that you can use. As per the configurations selected in previous steps, this API key needs to be added to the header
-
-The curl command would look something like: 
-
-`curl https://1883da9e.us-south.apiconnect.appdomain.cloud/v1 -H "X-IBM-Client-Id: API_KEY"`
-
-Sample output
-```
-$ curl https://1883da9e.us-south.apiconnect.appdomain.cloud/v1 -H "X-IBM-Client-Id: 74259d6f-20a8-4e0a-ac16-12d96b9b36d2"
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-100   166  100   166    0     0    272      0 --:--:-- --:--:-- --:--:--   272Private MonthlyCost Application<br/>I am hostname: dep-monthlycost-69fc59959c-fbg8w<br/>Your app is up and running in a cluster!<br/>No Accounts<br/>No Providers<br/>
-```
-Great! our API call worked!
 
 Is our API secure? Well.... Not really.
 
