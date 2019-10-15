@@ -9,9 +9,17 @@ You can scale your Kubernetes application running on the IBM Cloud Kubernetes se
 * Using a deployment configuration file
 * Navigating to the deployments view in the IBM Cloud Kubernetes service dashboard and modifying the configuration
 
-## Horizontal Scaling with Replicas
+## Manual Scaling with Replicas
+
+By default when a deployment is created, a single pod is created.  The deployment has a *replicaset* resource which manages the fact that a running single pod is needed.  If the pod is terminated, the replicaset
+is responsible for trying to bring up another pod, and continues forever.  The replicaset can be configured to specify multiple pods in order to handle greater loads (eg. more requests).  This is known as
+Horizontal Scaling.
+
+<details>
+<summary>Instructions</summary>
+
 1. Scaling account, provider and cost service deployments  
-In this step you will scale the account deployment by adding 2 replicas, the provider depolment with 4 replicas and the cost deployment with 8 replicas.  
+In this step you will scale the account deployment by adding 2 replicas, the provider deploment with 4 replicas and the cost deployment with 8 replicas.  
 
 1.1. Scale the dep-account depolyment by adding 2 replicas ***using the kubectl scale command*** by running  
 ```
@@ -64,7 +72,7 @@ Click on the Scale menu option against the dep-cost service and add 8 replicas.
 ![](./images/kube-cluster-dashboard-depolyments-view.png)  
 
 
-2. We will then proceed to rollout the changes. To roll out these change run
+2. We will then proceed to view the rollout status. Run
 ```
 kubectl rollout status deployment/dep-account
 kubectl rollout status deployment/dep-provider
@@ -80,7 +88,7 @@ deployment "dep-account" successfully rolled out
 ```
 You may see the output as each pod for each service is being rolled out.  
 
-3. Once the rollout has finished, verify that the replicas have been rolled out and are runnig. To do this run the command:
+3. Once the rollout has finished, verify that the replicas have been rolled out and are running. To do this run the command:
 ```
 kubectl get pods
 
@@ -129,7 +137,95 @@ eg. http://173.190.91.194:30507/cost/123
 ```
 Notice that each time you hit the same service, the service request is handled from a different pod running the service. This can be verified by checking the hostname from the service response. Just as you scaled up the number of replicas, you can even scale them down.  
 
+</details>
+
+## AutoScaling with Replicas
+
+What we have seen is that the Kubernetes administrator can update the replicas if they suspect that there are insufficient pods to handle all the requests.  However in practice, this relies on someone to scale up or down when
+needed, and may cause an overuse of resources, as well as a maintenance headache when dealing with many different pods.
+
+<details>
+<summary>Instructions</summary>
+
+In order for Kubernetes to make the most efficient use of resources, it must understand the resource needs for your pods so that it will know when scaling should occur.  These fields can be updated in your pod definition
+to provide this information, resources and limits.  
+
+| Field | Description |
+|-------| --- |
+| Requests - cpu | Requests describes the minimum amount of cpu required. |
+| Requests - memory | Requests describes the minimum amount of memory required. |
+| Limits - cpu | Limits describes the maximum amount of cpu allowed. | 
+| Limits - memory | Limits describes the maximum amount of memory allowed. | 
+
+The cpu is measured in cores, so 100m would be equivalent to 0.1 core.  
+
+1. To check how many cpu cores and memory we have, you can check the nodes in your cluster:
+
+    ```
+    kubectl get nodes -o=jsonpath='{.items[0].status.capacity}'
+    ```
+
+    map[cpu:2 ephemeral-storage:101330012Ki hugepages-1Gi:0 hugepages-2Mi:0 memory:4041540Ki pods:110]
+
+This output shows there are 2 CPU cores, and a total of 4Gb of memory available to us.
+
+1. Let us create a different deployment which has an initial request of 0.5 of a core, and 256 Mb of memory, and display how much cpu is in use currently.
+
+    ```
+    kubectl run resource-consumer --image=gcr.io/kubernetes-e2e-test-images/resource-consumer:1.4 --expose --service-overrides='{ "spec": { "type": "NodePort" } }' --port 8080 --requests='cpu=500m,memory=256Mi'
+    ```
+
+1. Create a Horizonal Pod Autoscaler
+
+    ```
+    kubectl autoscale deploy resource-consumer --min=1 --max=10 --cpu-percent=5
+    kubectl get horizontalpodautoscaler
+    kubectl get hpa
+    ```
+
+It may take some time for the autoscaler to calculate cpu usage for the resource-consumer.  It should appear similar to this:
+
+    NAME                REFERENCE                      TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
+    resource-consumer   Deployment/resource-consumer   0%/5%     1         10        1          39s
+
+1.  Now we can check the usage of the pod here:
+
+    ```
+    kubectl get hpa
+    ```
 
 
-### Note
-Other ways to improve availability is to [add more clusters and nodes that expand across geo regions](https://cloud.ibm.com/docs/containers?topic=containers-clusters). You can set up a worker pool with multiple nodes in multiple zones, thereby increasing the number of total workers. This is unfortunately out of scope of this workshop (requires paid account).
+1. This image allows us to simulate load 
+
+    ```
+    curl --data "millicores=600&durationSec=60" http://<EXTERNAL-IP>:<SERVICE_PORT>/ConsumeCPU
+    ```
+
+1. After a few sectons, you can check how many resource-consumer pods there are, and how much cpu is being consumed.
+
+    ```
+    kubectl get hpa
+    kubectl top pods
+    ```
+
+    ```
+    NAME                REFERENCE                      TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
+    resource-consumer   Deployment/resource-consumer   54%/5%    1         10        4          4m49s
+    ```
+
+In our example, there are now a total of 4 replicas.  You may see many more resource-consumer pods being instantiated, but stuck in Pending State.  This is because of the initial requested cpu of the pod (0.5 core)
+which cannot be allocated, because we only have 2 CPU cores to share among all pods.
+
+1. Finally lets clean up this example
+
+    ```
+    kubectl delete hpa resource-consumer
+    kubectl delete deployment resource-consumer
+    kubectl delete svc resource-consumer
+    ```
+
+</details>
+
+## Further Investigation
+Other ways to improve availability is to [add more clusters and nodes that expand across geo regions](https://cloud.ibm.com/docs/containers?topic=containers-clusters). You can set up a worker pool with 
+multiple nodes in multiple zones, thereby increasing the number of total workers. This is unfortunately out of scope of this workshop (requires paid account).
