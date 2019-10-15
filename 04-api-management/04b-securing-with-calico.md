@@ -160,7 +160,9 @@ The API Management actually uses multiple IP addresses to connect to the service
    - Ingress
 ```
 
-If you need help finding the IP addresses for API Management, refer to this document: *04c-finding-the-ip-of-api-management**
+If you need help finding the IP addresses for API Management, refer to this document: 
+[Finding the IP of API Management for Calico](04c-finding-the-ip-of-api-management.md)
+
 
 ## Removing our own IP from the configuration
 

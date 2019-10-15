@@ -1,5 +1,13 @@
 # API Management
 
+This lab will be split into multiple parts.
+
+[Securing your API with Calico](04b-securing-with-calico.md)
+[Improving the API Management Security](04d-improving-apim-security.md)
+[Configuring the other end points](04e-configuring-other-end-points.md)
+
+## Summary of previous steps
+
 So far, we have created services, deployed them to a kubernetes cluster and we have exposed one of these services via a NodePort which assigns a random port to the service.
 
 In this part of the workshop, we will use the IBM Cloud API Management to start securing our service so that we can eventually control who has access and impose API limits to the calls to our service.
