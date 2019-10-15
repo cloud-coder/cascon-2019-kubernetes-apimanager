@@ -28,13 +28,13 @@ IBM Cloud API Management allows you to create new APIs or discover existing ones
 
 ## Lab 1 Setup Pre-Requisite
 
-Follow instructions in [setup section](01-setup/01-setup.md) to sign in to IBM Cloud and set up your account.  You can use a trial account for this purpose.
+Follow instructions in [setup section](01-setup/readme.md) to sign in to IBM Cloud and set up your account.  You can use a trial account for this purpose.
 
 The workshop pre-requisites also indicated that creation of the IBM Cloud Kubernetes cluster should be done prior to the workshop.  This is due to the fact that cluster creation can take some time to complete - thus it is beneficial to complete these steps prior to the workshop day.  Instructions are above in the [setup section](01-setup/01-setup.md)
 
 ## Lab 2 Exploring Kubernetes and Creating a Kubernetes Service Deployment
 
-[This section](02-kubernetes-service-creation/02-kubernetes-service-creation.md) will explore the CLI tools and Dashboard for administering a Kubernetes cluster.  The lab will then walk you through the steps to :
+[This section](02-kubernetes-service-creation/readme.md) will explore the CLI tools and Dashboard for administering a Kubernetes cluster.  The lab will then walk you through the steps to :
 * Create microservice images
 * Create containers and deploy them to the Kubernetes cluster using IBM Cloud	
 * Expose the API outside of the cluster
@@ -42,7 +42,7 @@ The workshop pre-requisites also indicated that creation of the IBM Cloud Kubern
 
 ## Lab 3 Scaling Applications in Kubernetes
 
-[This section](03-scaling-in-kubernetes/03-scaling-in-kubernetes.md) will explore some of the scaling capabilities in Kubernetes.  It will detail the steps to:
+[This section](03-scaling-in-kubernetes/readme.md) will explore some of the scaling capabilities in Kubernetes.  It will detail the steps to:
 * Create a scaled deployment setup
 * Compare temporary versus permanent changes in a Kubernetes deployment
 * Monitor the health of a deployment
@@ -50,7 +50,7 @@ The workshop pre-requisites also indicated that creation of the IBM Cloud Kubern
 
 ## Lab 4 API Management
 
-[This section](04-api-management/04-api-management.md) will describe the ways that API's can be managed using IBM Cloud API Management.  The topics include how to:
+[This section](04-api-management/readme.md) will describe the ways that API's can be managed using IBM Cloud API Management.  The topics include how to:
 * Add endpoints in IBM Cloud API Management for services deployed in Kubernetes
 * Add security to services using API keys
 * Rate limiting for an API
