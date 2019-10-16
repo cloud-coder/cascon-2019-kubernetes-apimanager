@@ -145,7 +145,6 @@ While you are waiting for the cluster provision to complete, you can move onto t
 
 ## Section 3 - Setting up CLI Tools
 
-
 ### 3.1 Installation
 
 We will need to install the IBM Cloud CLI (Command Line Interface) and the Kubernetes Service and Container Registry plug-ins.
@@ -157,13 +156,15 @@ For Mac and Linux, run:
           curl -sL https://ibm.biz/idt-installer |bash
 
         
-For Windows 10, run this as an administrator:
+For Windows 10, run this as an administrator in Windows Powershell:
 
 ```
 [Net.ServicePointManager]::SecurityProtocol = "Tls12"; iex(New-Object  Net.WebClient).DownloadString('https://ibm.biz/idt-win-installer')
 ```
 
-This will take a few mins to finish.
+This will take a few mins to finish. 
+
+**Note:** On Windows, The Docker for Windows installation may log you off, but the install is not completed. Wehn you log in again, relaunch the same command again and the installation will resume. The installation will end with a question to ask for a system restart which you must complete.
 
 In addition to the above mentioned, this command will also install the Kubernetes CLI (kubectl) as well as other tooling:
 
@@ -178,6 +179,8 @@ IBM Cloud Developer Tools plug-in
 IBM Cloud Functions plug-in
 IBM Cloud Object Storage plug-in
 ```
+
+**Note:** On Windows this will include gitbash which is the command line tool that you should use for the rest of the labs as the commands for Mac and Linux will work in gitbash.
 
 ### 3.2 Verify the installation
 
@@ -274,9 +277,6 @@ kubectl get pods
 
 
 ## Section 4 - Other Tools
-
-For windows users, ensure you have `gitbash` installed on your machine (https://gitforwindows.org)
-
 
 Here's some recommended tools you can download and install ahead of time for working with the labs:
 
