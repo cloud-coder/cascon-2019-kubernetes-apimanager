@@ -617,3 +617,7 @@ We need to update the deployment so that the correct secret is used.  You can ad
 
 </details>
 </details>
+
+## Continue
+
+Continue to [Lab 3](https://github.com/cloud-coder/cascon-2019-kubernetes-apimanager/tree/master/03-scaling-in-kubernetes).

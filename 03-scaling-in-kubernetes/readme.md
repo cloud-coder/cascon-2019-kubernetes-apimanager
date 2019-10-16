@@ -229,3 +229,8 @@ which cannot be allocated, because we only have 2 CPU cores to share among all p
 ## Further Investigation
 Other ways to improve availability is to [add more clusters and nodes that expand across geo regions](https://cloud.ibm.com/docs/containers?topic=containers-clusters). You can set up a worker pool with 
 multiple nodes in multiple zones, thereby increasing the number of total workers. This is unfortunately out of scope of this workshop (requires paid account).
+
+## Continue
+
+Continue to [Lab 4](https://github.com/cloud-coder/cascon-2019-kubernetes-apimanager/tree/master/04-api-management).
+
