@@ -6,10 +6,13 @@ In this case we will be using a plugin called Calico to enable some networking p
 
 ## Installing Calico
 
-Go to the following url to install Calico
+Calico enables networking and network policy in Kubernetes clusters. In IBM Cloud, Calico is pre-installed which allows us to configure network policies in our cluster. But before we do that, we need to install the Calico command line interface (CLI).
+
+Go to the following url to install Calico CLI
 
 https://cloud.ibm.com/docs/containers?topic=containers-network_policies#cli_install
 
+**Note:** if you are using a Windows machine, you will need to add the `--config=calicoctl.cfg` option to all the command lines in this lab. It is easier if you copy the configuration file to your current directly to achive this.
 
 ## Configuring Calico Network policies
 
@@ -75,7 +78,7 @@ As you may see in the above policy:
 - We deny all incoming TCP traffic on ports 30000 to 32767
 - We deny all incoming UDP traffic on ports 30000 to 32767
 
-Once you have this policy saved in a file called `deny-nodeports.yaml` we can apply it.
+You can find this policy in a file called `deny-nodeports.yaml` in the repository.
 
 Run the command: `calicoctl apply -f deny-nodeports.yaml`, you should get confirmation that the policy was applied.
 

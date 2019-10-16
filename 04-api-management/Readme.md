@@ -64,6 +64,8 @@ $ curl http://173.197.99.247:32482
 
 ### Accessing API management
 
+**Note:** If you are using a Mac, do not use Safari as the browser as it seems to have issues and does not allow all the steps to be completed fully.
+
 In your IBM Cloud account, 
 - Top left menu, then select *API Management*
 ![](images/01-API-Management.png)
