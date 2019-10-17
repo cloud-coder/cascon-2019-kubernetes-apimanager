@@ -413,7 +413,7 @@ Now we finally need to see how we can access this from the outside.
 
     ```
     kubectl get nodes -o wide
-    EXTERNALIP=`k get nodes -o=jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}'`
+    EXTERNALIP=`kubectl get nodes -o=jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}'`
     echo "Your external IP for this node is $EXTERNALIP."
     ```
 
@@ -427,12 +427,12 @@ Check the ports column for the  external value (after the colon).
 1. Access the urls from a web browser.
 
     ```
-    eg. http://&lt;externalip>:31234/account
-    eg. http://&lt;externalip>:30507/account/123
-    eg. http://&lt;externalip>:31323/provider
-    eg. http://&lt;externalip>:31323/provider/bell
-    eg. http://&lt;externalip>:30507/cost
-    eg. http://&lt;externalip>:30507/cost/123
+    eg. http://<External IP>:31234/account
+    eg. http://<External IP>:30507/account/123
+    eg. http://<External IP>:31323/provider
+    eg. http://<External IP>:31323/provider/bell
+    eg. http://<External IP>:30507/cost
+    eg. http://<External IP>:30507/cost/123
     ```
 
 Here is an example of what should be configured in your cluster.  IP number will differ.
