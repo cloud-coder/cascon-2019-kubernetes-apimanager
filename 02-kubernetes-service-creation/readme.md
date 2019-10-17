@@ -2,26 +2,26 @@
 
 ## A. Deployment Scenario
 
-In this exercise we are deploying a website that provides cost comparisons for users across different service providers.  The development teams have worked independently
+In this exercise imagine that we are working on an application that provides cost comparisons for users across different service providers.  The development teams have worked independently
 on 3 microservice projects.  
 
 <details>
 <summary>Microservice Details</summary>
 
-An *account* microservice provides information about all the users, including the the service providers they subscribe to.  They provide the REST api:
+An *account* microservice provides information about a specific account/user, including the the service providers they subscribe to.  They provide the REST api:
 
     GET /account           # Returns a health message
     GET /account/<acct_id> # Returns the specific account detail in JSON
 
-The *provider* microservice provides detail on particular costs of their service.  they provide the REST api:
+The *provider* microservice provides detail on particular costs of their service.  They provide the REST api:
 
     GET /provider                # Returns a health message
     GET /provider/<provider_id>  # Returns specific provider cost in JSON
 
-The *cost* microservice integrates information from the other two microservices, and provides a summary of the costs for a specific user.  The endpoint renders an html page and accesses the other microservices.
+The *cost* microservice retrieves information from the other two microservices, and provides a summary of the costs for a specific account/user.  The endpoint renders an html page and accesses the other microservices.
 
     GET /cost            # Returns a health message
-    GET /cost/<cost_id>  # calls the account service to see which providers are associated to the account, then calls each provider to get each cost.  Returns total cost for all providers in JSON
+    GET /cost/<acct_id>  # calls the account service to see which providers are associated to the account, then calls each provider to get each cost.  Returns total cost for all providers in JSON
 
 ***
 
@@ -30,7 +30,7 @@ The *cost* microservice integrates information from the other two microservices,
 Our task is to deploy these services to the IBM Cloud using the command-line interface (CLI) tools provided.
 
 ## B. Loading the IBM Cloud Container Registry
-The IBM Cloud Container Registry allows you to store images in your private registry.  See https://cloud.ibm.com/kubernetes/registry/main/start for the WebUI.
+The IBM Cloud Container Registry allows you to store Docker images in the IBM Cloud private registry rather than the public Docker Hub.  See https://cloud.ibm.com/kubernetes/registry/main/start for the WebUI.
 We will be storing 3 images created from code available in this git repository.
 
 <details>
@@ -70,11 +70,10 @@ provider, cost).
 <details>
 <summary>Instructions</summary>
 
-1. Clone this repository with git.  
+1. Clone this repository with using git https method.  
 For more information on choosing either ssh/https methods, see [github](https://help.github.com/en/articles/which-remote-url-should-i-use)
 
     ```
-    git clone git@github.com:cloud-coder/cascon-2019-kubernetes-apimanager.git (ssh)
     git clone https://github.com/cloud-coder/cascon-2019-kubernetes-apimanager.git (https)
     ```
 
@@ -84,15 +83,15 @@ For more information on choosing either ssh/https methods, see [github](https://
 
 ### Create Images
 
-This is essentially the Docker command (www.docker.com), but pushes the images to the IBM Cloud Container Registry.  Docker is a tool designed to make it easier to create, 
-deploy, and run applications by using containers.  The images are built with the corresponding Dockerfile and contains all of the necessary software packages needed to run 
+Docker is a tool designed to make it easier to create, deploy, and run applications by using containers.  The images are built with the corresponding Dockerfile and contains all of the necessary software packages needed to run 
 the microservices (eg. NodeJs, business logic).  By creating an image, it allows us the flexibility of reusing it to deploy several times without needing to recompile the code.  
+
+In this section we are creating the Docker images and pushing those images to the IBM Cloud Container Registry.
 
 <details>
 <summary>Create Images </summary>
 1. For each of the folders, we need to create Docker images and deploy them to the registry.
 
-    ```
     cd cascon-2019-kubernetes-apimanager/02-kubernetes-service-creation
     cd account
     ibmcloud cr build --no-cache -t $CRLOC/$CRNS/account:1 .
@@ -100,16 +99,10 @@ the microservices (eg. NodeJs, business logic).  By creating an image, it allows
     ibmcloud cr build --no-cache -t $CRLOC/$CRNS/provider:1 .
     cd ../cost
     ibmcloud cr build --no-cache -t $CRLOC/$CRNS/cost:1 .
-    ```
 
-This is the first time we are submitting these image repositories so we will provide it with an initial tag "1".  Ensure you specify the trailing "." 
-which references the location of the Dockerfile.
+This is the first time we are submitting these image repositories so we will provide it with an initial tag "1".  Ensure you specify the trailing "." which references the location of the Dockerfile.  In this case it's the current directory.
 
-The --no-cache allows you to make a clean build of an image every time, but optional.
-
-If you experience quota related issues, you can remove any older images you may have.
-
-    ibmcloud cr image-rm <image name>
+The --no-cache allows you to make a clean build of an image every time, but is an optional parameter.
 
 You should see the three additional images listed using this command.
 
@@ -118,6 +111,9 @@ You should see the three additional images listed using this command.
     ```
     ibmcloud cr images
     ```
+If you experience quota related issues, you can remove any older images you may have.
+
+    ibmcloud cr image-rm <image name>
 
 ***
 
@@ -159,7 +155,7 @@ The IBM Cloud Free Tier allocates a single worker, so everything will be deploye
 
 </details>
 
-## D. Setting up into the Kubernetes Cluster
+## D. Deploying images into the Kubernetes Cluster
 
 This will guide you how to move the images into the cluster and configure them so they can be accessible from the outside.
 
@@ -190,9 +186,9 @@ cluster.  In the IBM Cloud Free Tier, the cluster is only allocated one node, so
     kubectl get pods -o wide
     ```
 
-Deployments exists until they are explicitly removed, but each pod is ephemeral, so using the IP address will only be valid for as long as the pod is alive.  
+Deployments exists until they are explicitly removed, but each pod is ephemeral (short term and not permanent), so using the IP address will only be valid for as long as the pod is alive.  
 
-1. Let's delete a pod and see what happens.
+1. Let's delete a pod and see what happens.  From the output of the get pods command above, note the name of the dep-account-pod.  It will be something like dep-account-87b4696ed-swbw6.  Now delete the pod using it's name and this command:
 
     ```
     kubectl delete pod <pod-name>
@@ -204,11 +200,9 @@ Deployments exists until they are explicitly removed, but each pod is ephemeral,
     kubectl get pods -o wide
     ```
 
-Notice the original pod name/IP may result in a terminated status, but a new pod will spawn, and a new IP is assigned to it.  Kubernetes attempts to provide you the pod
-specified in the deployment that you created earlier automatically.  This also happens if your container fails (eg. due to a software glitch), and will continue 
-forever in attempting to have a successfully running deployment.
+Notice the original pod name/IP may result in a terminated status, but a new pod will spawn, and a new IP is assigned to it.  Kubernetes always attempts to provide you the pods specified in the deployment that you created earlier.  It will automatically recreate any pods that are terminated.  This also happens if your container fails (eg. due to a software glitch), and will continue forever in attempting to have a successfully running deployment.
 
-If you make a mistake in creating your deployment, you can also remove deployments using the command.
+If you make a mistake in creating your deployment, you can also remove deployments using the following command.  Since the deployment is controlling the pods, then removing the deployment will also remove the pods and they will not attempt to respawn.
 
     kubectl delete deployment <deployment-name>
 
@@ -231,7 +225,7 @@ to specify the particular pod name, which means you need to get the current runn
     kubectl logs -f <provider pod name>
     ```
 
-Press Ctrl-C to end the tail of the log.
+You should see the message "Provider Application is listening on port: 8081" which is the log message printed when the application is started and begins to listen.  Press Ctrl-C to end the tail of the log.
 
 ***
 
@@ -246,8 +240,7 @@ Press Ctrl-C to end the tail of the log.
 ### Services
 
 As the pods have dynamically assigned private IPs that can change at any time, it would be difficult to expose them to the outside world without telling the user
-what the updated host and port is.  To resolve this, Kubernetes provides *services*, an interface that sits in front of pods.  Its job is to give a unique name
-that others can reference which it will allow traffic to be served by an available pod.  If a new pod has generated or terminated, the service will be aware of it, and 
+what the updated host and port is.  To resolve this, Kubernetes provides *services*.  A service is an interface that sits in front of pods and it's job is to provide a unique name that others can reference which will allow traffic to be served by an available pod.  If a new pod has respawned with a different IP address, the service will be aware of it and 
 direct traffic appropriately.  The port specified below should match what each application port it is listening on.  Services are not ephemeral so they are will always
 exist unless explicitly removed, but its existence is not affected by the number of pods associated with it.
 
@@ -283,8 +276,8 @@ provides.
 ### DNS support for Services and Pods
 
 Our cluster now has all 3 microservices deployed, however the *cost* application is an application that depends on the other microservices, and somehow needs to
-reference them properly.  In order for one pod to discover the other pod, it would be difficult as we have already discovered the IPs are dynamic.  The solution 
-is that pods should reference the appropriate services.  Kubernetes by default comes with kube-dns, a way to resolve services by simply using their service name.
+reference them properly.  In order for one pod to discover the other pod, it would be difficult as we have already discovered the IPs are dynamic.  We cannot know the IP address of the other services.  The solution 
+is that pods should reference the appropriate services by name.  Kubernetes by default comes with kube-dns, a way to resolve services by simply using their service name.
 
 <details>
 <summary>DNS support</summary>
@@ -296,7 +289,7 @@ For instance, the *account* service can be accessed via any of the following hos
     account-service.default
     account-service
 
-The running application containers are built upon a small unix image which are running NodeJs listening on specific ports.  However it is also possible to create a session 
+The running application containers are built upon a small unix image which are running Node.js and listening on specific ports.  However it is also possible to create a session 
 with the container using an interactive shell.  Lets start a session with it so we can see the kube-dns in action.
 
 1. Locate the cost pod name and create a shell.
@@ -323,13 +316,13 @@ currently available services are provided to it in the form of environment varia
     exit
     ```
 
-If the service was defined before the pod was created, you would have seen a &lt;svcname&gt;_SERVICE_HOST &lt;svcname&gt;_SERVICE_PORT pair of entries.  This is what is being
+If the cost service was defined before the pod was created, you would have seen a &lt;svcname&gt;_SERVICE_HOST &lt;svcname&gt;_SERVICE_PORT pair of entries.  This is what is being
 used by our code in the *cost* microservice.
 
 In our steps above, the *cost* pod was created during the deployment creation, but the service creation for *account* and *provider* was done afterwards.  This means that the current 
 *cost* pod is not directly aware of the 2 new services that were created as we do not see any entries in the environment variables.  The code in cost/app.js could have made
 a hard reference to http://account-service.default.svc:8080/ and http://provider-service.default.svc:8081/ but that would rely on the services' port being defined as 8080/8081 
-in the expose command.  The NodeJs code in app.js currently references:
+in the expose command.  The Node.js code in app.js currently references:
 
     process.env.ACCOUNT_SERVICE_SERVICE_HOST
     process.env.ACCOUNT_SERVICE_SERVICE_PORT
@@ -392,7 +385,7 @@ You should be able to see all of the services listed now including its own servi
     PROVIDER_SERVICE_SERVICE_HOST=172.21.12.109
     PROVIDER_SERVICE_SERVICE_PORT=8081
 
-Just to be sure, we can delete all the pods to ensure they are all aware of these environment variables.
+The provider and account pods also need to be more aware of their environments.  Since the services were created after those pods, they must also be respawned in order to be aware of service names.  We can delete all the pods to ensure they are all aware of these environment variables.  They will respawn after just a moment since the deployment still exists.
 
     ```
     kubectl delete pods --all
@@ -402,9 +395,9 @@ Just to be sure, we can delete all the pods to ensure they are all aware of thes
 
 </details>
 
-### Accessing from the Outside
+### Accessing Services from outside the Cluster
 
-Now we finally need to see how we can access this from the outside.
+Now we finally need to see how we can access these services from outside of the cluster.
 
 <details>
 <summary>Instructions</summary>
@@ -427,12 +420,20 @@ Check the ports column for the  external value (after the colon).
 1. Access the urls from a web browser.
 
     ```
-    eg. http://<External IP>:31234/account
-    eg. http://<External IP>:30507/account/123
-    eg. http://<External IP>:31323/provider
-    eg. http://<External IP>:31323/provider/bell
-    eg. http://<External IP>:30507/cost
-    eg. http://<External IP>:30507/cost/123
+    eg. http://<External IP>:<account service port>/account
+    eg. http://<External IP>:<account service port>/account/123
+    eg. http://<External IP>:<provider service port>/provider
+    eg. http://<External IP>:<provider service port>/provider/bell
+    eg. http://<External IP>:<cost service port>/cost
+    eg. http://<External IP>:<cost service port>/cost/123
+    ```
+
+2. Alternatively you may access via curl in the terminal.
+
+    ```
+    eg. http://$EXTERNALIP:<account service port>/account/123
+    eg. http://$EXTERNALIP:<provider service port>/provider/bell
+    eg. http://$EXTERNALIP:<cost service port>/cost/123
     ```
 
 Here is an example of what should be configured in your cluster.  IP number will differ.
@@ -476,7 +477,10 @@ To explain this, let's simulate a code change.
     ```
     account/app.js
     ```
+For example, change the listening message:
 
+    console.log('*NEW* Account Service is listening on port: '+ listenPort)
+    
 Now that we have a change, we need to build a new image in the registry.
 
 1. Make a new version 2 of the account application.
@@ -501,10 +505,21 @@ save then close the file.
 You should see the image version reflected in the deployment:
 
     kubectl get deployments -o wide
+    
+    Note the version of the account image will show account:2
 
 As well as the old pod will terminate, and you will see that a new one will be created (verify that the age is younger than the other pods).
 
     kubectl get pods
+
+In order to prove that the new application code is running, view the log message for the account pod like we did earlier.
+
+    kubectl get pods -o wide
+    kubectl logs -f <provider pod name>
+
+You should see the new console message added to app.js
+
+    NEW Account Service is listening on port: 8080
 
 And that's it.  After a new image is available, only one change is necessary, and Kubernetes takes care of the rest.
 
@@ -586,7 +601,7 @@ You should see the environment variables for value1 and value2.
 You can also use Kubernetes Namespace.  This allows us to group all our Kubernetes objects together under our project, and separate
 them from other potential projects on the same cluster.  By default, the *default* namespace is used, but by using a custom one, it gives us 
 flexibility in managing it later.  When we use a non-default namespace, we need to migrate all the secrets over so that the tokens use to authenticate
-against the Cloud Container Register are available when we pull images.  Normally this would have been done before any deployments were created.
+against the Cloud Container Registry are available when we pull images.  Normally this would have been done before any deployments were created.
 
 <details>
 <summary>Instructions</summary>
@@ -602,7 +617,7 @@ against the Cloud Container Register are available when we pull images.  Normall
 
 1. Update the imagePullSecrets
 
-Because we are using a non-default namespace for Kubernetes, the credentials to pull images from the Container Register are not specified in this namespace.  
+Because we are using a non-default namespace for Kubernetes, the credentials to pull images from the Container Registry are not specified in this namespace.  
 We need to update the deployment so that the correct secret is used.  You can add the imagePullSecrets key by updating the deployment descriptors:
 
     spec:
