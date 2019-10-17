@@ -21,7 +21,16 @@ You can scale your Kubernetes application running on the IBM Cloud Kubernetes se
 1. Scaling account, provider and cost service deployments  
 In this step you will scale the account deployment by adding 2 replicas, the provider deploment with 4 replicas and the cost deployment with 8 replicas.  
 
-1.1. Scale the dep-account depolyment by adding 2 replicas ***using the kubectl scale command*** by running  
+1.1. Scale the dep-account deployment by adding 2 replicas ***using the kubectl scale command*** by running  
+
+Note: If you modified the Kubernetes namespace in the last lab, set it back to the default by executing the following command:
+
+```
+$ kubectl config set-context --current --namespace=default
+```
+
+Now scale the account deployment.
+
 ```
 $ kubectl scale --replicas=2 deployment dep-account  
 deployment "dep-account" scaled 
@@ -29,6 +38,7 @@ deployment "dep-account" scaled
   
 Kubernetes will now add 2 new pods for the dep-account service. You can verify this by running the ``` kubectl get pods``` command. Notice that 2 new pods for the dep-account were created. Now try deleting one of the account pods using the command ```kubectl delete pods dep-account-xxx```. Kubernetes will delete the pod and re-create a new one to satisfy the deployment configuration that specified 2 replicas for the deployment, dep-account. You can verify this by running the ``` kubectl get pods``` command and notice the name of the newly created dep-account-xxx pod.
 
+Scaling on the command line is a quick way to add additional pods but perhaps it is not the best way because the modification of the deployment was temporary.  Ideally you'd likely want to have the number of replicas specified in a configuration file.
 
 1.2.  Scale the dep-provider depolyment by adding 4 replicas by ***editing the deployment configuration*** running the command below and modifying the *replicas* property value under the spec property. You can also edit the deployment configuration via the Kubernetes dashboard.
  
@@ -110,7 +120,7 @@ dep-provider-6c897669cb-cdfgy           1/1       Running   0          9m
 
 ```
   
-4. A ReplicaSet is a Kubernetes object whose purpose is to maintain a stable set of replicated Pods running at any given time. Kubernetes should have craeted 2 replicasets for the pods running the account service, 8 for the cost service and 4 for the provider. To view the ReplicaSets and the number of replicas that were created after scaling run:
+4. A ReplicaSet is a Kubernetes object whose purpose is to maintain a stable set of replicated Pods running at any given time. Kubernetes should have created 2 replicasets for the pods running the account service, 8 for the cost service and 4 for the provider. To view the ReplicaSets and the number of replicas that were created after scaling run:
 ```
 kubectl get replicasets
 ```
