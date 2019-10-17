@@ -409,10 +409,12 @@ Now we finally need to see how we can access this from the outside.
 <details>
 <summary>Instructions</summary>
 
-1. Determine the node's external IPs addresses. The IBM Cloud Free Tier should only contain a single node for this cluster.
+1. Determine the node's external IPs addresses. The IBM Cloud Free Tier should only contain a single node for this cluster.  We can capture this in a variable.
 
     ```
     kubectl get nodes -o wide
+    EXTERNALIP=`k get nodes -o=jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}'`
+    echo "Your external IP for this node is $EXTERNALIP."
     ```
 
 1. Determine the port for our external facing cost service.  Because we specified it with type Nodeport, it will be allocated a port in the (30,000-32767) range.  
@@ -425,12 +427,12 @@ Check the ports column for the  external value (after the colon).
 1. Access the urls from a web browser.
 
     ```
-    eg. http://173.193.92.194:31234/account
-    eg. http://173.193.92.194:30507/account/123
-    eg. http://173.193.92.194:31323/provider
-    eg. http://173.193.92.194:31323/provider/bell
-    eg. http://173.193.92.194:30507/cost
-    eg. http://173.193.92.194:30507/cost/123
+    eg. http://&lt;externalip>:31234/account
+    eg. http://&lt;externalip>:30507/account/123
+    eg. http://&lt;externalip>:31323/provider
+    eg. http://&lt;externalip>:31323/provider/bell
+    eg. http://&lt;externalip>:30507/cost
+    eg. http://&lt;externalip>:30507/cost/123
     ```
 
 Here is an example of what should be configured in your cluster.  IP number will differ.
