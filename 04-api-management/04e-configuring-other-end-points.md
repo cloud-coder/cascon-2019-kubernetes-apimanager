@@ -6,7 +6,7 @@ We have 2 other services that we can also configure, the *account* and the *prov
 
 ## Configuring the account and provider services
 
-For both of these you will want to repeat the steps from the [First part of the lab](Readme.md), specifically the section **### Creating your first API proxy**. Of course you will need to adjust the endpoints accordingly.
+For both of these you will want to repeat the steps from the [First part of the lab](Readme.md), specifically the section **Creating your first API proxy**. Of course you will need to adjust the endpoints accordingly.
 
 You will then also have to update your `whitelist.yaml` file to include the additional 2 ports required for these services.
 
