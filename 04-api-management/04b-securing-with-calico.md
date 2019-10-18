@@ -8,11 +8,11 @@ In this case we will be using a plugin called Calico to enable some networking p
 
 Calico enables networking and network policy in Kubernetes clusters. In IBM Cloud, Calico is pre-installed which allows us to configure network policies in our cluster. But before we do that, we need to install the Calico command line interface (CLI).
 
-Go to the following url to install Calico CLI
+Go to the following URL and follow the instructions to install Calico CLI
 
 https://cloud.ibm.com/docs/containers?topic=containers-network_policies#cli_install
 
-**Note:** if you are using a Windows machine, you will need to add the `--config=calicoctl.cfg` option to all the command lines in this lab. It is easier if you copy the configuration file to your current directly to achive this.
+**Note:** if you are using a Windows machine, you will need to add the `--config=calicoctl.cfg` option to all the command lines in this lab. It is easier if you copy the configuration file to your current directory to achieve this.
 
 ## Configuring Calico Network policies
 
@@ -25,7 +25,7 @@ Get the ports used by the services: `kubectl get services`
 
 ### Get information about your local IP address
 
-Although tools like `ifconfig` or `ipconfig` provide information about your local IP addresses, we need to know the IP address that you *appear* to be coming from when connecting to a pulic site.
+Although tools like `ifconfig` or `ipconfig` provide information about your local IP addresses, we need to know the IP address that you *appear* to be coming from when connecting to a public site.
 
 Point your browser to a site such as: https://ifconfig.me/
 
@@ -34,7 +34,7 @@ Or type "what is my ip" in a google search.
 This will give you the IP address you appear to be coming from for a public site.
 
 
-## Confirm yo ucan still access the cluster
+## Confirm you ucan still access the cluster
 
 Confirm that if you run the following command
 
@@ -78,17 +78,17 @@ As you may see in the above policy:
 - We deny all incoming TCP traffic on ports 30000 to 32767
 - We deny all incoming UDP traffic on ports 30000 to 32767
 
-You can find this policy in a file called `deny-nodeports.yaml` in the repository.
+You can find this policy in a file called `deny-nodeports.yaml` in the repository.  Navigate to the cascon-2019-kubernetes-apimanager/04-api-management directory on your computer which you cloned from GitHub in the previous labs.
 
 Run the command: `calicoctl apply -f deny-nodeports.yaml`, you should get confirmation that the policy was applied.
 
-Now try connecting to your cluster using the command we used before and it should be unsuccessful.
+Now try connecting to your service using the curl command again.  It now will not connect due to the network policy.
 
 ## Accepting incoming connections using a whitelist
 
-Now that all traffic going to those ports has been blocked our API is now secured, but also is unusable by anyone.
+Now that all traffic going to those ports has been blocked our API is secured, but also is unusable by anyone.
 
-For testing purposes we will want to open up access to our IP address.
+For testing purposes we will want to open up access to our IP address.  Open the file whitelist.yaml and update <my_ip_address> to be the IP address from the http://ifconfig.me page.  Next, update the <nodeport_port> to be the port for the cost service.  Also update the <cluster_public_ip> to be your Kubernetes public cluster IP address.
 
 ```yaml
  apiVersion: projectcalico.org/v3
@@ -121,15 +121,15 @@ As you may see above the policy:
 
 Run the command: `calicoctl apply -f whitelist.yaml`, you should get confirmation that the policy was applied.
 
-Try accessing your service again using the command we used before, the connection should work. Ask a friend to try to connect and the connection should fail.
+Try accessing your service again using the command we used before and the direct IP address - the connection should work. Ask a friend to try to connect and the connection should fail.
 
-Obviously this is not achiveving what we ultimately want yet, but it is a first step.
+Obviously this is not achieving what we ultimately want yet because we are only allowing traffic from our own computer.  
 
-If you try to connect using the API management url we received in the previous step, that connection should still fail.
+If you try to connect using the API Management URL we received in the previous step, that connection should still fail.
 
 ## Updating our policy to allow connections from the API Management IPs
 
-The API Management actually uses multiple IP addresses to connect to the service, so we need to add all of them to our whitelist. In the example below we add 3 entries:
+The API Management actually uses multiple IP addresses to connect to the service, so we need to add all of them to our whitelist. Open up the whitelist.yaml file again and add 3 entries:
 - 169.46.64.77/32
 - 169.48.97.212/32
 - 169.48.246.130/32
@@ -162,6 +162,10 @@ The API Management actually uses multiple IP addresses to connect to the service
    types:
    - Ingress
 ```
+
+Apply this new whitelist by executing the command `calicoctl apply -f whitelist.yaml`
+
+Now if you try to connect using the API Management URL we received in the previous step that connection should successfully connect to the service.
 
 If you need help finding the IP addresses for API Management, refer to this document: 
 [Finding the IP of API Management for Calico](04c-finding-the-ip-of-api-management.md)
