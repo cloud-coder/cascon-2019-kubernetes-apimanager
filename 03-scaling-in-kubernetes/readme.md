@@ -138,14 +138,16 @@ dep-provider-6c897669cb           4         4         4         23h
   
 6. Test any of services that were created using either cURL or from your browser.
 ```
-eg. http://173.190.91.194:31234/account
-eg. http://173.190.91.194:30507/account/123
-eg. http://173.190.91.194:31323/provider
-eg. http://173.190.91.194:31323/provider/bell
-eg. http://173.190.91.194:30507/cost
-eg. http://173.190.91.194:30507/cost/123
+eg. http://<external ip>:<account service port>/account
+eg. http://<external ip>:<account service port>/account/123
+eg. http://<external ip>:<provider service port>/provider
+eg. http://<external ip>:<provider service port>/provider/bell
+eg. http://<external ip>:<cost service port>/cost
+eg. http://<external ip>:<cost service port>/cost/123
 ```
-Notice that each time you hit the same service, the service request is handled from a different pod running the service. This can be verified by checking the hostname from the service response. Just as you scaled up the number of replicas, you can even scale them down.  
+Notice that each time you hit the same service, the service request might be handled by a different pod running the service. This can be verified by checking the hostname from the service response. The external IP address and port remains the same but based on load, the requests may end up on different pods.
+
+Just as you scaled up the number of replicas, you can even scale them down.  
 
 </details>
 
@@ -179,7 +181,7 @@ The cpu is measured in cores, so 100m would be equivalent to 0.1 core.
 
 This output shows there are 2 CPU cores, and a total of 4Gb of memory available to us.
 
-1. Let us create a different deployment which has an initial request of 0.5 of a core, and 256 Mb of memory, and display how much cpu is in use currently.
+1. Let us create a different deployment from a different image which has an initial request of 0.5 of a core, and 256 Mb of memory, and display how much cpu is in use currently.
 
     ```
     kubectl run resource-consumer --image=gcr.io/kubernetes-e2e-test-images/resource-consumer:1.4 --expose --service-overrides='{ "spec": { "type": "NodePort" } }' --port 8080 --requests='cpu=500m,memory=256Mi'
@@ -198,20 +200,19 @@ It may take some time for the autoscaler to calculate cpu usage for the resource
     NAME                REFERENCE                      TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
     resource-consumer   Deployment/resource-consumer   0%/5%     1         10        1          39s
 
-1.  Now we can check the usage of the pod here:
+1.  The resource-consumer deployment also has a service created with a nodeport.  Examine it and note the external port:
 
     ```
-    kubectl get hpa
+    kubectl get service resource-consumer
     ```
 
-
-1. This image allows us to simulate load 
+2. This resource-consumer image allows us to simulate load 
 
     ```
     curl --data "millicores=600&durationSec=60" http://<EXTERNAL-IP>:<SERVICE_PORT>/ConsumeCPU
     ```
 
-1. After a few sectons, you can check how many resource-consumer pods there are, and how much cpu is being consumed.
+3. After a few moments, you can check how many resource-consumer pods there are, and how much cpu is being consumed.
 
     ```
     kubectl get hpa
