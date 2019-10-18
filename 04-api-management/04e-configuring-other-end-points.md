@@ -39,7 +39,7 @@ Your `whitelist.yaml` should look like:
    types:
    - Ingress
 ```
-Apply the new whitelist using the command `calicoctl apply -f deny-nodeports.yaml`
+Apply the new whitelist using the command `calicoctl apply -f whitelist.yaml`
 
 You should now be able to test the new end points:
 ```
