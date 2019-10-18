@@ -39,12 +39,14 @@ Your `whitelist.yaml` should look like:
    types:
    - Ingress
 ```
+Apply the new whitelist using the command `calicoctl apply -f deny-nodeports.yaml`
 
 You should now be able to test the new end points:
-```bash
+```
 curl https://1883da9e.us-south.apiconnect.appdomain.cloud/v1/account
 curl https://1883da9e.us-south.apiconnect.appdomain.cloud/v1/provider
 ```
+Note that at the moment only the cost service requires an API key.
 
 If you provide some additional information on the path of the url you will receive specific information:
 ```bash
@@ -62,7 +64,11 @@ $ curl https://1883da9d.us-south.apiconnect.appdomain.cloud/v1/provider/bell
 
 ## Next level of configuration
 
-Here, in addition to being able to add an API Key as we did in the cost service, we can experiment with configuring
-- Using the same API Key
-- Having a different Rate Limit
+Here, take some time on your own to configure the API's in different ways.  In addition to being able to add an API Key as we did in the cost service, we can experiment with:
+- configuring some of the API's with API keys and some without
+- Having a different Rate Limits per API
 - Using API Keys and Secret: https://cloud.ibm.com/docs/services/api-management?topic=api-management-keys_secrets
+
+## API Logging
+
+Lastly, the API Managememt interface also allows you to view some logs of API usage.  On the Summary tab for the API you can view the number of calls to the API, the average response time and even individual API responses.  This is a handy tool to determine usage.
