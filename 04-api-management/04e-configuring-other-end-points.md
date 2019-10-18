@@ -34,6 +34,7 @@ Your `whitelist.yaml` should look like:
        - 169.46.64.77/32
        - 169.48.97.212/32
        - 169.48.246.130/32
+       - 169.48.97.211/32
    selector: ibm.role=='worker_public'
    order: 500
    types:
