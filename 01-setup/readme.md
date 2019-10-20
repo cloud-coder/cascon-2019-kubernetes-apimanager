@@ -12,26 +12,22 @@ Before you can carry on with the lab exercises, you first need to have an accoun
 
 2.	Click on the `Create an IBM Cloud account` button on the left side
 
-![](images/prereq1.png)
+![](screncaps/section1step2.png)
 
 
-3.	On the registration page, under Create a free account, fill in the required info:
+3.	On the registration page, under *Create a free account*, fill in the required info:
 
-i.	Email
+-	Email
 
-ii.	First Name
+-	First Name
 
-iii.      Last Name
+-	Last Name
 
-iv.	Country or Region
+-	Country or Region
 
-v.	Password 
-          
-    (Note that: Password must contain 8-31 characters with at least one upper-case, one lower-case, one number. The characters ‘?’ and ‘}’ are not allowed.)
+-	Password (must contain 8-31 characters with at least one upper-case, one lower-case, one number. The characters ‘?’ and ‘}’ are not allowed.)
 
-vi.	Contact method (Optional)
-      
-     Check off ‘by email’ or ‘by telephone’, both or none.
+-	Contact method (Optional - check off ‘by email’ or ‘by telephone’, both or none)
 
 
 4.	Review the *IBM Privacy Statement* and *Terms and Conditions*
@@ -39,21 +35,21 @@ vi.	Contact method (Optional)
 5.	Click the `Create Account` button
 
 
-![](images/prereq2.png)
+![](screencaps/section1step5.png)
 
 
 You will receive an email titled _*Action required: Confirm your IBM Cloud account*_ in your inbox.
 
-Open the email and click on the `Confirm Account` button.
+6. Open the email and click on the `Confirm account` button.
 
 
-![](images/prereq3.png)
+![](screencaps/section1step6.png)
 
 
-Upon confirming your account. You will see this welcome message indicating that your account is ready for use:
+7. Upon confirming your account. You will see this welcome message indicating that your account is ready for use:
 
 
-![](images/prereq4.png)
+![](screencaps/section1step7.png)
 
 
 
@@ -68,76 +64,136 @@ For this lab, we will be using the free Kubernetes cluster available to IBM Clou
 
 3.	Enter your IBM Cloud ID and click `Continue` button
 
-
-![](images/prereq5.png)
+![](screencaps/section2step3.png)
 
 4.	Enter your Password then click the `Log in` button
 
-![](images/prereq6.png)
+![](screencaps/section2step4.png)
 
 
 
-5.	Upon successful login, you will arrive on your *Dashboard* page.
+5.	Upon successful login, you will arrive on your *Dashboard* page. 
+
+i. Click `Next` through the intro overlay screens if they appear. Otherwise proceed to step 6.
+
+![](screencaps/section2step5i.png)
+
+
+ii. Click `Close`.
+
+![](screencaps/section2step5ii.png)
+
 
 6.	Click on the `Create resource` button on the top right corner.
 
-![](images/prereq7.png)
+![](screencaps/section2step6.png)
 
 
-7.	On the *Catalog* page, click on the `Kubernetes Service` tile:
+7.	On the *Catalog* page, you may see that the default results are being filtered by "lite". If so, remove the *label:lite* filter from the search box:
 
-![](images/prereq8.png)
-
-
-8.	On the *Kubernetes Service* page, click on the `Create` button:
-
-![](images/prereq9.png)
-
-9.	On the *Create a new cluster* page, under *Select a plan*, click on the `Free` tile:
+![](screencaps/section2step7.png)
 
 
-![](images/prereq10.png)
+8.	This should bring up the Featured results on top, click on the `Kubernetes Service` tile:
 
-10.	`Kubernetes` is the preselected default Cluster type for the free plan, where the latest stable version is listed inside the tile (eg. V1.14.6).
+![](screencaps/section2step8.png)
 
-11. Fill in the required info:
 
-i. Cluster name
+9.	On the *Kubernetes Service* page, 
 
-    Enter a name for your cluster
+
+A. If you see this message near the bottom :
+
+```
+Kubernetes clusters are not available with your current account type. 
+Upgrade your account to create a cluster.
+```   
+
+![](screencaps/section2step9a.png)
+
+
+i.	Then you would first have to upgrade your account. Scroll down on this page to see the various price plans that IBM offers.
+
+
+ii.	For the purpose of this lab, we will use the *Free* plan, which gives us a free cluster with 1 worker node. Click the `Upgrade` button.
+
+![](screencaps/section2step9aii.png)
+
+
+iii.	On the *Unlock the full catalog* overlay, fill out the requested information to upgrade to your account to a *Pay-as-you-go* account. 
+
+
+### Note: Although this step requires you to enter your Credit Card Information, you *__will not be charged__* if you are only using free services for the purpose of this workshop.
+
+
+iv. Select the *Personal Account* radio. Fill out the required Billing Information (First name, Last name, Address, Phone Number):
+
+
+![](screencaps/section2step9aiv.png)
+
+
+v. Fill out the required Credit Card Information (Credit Card Number, Expiration Date, Security Code). Select a Payment Currency. Click the "I accept" checkbox after reading the *Cloud Services terms*. Click `Next`.
+
+
+![](screencaps/section2step9v.png)
     
-ii.	Tags
     
-    Optionally, enter any tags for this cluster or leave blank
 
-iii.	Resource group
+B. Otherwise, your account is already eligible to create the free cluster. 
+
+
+10. On the *Kubernetes Service* page, click on the `Create` button:
+
+![](screencaps/section2step10.png)
+
+
+11.	On the *Create a new cluster* page, under *Select a plan*, click on the `Free` tile:
+
+![](screencaps/section2step11.png)
+
+
+12.	`Kubernetes` is the preselected default Cluster type for the free plan, where the latest stable version is listed inside the tile (eg. V1.14.7). Fill in the required info:
+
+i.        Cluster name
+
+    Enter a name for your cluster, eg. 'mycluster'
+
+ii.	Resource group
 
     Select "Default" from the drop down
 
-iv.	Geography
-
-    Select "North America" from the drop down
+![](screencaps/section2step12.png)
 
 
-v.	Metro
+13.	Review the *Order summary*. A free cluster with 2 vCPUs 4GB RAM and 1 worker node will be created. Click on the `Create cluster` button.
 
-    Select "Dallas" from the drop down
-
-
-12.	Click on the `Create cluster` button.
+![](screencaps/section2step13.png)
 
 
-13.	You will see a green progress bar with status info:  *Requesting creation…*
+14.	On your *Cluster* page, the cluster creation process is indicated by a green progress bar with status info: eg.  *Requesting creation…*  
 
-![](images/prereq11.png)
-
-
-14.	The entire cluster creation process can take on average 20-45mins, or more, depending on your connection and network traffic.
-
-15.	The green bar will keep progressing and there will be some time spent on *Configuring worker nodes…*
+![](screencaps/section2step14a.png)
 
 
-While you are waiting for the cluster provision to complete, you can move onto the next section 3 to set up the required Command Line Interface tools.
+Then *Preparing master,workers…*
+
+![](screencaps/section2step14b.png)
+
+
+15.	The entire cluster creation process can take on average 20-45mins, or more, depending on your connection and network traffic.
+
+As the green bar progresses,  there will be some time spent on *Configuring worker nodes…* and *Finalizing workers…* This is expected.
+
+![](screencaps/section2step15.png)
+
+
+While you are waiting for the cluster provision to complete, you can move on to Section 3 to set up the required Command Line Interface tools.
+
+
+16.	Once the cluster has been successfully provisioned, you will see a green `Normal` status replacing the previous progress bar:
+
+
+![](screencaps/section2step16.png)
 
 
 
@@ -162,11 +218,11 @@ For Windows 10, run this as an administrator in Windows Powershell:
 [Net.ServicePointManager]::SecurityProtocol = "Tls12"; iex(New-Object  Net.WebClient).DownloadString('https://ibm.biz/idt-win-installer')
 ```
 
-This will take a few mins to finish. 
+This will take a few mins to finish. If you've already got these installed previously, it will upgrade your existing plug-ins to the latest versions.
 
-**Note:** On Windows, The Docker for Windows installation may log you off, but the install is not completed. Wehn you log in again, relaunch the same command again and the installation will resume. The installation will end with a question to ask for a system restart which you must complete.
+**Note:** On Windows, the Docker for Windows installation may log you off, but the install is not completed. When you log in again, relaunch the same command again and the installation will resume. The installation will end with a question to ask for a system restart which you must complete.
 
-In addition to the above mentioned, this command will also install the Kubernetes CLI (kubectl) as well as other tooling:
+In addition to the above mentioned, this command will also install the __Kubernetes CLI (kubectl)__ as well as other tooling:
 
 
 ```
@@ -182,82 +238,100 @@ IBM Cloud Object Storage plug-in
 
 **Note:** On Windows this will include gitbash which is the command line tool that you should use for the rest of the labs as the commands for Mac and Linux will work in gitbash.
 
+
+
+2. Upon completion, you will see the _Install finished._ message :
+
+![](screencaps/section31step2.png)
+
+
 ### 3.2 Verify the installation
 
-Next, you can verify your installation by attempting to login via the IBM Cloud CLI
+Next, verify your installation by attempting to login via the IBM Cloud CLI.
 
-1.	In your terminal type: 
+1.	In your terminal, type: 
 
-        ibmcloud login
+        ibmcloud login -a cloud.ibm.com -r us-south -g Default
+        
+        
+(Use --sso for federated account:)
+
+        ibmcloud login -a cloud.ibm.com --sso -r us-south -g Default
+
 
 (Note: this may prompt to display an auth code in your default broswer. Type `Y`, login, then copy/paste the auth code into the terminal)
 
 2.	Enter your Email address as prompted: 
 
-![](images/prereq12.png)
+![](screencaps/section32step2.png)
 
 
 3.	Enter your Password as prompted:
 
-
-![](images/prereq13.png)
-
-
-4.	Once your login is successful, you will see an OK message with your account details
+![](screencaps/section32step3.png)
 
 
-
-![](images/prereq14.png)
-
-![](images/prereq15.png)
+4.	Once your login is successful, you will see an OK message with your account details:
 
 
-Next, verify the service plug-in are installed properly.
+
+![](screencaps/section32step4a.png)
+
+![](screencaps/section32step4b.png)
+
+
+Verify that service plug-in are installed properly.
 
 5.	In your terminal type: 
 
          ibmcloud plugin list
 
 
-![](images/prereq16.png)
+![](screencaps/section32step5.png)
 
 
 ### 3.3 Set up KubeConfig
 
 After your cluster is provisioned from Section 2, we can complete the kubeconfig set up.
 
-1. Ensure you are logged in to your ibm account
+1. Ensure you are logged in to your ibm cloud account. If you have just completed section 3.2, you can skip logging in again and proceed directly to step 2.
 
 ```
-ibmcloud login -a cloud.ibm.com -r us-south -g default
-
-```
-
-(Use -sso for federated account)
-
-
-```
-ibmcloud login -a cloud.ibm.com --sso -r us-south -g default
+ibmcloud login -a cloud.ibm.com -r us-south -g Default
 
 ```
 
-2. Download your cluster's kubeconfig files
-
-```
-ibmcloud ks cluster-config --cluster <cluster id>
-```
-
-where cluster id can be found on your cluster creation page, *eg. bm0l4gid0t3g52djj5mg*
-
-
-
-3. Take the output from the previous command to set the _KUBECONFIG_ environment variable. For example:
+(Use --sso for federated account)
 
 
 ```
-export KUBECONFIG=/Users/vyuen/.bluemix/plugins/container-service/clusters/<cluster id>/kube-config-hou02-vycluster.yml
+ibmcloud login -a cloud.ibm.com --sso -r us-south -g Default
+
 ```
-where cluster id can be found on your cluster creation page, *eg. bm0l4gid0t3g52djj5mg*
+
+2. Next, download your cluster's kubeconfig files. On the command line, type:
+
+```
+ibmcloud ks cluster-config --cluster <cluster_id>
+```
+
+where `<cluster_id>` can be found on your cluster creation page from section 2 step 16, *eg. bmm8gi4d0d78en43d430*
+
+![](screencaps/section33step2.png)
+
+
+3. Next we set the _KUBECONFIG_ environment variable. Copy the output from the previous step then paste this in the command window to execute. For example:
+
+```
+export KUBECONFIG=/Users/<user>/.bluemix/plugins/container-service/clusters/<cluster_id>/kube-config-hou02-mycluster.yml
+```
+
+where `<user>` is the user profile on your machine
+and `<cluster_id>` can be found on your cluster creation page, or from the previous step *eg. bmm8gi4d0d78en43d430*
+
+
+
+![](screencaps/section33step3.png)
 
 
 
@@ -266,6 +340,13 @@ where cluster id can be found on your cluster creation page, *eg. bm0l4gid0t3g52
 ```
 kubectl version --short
 ```
+
+![](screencaps/section33step4.png)
+
+
+Note: the recommended default versions above.
+
+
 
 You can also run the get pods command to ensure that it runs although we have no pods at this point:
 
