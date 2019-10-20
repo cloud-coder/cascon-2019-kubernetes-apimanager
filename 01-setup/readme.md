@@ -12,7 +12,9 @@ Before you can carry on with the lab exercises, you first need to have an accoun
 
 2.	Click on the `Create an IBM Cloud account` button on the left side
 
-![](screncaps/section1step2.png)
+
+![](screencaps/section1step2.png)
+
 
 
 3.	On the registration page, under *Create a free account*, fill in the required info:
@@ -53,10 +55,10 @@ You will receive an email titled _*Action required: Confirm your IBM Cloud accou
 
 
 
+
 ## Section 2 - Creating a Kubernetes Cluster
 
 For this lab, we will be using the free Kubernetes cluster available to IBM Cloud free tier users.
-
 
 1.	Go to https://cloud.ibm.com
 
@@ -70,37 +72,29 @@ For this lab, we will be using the free Kubernetes cluster available to IBM Clou
 
 ![](screencaps/section2step4.png)
 
-
-
 5.	Upon successful login, you will arrive on your *Dashboard* page. 
 
 i. Click `Next` through the intro overlay screens if they appear. Otherwise proceed to step 6.
 
 ![](screencaps/section2step5i.png)
 
-
 ii. Click `Close`.
 
 ![](screencaps/section2step5ii.png)
-
 
 6.	Click on the `Create resource` button on the top right corner.
 
 ![](screencaps/section2step6.png)
 
-
 7.	On the *Catalog* page, you may see that the default results are being filtered by "lite". If so, remove the *label:lite* filter from the search box:
 
 ![](screencaps/section2step7.png)
-
 
 8.	This should bring up the Featured results on top, click on the `Kubernetes Service` tile:
 
 ![](screencaps/section2step8.png)
 
-
 9.	On the *Kubernetes Service* page, 
-
 
 A. If you see this message near the bottom :
 
@@ -112,13 +106,11 @@ Upgrade your account to create a cluster.
 ![](screencaps/section2step9a.png)
 
 
-i.	Then you would first have to upgrade your account. Scroll down on this page to see the various price plans that IBM offers.
-
+i.	You would first have to upgrade your account. Scroll down on this page to see the various price plans that IBM offers.
 
 ii.	For the purpose of this lab, we will use the *Free* plan, which gives us a free cluster with 1 worker node. Click the `Upgrade` button.
 
 ![](screencaps/section2step9aii.png)
-
 
 iii.	On the *Unlock the full catalog* overlay, fill out the requested information to upgrade to your account to a *Pay-as-you-go* account. 
 
@@ -128,15 +120,12 @@ iii.	On the *Unlock the full catalog* overlay, fill out the requested informatio
 
 iv. Select the *Personal Account* radio. Fill out the required Billing Information (First name, Last name, Address, Phone Number):
 
-
 ![](screencaps/section2step9aiv.png)
 
 
 v. Fill out the required Credit Card Information (Credit Card Number, Expiration Date, Security Code). Select a Payment Currency. Click the "I accept" checkbox after reading the *Cloud Services terms*. Click `Next`.
 
-
 ![](screencaps/section2step9v.png)
-    
     
 
 B. Otherwise, your account is already eligible to create the free cluster. 
@@ -192,9 +181,7 @@ While you are waiting for the cluster provision to complete, you can move on to 
 
 16.	Once the cluster has been successfully provisioned, you will see a green `Normal` status replacing the previous progress bar:
 
-
 ![](screencaps/section2step16.png)
-
 
 
 
@@ -274,7 +261,6 @@ Next, verify your installation by attempting to login via the IBM Cloud CLI.
 4.	Once your login is successful, you will see an OK message with your account details:
 
 
-
 ![](screencaps/section32step4a.png)
 
 ![](screencaps/section32step4b.png)
@@ -330,9 +316,7 @@ where `<user>` is the user profile on your machine
 and `<cluster_id>` can be found on your cluster creation page, or from the previous step *eg. bmm8gi4d0d78en43d430*
 
 
-
 ![](screencaps/section33step3.png)
-
 
 
 4. Verify that you can connect to your cluster:
@@ -344,8 +328,7 @@ kubectl version --short
 ![](screencaps/section33step4.png)
 
 
-Note: the recommended default versions above.
-
+__Note:__ the recommended default versions above.
 
 
 You can also run the get pods command to ensure that it runs although we have no pods at this point:
