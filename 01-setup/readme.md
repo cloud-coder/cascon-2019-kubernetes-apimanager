@@ -13,7 +13,7 @@ Before you can carry on with the lab exercises, you first need to have an accoun
 
 1.	Go to https://cloud.ibm.com
 
-2.	Click on the `Create an IBM Cloud account` button on the left side
+2.	Click on the `Create an IBM Cloud account` button on the left side.
 
 
 ![](screencaps/section1step2.png)
@@ -35,9 +35,9 @@ Before you can carry on with the lab exercises, you first need to have an accoun
 -	Contact method (Optional - check off ‘by email’ or ‘by telephone’, both or none)
 
 
-4.	Review the *IBM Privacy Statement* and *Terms and Conditions*
+4.	Review the *IBM Privacy Statement* and *Terms and Conditions*.
 
-5.	Click the `Create Account` button
+5.	Click the `Create Account` button.
 
 
 ![](screencaps/section1step5.png)
@@ -70,13 +70,13 @@ For this lab, we will be using the free Kubernetes cluster available to IBM Clou
     
 1.	Go to https://cloud.ibm.com
 
-2.	Log in to your IBM Cloud account
+2.	Log in to your IBM Cloud account.
 
-3.	Enter your IBM Cloud ID and click `Continue` button
+3.	Enter your IBM Cloud ID and click `Continue` button.
 
 ![](screencaps/section2step3.png)
 
-4.	Enter your Password then click the `Log in` button
+4.	Enter your Password then click the `Log in` button.
 
 ![](screencaps/section2step4.png)
 
@@ -86,7 +86,7 @@ i. Click `Next` through the intro overlay screens if they appear. Otherwise proc
 
 ![](screencaps/section2step5i.png)
 
-ii. Click `Close`.
+ii. Click `Close` or the `X`.
 
 ![](screencaps/section2step5ii.png)
 
@@ -134,6 +134,10 @@ iv. Select the *Personal Account* radio. Fill out the required Billing Informati
 v. Fill out the required Credit Card Information (Credit Card Number, Expiration Date, Security Code). Select a Payment Currency. Click the "I accept" checkbox after reading the *Cloud Services terms*. Click `Next`.
 
 ![](screencaps/section2step9v.png)
+
+vi. It may take a couple minutes to process the upgrade. When completed, this screen will appear. Click `Done` and proceed to step 11.
+
+![](screencaps/section2step9vi.png)
     
 
 B. Otherwise, your account is already eligible to create the free cluster. 
@@ -149,7 +153,9 @@ B. Otherwise, your account is already eligible to create the free cluster.
 ![](screencaps/section2step11.png)
 
 
-12.	`Kubernetes` is the preselected default Cluster type for the free plan, where the latest stable version is listed inside the tile (eg. V1.14.7). Fill in the required info:
+12.	`Kubernetes` is the preselected default Cluster type for the free plan, where the latest stable version is listed inside the tile (eg. V1.14.7). At this point, if you do not see the following fields, you may need to refresh your page (eg. if you are just coming from step 9vi). 
+
+Fill in the required info:
 
 i.        Cluster name
 
