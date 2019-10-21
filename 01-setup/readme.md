@@ -247,7 +247,7 @@ IBM Cloud Object Storage plug-in
 
 ### 3.2 Verify the installation
 
-Next, verify your installation 
+Next, verify your installation by following the steps below.
 
 
 <details>
@@ -285,7 +285,7 @@ First, let's attempt to login via the IBM Cloud CLI.
 ![](screencaps/section32step4b.png)
 
 
-Verify that service plug-in are installed properly.
+Next, verify that service plug-in are installed properly.
 
 5.	In your terminal type: 
 
