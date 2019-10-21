@@ -579,7 +579,10 @@ work in the same way, but the values are usually passwords or tokens that should
         app: dep-account
     spec:
       containers:
-      - envFrom:
+      - image: us.icr.io/cas2019/account:1
+        imagePullPolicy: IfNotPresent
+        name: account
+        envFrom:
         - configMapRef:
             name: myconfigmap
    ```
