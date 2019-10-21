@@ -8,6 +8,9 @@ This lab is a mandatory prerequisite for the subsequent labs (2-4) and must be c
 
 Before you can carry on with the lab exercises, you first need to have an account on the IBM Cloud. If you already have an account, you can skip this step and proceed to section 2.
 
+<details>
+<summary>Instructions</summary>
+
 1.	Go to https://cloud.ibm.com
 
 2.	Click on the `Create an IBM Cloud account` button on the left side
@@ -53,6 +56,7 @@ You will receive an email titled _*Action required: Confirm your IBM Cloud accou
 
 ![](screencaps/section1step7.png)
 
+</details>
 
 
 
@@ -60,6 +64,10 @@ You will receive an email titled _*Action required: Confirm your IBM Cloud accou
 
 For this lab, we will be using the free Kubernetes cluster available to IBM Cloud free tier users.
 
+
+<details>
+<summary>Instructions</summary>
+    
 1.	Go to https://cloud.ibm.com
 
 2.	Log in to your IBM Cloud account
@@ -183,7 +191,7 @@ While you are waiting for the cluster provision to complete, you can move on to 
 
 ![](screencaps/section2step16.png)
 
-
+</details>
 
 
 ## Section 3 - Setting up CLI Tools
@@ -191,6 +199,9 @@ While you are waiting for the cluster provision to complete, you can move on to 
 ### 3.1 Installation
 
 We will need to install the IBM Cloud CLI (Command Line Interface) and the Kubernetes Service and Container Registry plug-ins.
+
+<details>
+<summary>Instructions</summary>
 
 1.	Open a terminal or command line window.
 
@@ -231,10 +242,18 @@ IBM Cloud Object Storage plug-in
 
 ![](screencaps/section31step2.png)
 
+</details>
+
 
 ### 3.2 Verify the installation
 
-Next, verify your installation by attempting to login via the IBM Cloud CLI.
+Next, verify your installation 
+
+
+<details>
+<summary>Instructions</summary>
+    
+First, let's attempt to login via the IBM Cloud CLI.
 
 1.	In your terminal, type: 
 
@@ -276,9 +295,15 @@ Verify that service plug-in are installed properly.
 ![](screencaps/section32step5.png)
 
 
+</details>
+
+
 ### 3.3 Set up KubeConfig
 
-After your cluster is provisioned from Section 2, we can complete the kubeconfig set up.
+After your cluster is provisioned from Section 2, we can now complete the kubeconfig set up.
+
+<details>
+<summary>Instructions</summary>
 
 1. Ensure you are logged in to your ibm cloud account. If you have just completed section 3.2, you can skip logging in again and proceed directly to step 2.
 
@@ -338,6 +363,7 @@ You can also run the get pods command to ensure that it runs although we have no
 kubectl get pods
 ```
 
+</details>
 
 
 ## Section 4 - Other Tools
