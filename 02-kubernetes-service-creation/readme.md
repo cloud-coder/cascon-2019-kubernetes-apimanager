@@ -619,22 +619,42 @@ against the Cloud Container Registry are available when we pull images.  Normall
     kubectl get secrets -n default -o yaml | sed 's/default/cas2019ns/g' | kubectl -n cas2019ns create -f -
     ```
 
-2. Update the imagePullSecrets
+2. Create a sample pod
 
-Because we are using a non-default namespace for Kubernetes, the credentials to pull images from the Container Registry are not specified in this namespace.  
-We need to update the deployment so that the correct secret is used.  You can add the imagePullSecrets key by updating the deployment descriptors:
+    ```
+    kubectl run nginx --image=nginx -n cas2019ns --restart=Never
+    kubectl get pods
+    ```
+
+You will see that only the pods for this namespace is shown.  You can the pods for all namespaces with
+
+    kubectl get pods -A    
+
+3. Switch back to the default context
+
+    ```
+    kubectl config set-context --current --namespace=cas2019ns
+    kubectl config get-contexts
+    ```
+    
+4. Update the imagePullSecrets
+
+If you wish to use a non-default namespace for Kubernetes, the credentials to pull images from the Container Registry are not specified in this namespace.  You would need to update the deployment so that the correct secret is used.  You can add the imagePullSecrets key by updating the deployment descriptors:
 
     spec:
       containers:
       - image: us.icr.io/cas2019/account:1
         imagePullPolicy: IfNotPresent
         name: account
+        namespace: cas2019ns
         resources: {}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
       dnsPolicy: ClusterFirst
       imagePullSecrets:
       - name: default-us-icr-io
+
+As we have already created all the pods in the default namespace, we will not modify this at this time.
 
 </details>
 </details>
