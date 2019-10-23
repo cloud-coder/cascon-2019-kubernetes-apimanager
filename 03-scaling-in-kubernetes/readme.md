@@ -43,7 +43,7 @@ i. Now scale the account deployment. Run:
 kubectl scale --replicas=2 deployment dep-account  
 ```
 
-You should see `deployment "dep-account"scaled`.
+You should see `deployment "dep-account" scaled`.
 
   
 ii. Kubernetes will now add 2 new pods for the dep-account service. Verify this by running the command
@@ -169,7 +169,7 @@ kubectl rollout status deployment/dep-cost
 
 You may see the output as each pod for each service is being rolled out:
 
-eg. for dep-accout:
+eg. for dep-account:
 ```
 Waiting for rollout to finish: 1 of 2 updated replicas are available...
 Waiting for rollout to finish: 2 of 2 updated replicas are available...
@@ -259,7 +259,7 @@ eg. http://<external ip>:<cost service port>/cost/123
 
 Notice that each time you hit the same service, the service request might be handled by a different pod running the service. This can be verified by checking the hostname from the service response. The external IP address and port remain the same but based on load, the requests may end up on different pods.
 
-Just as you scaled up the number of replicas, you can even scale them down.  
+Just as you scaled up the number of replicas, you can also scale them down in the same manner.
 
 </details>
 
