@@ -7,9 +7,6 @@ Deployments in Kubernetes can be horizontally scaled using replicas. A replica i
 
 By default when a deployment is created, a single pod is created.  The deployment has a *replicaset* resource which manages the fact that a running single pod is needed.  If the pod is terminated, the replicaset is responsible for trying to bring up another pod, and continues to do this forever.  The replicaset can be configured to specify multiple pods in order to handle greater loads (eg. more requests).  This is known as Horizontal Scaling.
 
-<details>
-<summary>Instructions</summary>
-  
   
 You can scale your Kubernetes application running on the IBM Cloud Kubernetes service by specifying the number of replicas via:
 
@@ -20,6 +17,11 @@ You can scale your Kubernetes application running on the IBM Cloud Kubernetes se
 
 Let's go ahead and scale the *account*, *provider* and *cost* service deployments.
 
+
+<details>
+<summary>Instructions</summary>
+  
+  
 
 1. In this step you will scale the *account* deployment by adding 2 replicas, the *provider* deploment with 4 replicas and the *cost* deployment with 8 replicas
 
@@ -66,7 +68,7 @@ Notice the name of the newly created dep-account-xxx pod.
 
 </details>
 
-Scaling on the command line is a quick way to add additional pods but perhaps it is not the best way because the modification of the deployment is only temporary.  Ideally you'd likely want to have the number of replicas specified in a configuration file.
+Scaling on the command line is a quick way to add additional pods but perhaps it is not the best way because the modification of the deployment is only temporary.  Ideally you'd likely want to have this done permanently. This can be achieved by updating the number of replicas in the deployment configuration file.
 
  
 
@@ -76,11 +78,14 @@ Scaling on the command line is a quick way to add additional pods but perhaps it
   
   
 
-Run the command below and modifying the *replicas* property value under the *spec* property. You can also edit the deployment configuration via the Kubernetes dashboard.
+Run the command below to edit the deployment configuration. Alternatively, you can edit the deployment configuration via the Kubernetes dashboard.
  
 ``` 
 kubectl edit deployment/dep-provider
 ```
+
+
+Modify the *replicas* property value under the *spec* property.
 
 ```
 # Please edit the object below. Lines beginning with a '#' will be ignored,
@@ -108,6 +113,7 @@ spec:
 ...
 ```  
 Save changes and exit edit mode. 
+
 
 Verify that 4 new provider service pods were created
 
