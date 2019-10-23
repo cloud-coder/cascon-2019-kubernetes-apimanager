@@ -1,13 +1,11 @@
 # Lab 3 Scaling Microservices in Kubernetes
 In this lab, learn how to scale a microservice running in Kubernetes using replicas and how to safely roll up an update to the number of replicas.
 
-Deployments in Kubernetes can be horizontally scaled using replicas. A replica is a copy of a pod that contains a running service. To scale your Kubernetes application horizontally, create multiple replicas which ensure that multiple running copies of your application are available to handled increased workloads.  
+Deployments in Kubernetes can be horizontally scaled using replicas. A replica is a copy of a pod that contains a running service. To scale your Kubernetes application horizontally, create multiple replicas which ensure that multiple running copies of your application are available to handle increased workloads.  
 
 ## Manual Scaling with Replicas
 
-By default when a deployment is created, a single pod is created.  The deployment has a *replicaset* resource which manages the fact that a running single pod is needed.  If the pod is terminated, the replicaset
-is responsible for trying to bring up another pod, and continues forever.  The replicaset can be configured to specify multiple pods in order to handle greater loads (eg. more requests).  This is known as
-Horizontal Scaling.
+By default when a deployment is created, a single pod is created.  The deployment has a *replicaset* resource which manages the fact that a running single pod is needed.  If the pod is terminated, the replicaset is responsible for trying to bring up another pod, and continues to do this forever.  The replicaset can be configured to specify multiple pods in order to handle greater loads (eg. more requests).  This is known as Horizontal Scaling.
 
 <details>
 <summary>Instructions</summary>
@@ -18,10 +16,11 @@ You can scale your Kubernetes application running on the IBM Cloud Kubernetes se
 * Using a deployment configuration file
 * Navigating to the deployments view in the IBM Cloud Kubernetes service dashboard and modifying the configuration
 
-1. Scaling account, provider and cost service deployments  
-In this step you will scale the account deployment by adding 2 replicas, the provider deploment with 4 replicas and the cost deployment with 8 replicas.  
+1. Scaling the *account*, *provider* and *cost* service deployments
 
-1.1. Scale the dep-account deployment by adding 2 replicas ***using the kubectl scale command*** by running  
+In this step you will scale the *account* deployment by adding 2 replicas, the *provider* deploment with 4 replicas and the *cost* deployment with 8 replicas.  
+
+1.1. Scale the dep-account deployment by adding 2 replicas ***using the kubectl scale command*** 
 
 Note: If you modified the Kubernetes namespace in the last lab, set it back to the default by executing the following command:
 
@@ -36,11 +35,13 @@ $ kubectl scale --replicas=2 deployment dep-account
 deployment "dep-account" scaled 
 ```
   
-Kubernetes will now add 2 new pods for the dep-account service. You can verify this by running the ``` kubectl get pods``` command. Notice that 2 new pods for the dep-account were created. Now try deleting one of the account pods using the command ```kubectl delete pods dep-account-xxx```. Kubernetes will delete the pod and re-create a new one to satisfy the deployment configuration that specified 2 replicas for the deployment, dep-account. You can verify this by running the ``` kubectl get pods``` command and notice the name of the newly created dep-account-xxx pod.
+Kubernetes will now add 2 new pods for the dep-account service. You can verify this by running the ``` kubectl get pods``` command. Notice that 2 new pods for the dep-account were created. 
 
-Scaling on the command line is a quick way to add additional pods but perhaps it is not the best way because the modification of the deployment was temporary.  Ideally you'd likely want to have the number of replicas specified in a configuration file.
+Now try deleting one of the account pods using the command ```kubectl delete pods dep-account-xxx```. Kubernetes will delete the pod and re-create a new one to satisfy the deployment configuration that specified 2 replicas for the deployment, dep-account. You can verify this by running the ``` kubectl get pods``` command and notice the name of the newly created dep-account-xxx pod.
 
-1.2.  Scale the dep-provider depolyment by adding 4 replicas by ***editing the deployment configuration*** running the command below and modifying the *replicas* property value under the spec property. You can also edit the deployment configuration via the Kubernetes dashboard.
+Scaling on the command line is a quick way to add additional pods but perhaps it is not the best way because the modification of the deployment is temporary.  Ideally you'd likely want to have the number of replicas specified in a configuration file.
+
+1.2.  Scale the dep-provider deployment to 4 replicas by ***editing the deployment configuration*** running the command below and modifying the *replicas* property value under the spec property. You can also edit the deployment configuration via the Kubernetes dashboard.
  
 ``` 
 kubectl edit deployment/dep-provider
@@ -74,7 +75,7 @@ spec:
 Save changes and exit edit mode. Verify that 4 new provider service pods were created by running the command ``` kubectl get pods```.  
 
 
-1.3. To scale the dep-cost service by adding 8 replicas via the ***IBM Cloud Kubernetes Dashboard***, launch the dashboard from your Kubernetes service cluster and navigate to Deployments view. 
+1.3. Scale the dep-cost service to 8 replicas via the ***IBM Cloud Kubernetes Dashboard***, launch the dashboard from your Kubernetes service cluster and navigate to the Deployments view. 
 ![](./images/kube-cluster.png)  
 
 
@@ -120,7 +121,7 @@ dep-provider-6c897669cb-cdfgy           1/1       Running   0          9m
 
 ```
   
-4. A ReplicaSet is a Kubernetes object whose purpose is to maintain a stable set of replicated Pods running at any given time. Kubernetes should have created 2 replicasets for the pods running the account service, 8 for the cost service and 4 for the provider. To view the ReplicaSets and the number of replicas that were created after scaling run:
+4. A **replicaset** is a Kubernetes object whose purpose is to maintain a stable set of replicated Pods running at any given time. Kubernetes should have created 2 replicasets for the pods running the account service, 8 for the cost service and 4 for the provider. To view the replicasets and the number of replicas that were created after scaling run:
 ```
 kubectl get replicasets
 ```
@@ -145,7 +146,7 @@ eg. http://<external ip>:<provider service port>/provider/bell
 eg. http://<external ip>:<cost service port>/cost
 eg. http://<external ip>:<cost service port>/cost/123
 ```
-Notice that each time you hit the same service, the service request might be handled by a different pod running the service. This can be verified by checking the hostname from the service response. The external IP address and port remains the same but based on load, the requests may end up on different pods.
+Notice that each time you hit the same service, the service request might be handled by a different pod running the service. This can be verified by checking the hostname from the service response. The external IP address and port remain the same but based on load, the requests may end up on different pods.
 
 Just as you scaled up the number of replicas, you can even scale them down.  
 
@@ -181,13 +182,13 @@ The cpu is measured in cores, so 100m would be equivalent to 0.1 core.
 
 This output shows there are 2 CPU cores, and a total of 4Gb of memory available to us.
 
-1. Let us create a different deployment from a different image which has an initial request of 0.5 of a core, and 256 Mb of memory, and display how much cpu is in use currently.
+2. Let us create a different deployment from a different image which has an initial request of 0.5 of a core, and 256 Mb of memory, and display how much cpu is in use currently.
 
     ```
     kubectl run resource-consumer --image=gcr.io/kubernetes-e2e-test-images/resource-consumer:1.4 --expose --service-overrides='{ "spec": { "type": "NodePort" } }' --port 8080 --requests='cpu=500m,memory=256Mi'
     ```
 
-1. Create a Horizonal Pod Autoscaler
+3. Create a Horizonal Pod Autoscaler
 
     ```
     kubectl autoscale deploy resource-consumer --min=1 --max=10 --cpu-percent=5
@@ -200,19 +201,19 @@ It may take some time for the autoscaler to calculate cpu usage for the resource
     NAME                REFERENCE                      TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
     resource-consumer   Deployment/resource-consumer   0%/5%     1         10        1          39s
 
-1.  The resource-consumer deployment also has a service created with a nodeport.  Examine it and note the external port:
+i.  The resource-consumer deployment also has a service created with a nodeport.  Examine it and note the external port:
 
     ```
     kubectl get service resource-consumer
     ```
 
-2. This resource-consumer image allows us to simulate load 
+ii. This resource-consumer image allows us to simulate load 
 
     ```
     curl --data "millicores=600&durationSec=60" http://<EXTERNAL-IP>:<SERVICE_PORT>/ConsumeCPU
     ```
 
-3. After a few moments, you can check how many resource-consumer pods there are, and how much cpu is being consumed.
+iii. After a few moments, you can check how many resource-consumer pods there are, and how much cpu is being consumed.
 
     ```
     kubectl get hpa
@@ -224,10 +225,9 @@ It may take some time for the autoscaler to calculate cpu usage for the resource
     resource-consumer   Deployment/resource-consumer   54%/5%    1         10        4          4m49s
     ```
 
-In our example, there are now a total of 4 replicas.  You may see many more resource-consumer pods being instantiated, but stuck in Pending State.  This is because of the initial requested cpu of the pod (0.5 core)
-which cannot be allocated, because we only have 2 CPU cores to share among all pods.
+In our example, there are now a total of 4 replicas.  You may see many more resource-consumer pods being instantiated, but stuck in Pending State.  This is because of the initial requested cpu of the pod (0.5 core) cannot be allocated, because we only have 2 CPU cores to share amongst all pods.
 
-1. Finally lets clean up this example
+4. Finally lets clean up this example
 
     ```
     kubectl delete hpa resource-consumer
