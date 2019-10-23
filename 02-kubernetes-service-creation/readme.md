@@ -633,7 +633,7 @@ You will see that only the pods for this namespace is shown.  You can the pods f
 3. Switch back to the default context
 
     ```
-    kubectl config set-context --current --namespace=cas2019ns
+    kubectl config set-context --current --namespace=default
     kubectl config get-contexts
     ```
     
