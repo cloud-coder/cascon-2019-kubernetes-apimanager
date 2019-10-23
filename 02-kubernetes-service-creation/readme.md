@@ -600,7 +600,7 @@ You should see the environment variables for value1 and value2.
 
 </details>
 
-### Kubernetes Namepaces
+### Kubernetes Namespaces
 
 You can also use Kubernetes Namespace.  This allows us to group all our Kubernetes objects together under our project, and separate
 them from other potential projects on the same cluster.  By default, the *default* namespace is used, but by using a custom one, it gives us 
