@@ -34,20 +34,24 @@ Let's go ahead and scale the *account*, *provider* and *cost* service deployment
 Note: If you modified the Kubernetes namespace in the last lab, you need to first set it back to the default namespace by executing the following command:
 
 ```
-$ kubectl config set-context --current --namespace=default
+kubectl config set-context --current --namespace=default
 ```
 
-i. Now scale the account deployment.
+i. Now scale the account deployment. Run:
 
 ```
-$ kubectl scale --replicas=2 deployment dep-account  
-deployment "dep-account" scaled 
+kubectl scale --replicas=2 deployment dep-account  
 ```
+
+You should see `deployment "dep-account"scaled`.
+
   
 ii. Kubernetes will now add 2 new pods for the dep-account service. Verify this by running the command
 
 
-``` kubectl get pods```
+```
+kubectl get pods
+```
 
 
 Notice that 2 new pods for the dep-account got created. 
@@ -55,13 +59,17 @@ Notice that 2 new pods for the dep-account got created.
 
 iii. Now let's try deleting one of the account pods. 
 
-```kubectl delete pods dep-account-xxx```
+```
+kubectl delete pods dep-account-xxx
+```
 
 
 iv. Kubernetes will delete the pod and re-create a new one to satisfy the deployment configuration that specified 2 replicas for the deployment, dep-account. Verify this by running
 
 
-``` kubectl get pods``` 
+```
+kubectl get pods
+``` 
 
 
 Notice the name of the newly created dep-account-xxx pod.
@@ -117,7 +125,9 @@ iii. Save changes and exit edit mode.
 
 iv. Verify that 4 new provider service pods were created
 
-``` kubectl get pods```.  
+```
+kubectl get pods
+```
 
 </details>
 
@@ -146,7 +156,10 @@ iii. Enter 8 in the *Scale a Deployment* dialog and click `Ok`.
 </details>
 
 
-2. Next let's proceed to view the rollout status. Run
+2. Next let's proceed to view the rollout status. 
+
+
+i. Run
 
 ```
 kubectl rollout status deployment/dep-account
@@ -154,47 +167,69 @@ kubectl rollout status deployment/dep-provider
 kubectl rollout status deployment/dep-cost
 ```
 
-*The rollout might occur so quickly that the following messages might not display:*
+You may see the output as each pod for each service is being rolled out:
 
+eg. for dep-accout:
 ```
 Waiting for rollout to finish: 1 of 2 updated replicas are available...
 Waiting for rollout to finish: 2 of 2 updated replicas are available...
 deployment "dep-account" successfully rolled out
 ...
+```
+
+eg. for dep-cost:
+```
+Waiting for deployment "dep-cost" rollout to finish: 1 of 8 updated replicas are available...
+Waiting for deployment "dep-cost" rollout to finish: 2 of 8 updated replicas are available...
+Waiting for deployment "dep-cost" rollout to finish: 3 of 8 updated replicas are available...
+Waiting for deployment "dep-cost" rollout to finish: 4 of 8 updated replicas are available...
+Waiting for deployment "dep-cost" rollout to finish: 5 of 8 updated replicas are available...
+Waiting for deployment "dep-cost" rollout to finish: 6 of 8 updated replicas are available...
+Waiting for deployment "dep-cost" rollout to finish: 7 of 8 updated replicas are available...
+deployment "dep-cost" successfully rolled out
 ...
 ```
 
-You may see the output as each pod for each service is being rolled out.
 
 
-3. Once the rollout has finished, verify that the replicas have been rolled out and are running. To do this run the command:
+3. Once the rollout has finished, verify that the replicas have been rolled out and are running. 
+
+i. To do this, run
+
 ```
 kubectl get pods
+```
 
-NAME                                    READY     STATUS    RESTARTS   AGE
-dep-account-b78dfd57d-cpjp7             1/1       Running   0          36m
-dep-account-b78dfd57d-dbt9d             1/1       Running   0          18h
-dep-cost-5dcd9b5c7f-kppcj        1/1       Running   0          23h
-dep-cost-5dcd9b5c7f-lv5tw        1/1       Running   0          8m
-dep-cost-5dcd9b5c7f-kaccj        1/1       Running   0          21h
-dep-cost-5dcd9b5c7f-de5tw        1/1       Running   0          12m
-dep-cost-5dcd9b5c7f-werft        1/1       Running   0          13h
-dep-cost-5dcd9b5c7f-ppiuo        1/1       Running   0          19m
-dep-cost-5dcd9b5c7f-yuabj        1/1       Running   0          20h
-dep-cost-5dcd9b5c7f-sinae        1/1       Running   0          11m
-dep-provider-6c897669cb-fzzsc           1/1       Running   0          23h
-dep-provider-6c897669cb-jfjbz           1/1       Running   0          7m
-dep-provider-6c897669cb-lcbbg           1/1       Running   0          7m
-dep-provider-6c897669cb-cdfgy           1/1       Running   0          9m
+You should see the following output for all the replicas that we have scaled:
+
+```
+NAME                            READY   STATUS    RESTARTS   AGE
+dep-account-6576b6f45f-8cnl8    1/1     Running   0          55m
+dep-account-6576b6f45f-hlw7c    1/1     Running   0          22h
+dep-cost-7fbc9cf878-5fjkq       1/1     Running   0          3m25s
+dep-cost-7fbc9cf878-6bj84       1/1     Running   0          22h
+dep-cost-7fbc9cf878-7wc87       1/1     Running   0          3m25s
+dep-cost-7fbc9cf878-bnrqz       1/1     Running   0          3m25s
+dep-cost-7fbc9cf878-fmwgh       1/1     Running   0          3m25s
+dep-cost-7fbc9cf878-qrxgp       1/1     Running   0          3m25s
+dep-cost-7fbc9cf878-ttmps       1/1     Running   0          3m25s
+dep-cost-7fbc9cf878-vtsqp       1/1     Running   0          3m25s
+dep-provider-777f4d7b4b-d7fc2   1/1     Running   0          22h
+dep-provider-777f4d7b4b-mhmvd   1/1     Running   0          23m
+dep-provider-777f4d7b4b-sggcn   1/1     Running   0          23m
+dep-provider-777f4d7b4b-t7t5b   1/1     Running   0          23m
 
 ```
   
 4. As mentioned, a **replicaset** is a Kubernetes object whose purpose is to maintain a stable set of replicated Pods running at any given time. Kubernetes should have created 2 replicasets for the pods running the account service, 8 for the cost service and 4 for the provider.
 
-To view the replicasets and the number of replicas that were created after scaling run:
+i. To view the replicasets and the number of replicas that were created after scaling run:
+
 ```
 kubectl get replicasets
 ```
+
+You should see the list of replicasets:
 ```
 NAME                              DESIRED   CURRENT   READY     AGE
 dep-account-b78dfd57d             2         2         2         18h
