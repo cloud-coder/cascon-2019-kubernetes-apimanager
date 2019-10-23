@@ -37,14 +37,14 @@ Note: If you modified the Kubernetes namespace in the last lab, you need to firs
 $ kubectl config set-context --current --namespace=default
 ```
 
-Now scale the account deployment.
+i. Now scale the account deployment.
 
 ```
 $ kubectl scale --replicas=2 deployment dep-account  
 deployment "dep-account" scaled 
 ```
   
-Kubernetes will now add 2 new pods for the dep-account service. Verify this by running the command
+ii. Kubernetes will now add 2 new pods for the dep-account service. Verify this by running the command
 
 
 ``` kubectl get pods```
@@ -53,12 +53,12 @@ Kubernetes will now add 2 new pods for the dep-account service. Verify this by r
 Notice that 2 new pods for the dep-account got created. 
 
 
-Now let's try deleting one of the account pods. 
+iii. Now let's try deleting one of the account pods. 
 
 ```kubectl delete pods dep-account-xxx```
 
 
-Kubernetes will delete the pod and re-create a new one to satisfy the deployment configuration that specified 2 replicas for the deployment, dep-account. Verify this by running
+iv. Kubernetes will delete the pod and re-create a new one to satisfy the deployment configuration that specified 2 replicas for the deployment, dep-account. Verify this by running
 
 
 ``` kubectl get pods``` 
@@ -78,14 +78,14 @@ Scaling on the command line is a quick way to add additional pods but perhaps it
   
   
 
-Run the command below to edit the deployment configuration. Alternatively, you can edit the deployment configuration via the Kubernetes dashboard.
+i. Run the command below to edit the deployment configuration. Alternatively, you can edit the deployment configuration via the Kubernetes dashboard.
  
 ``` 
 kubectl edit deployment/dep-provider
 ```
 
 
-Modify the *replicas* property value under the *spec* property.
+ii. Modify the *replicas* property value under the *spec* property.
 
 ```
 # Please edit the object below. Lines beginning with a '#' will be ignored,
@@ -112,10 +112,10 @@ spec:
   revisionHistoryLimit: 2147483647
 ...
 ```  
-Save changes and exit edit mode. 
+iii. Save changes and exit edit mode. 
 
 
-Verify that 4 new provider service pods were created
+iv. Verify that 4 new provider service pods were created
 
 ``` kubectl get pods```.  
 
@@ -129,12 +129,19 @@ Verify that 4 new provider service pods were created
   
   
 
-Launch the dashboard from your Kubernetes service cluster and navigate to the Deployments view. 
+i. Launch the dashboard from your Kubernetes service cluster and navigate to the Deployments view. 
 ![](./images/kube-cluster.png)  
 
 
-Click on the Scale menu option against the dep-cost service and add 8 replicas. 
+ii. Click on the icon on the right of the dep-cost service to display the options menu. Select `Scale`.
+
 ![](./images/kube-cluster-dashboard-depolyments-view.png)  
+
+
+iii. Enter 8 in the *Scale a Deployment* dialog and click `Ok`.
+
+![](./images/kube-cluster-dashboard-scale-dialog.png)  
+
 
 </details>
 
