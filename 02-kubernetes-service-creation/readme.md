@@ -44,7 +44,7 @@ found when building images will be added automatically.
 <details>
 <summary>Instructions</summary>
 
-1. Create a unique namespace in the container registry to associate the images you will load into the directory.  eg. Here we are using the suffix jd40  (John Doe, age 40) to provide uniqueness.
+1. Create a unique namespace in the container registry to associate the images you will load into the directory.  eg. Here we are using the suffix jd40  (John Doe, age 40) to provide uniqueness. Choose your own unique suffix.
 
     ```
     export CRNS=cas2019jd40
@@ -70,7 +70,7 @@ provider, cost).
 <details>
 <summary>Instructions</summary>
 
-1. Clone this repository with using git https method.  
+1. Clone this repository using the git https method.  
 For more information on choosing either ssh/https methods, see [github](https://help.github.com/en/articles/which-remote-url-should-i-use)
 
     ```
@@ -177,7 +177,7 @@ created per deployment by downloading the image you specify in the command.
     kubectl create deployment dep-cost --image=$CRLOC/$CRNS/cost:1
     ```
 
-A successfully deployed pod will in the *running* status.  Each pod is assigned an IP address in the private network and automatically assigned to a node in your 
+A successfully deployed pod will be in the *running* status.  Each pod is assigned an IP address in the private network and automatically assigned to a node in your 
 cluster.  In the IBM Cloud Free Tier, the cluster is only allocated one node, so all pods will be deployed there.  
 
 1. Verify your pod is running.
@@ -241,7 +241,7 @@ You should see the message "Provider Application is listening on port: 8081" whi
 
 As the pods have dynamically assigned private IPs that can change at any time, it would be difficult to expose them to the outside world without telling the user
 what the updated host and port is.  To resolve this, Kubernetes provides *services*.  A service is an interface that sits in front of pods and it's job is to provide a unique name that others can reference which will allow traffic to be served by an available pod.  If a new pod has respawned with a different IP address, the service will be aware of it and 
-direct traffic appropriately.  The port specified below should match what each application port it is listening on.  Services are not ephemeral so they are will always
+direct traffic appropriately.  The port specified below should match what each application port it is listening on.  Services are not ephemeral so they will always
 exist unless explicitly removed, but its existence is not affected by the number of pods associated with it.
 
 <details>
@@ -472,27 +472,28 @@ you created (eg. deployments, services, pods) as *records of intent* so they can
 
 To explain this, let's simulate a code change.
 
-1. Open up the account/app.js file in the account directory with your favorite text editor, and make a change.
+1. Open up the account/app.js file in the account directory, and make a change. You can use the vi editor, VS Code or any other favorite text editor.
 
     ```
-    account/app.js
+    cd account
+    vi account/app.js
     ```
 For example, change the listening message:
 
     console.log('*NEW* Account Service is listening on port: '+ listenPort)
     
-Now that we have a change, we need to build a new image in the registry.
+Save the file. Now that we have a change, we need to build a new image in the registry.
 
-1. Make a new version 2 of the account application.
+2. Make a new version 2 of the account application.
     ```
     ibmcloud cr build -t $CRLOC/$CRNS/account:2 .
     ```
 
-Now that we have a new image, the Kubernetes administrator can update the deployment.
+3. Now that we have a new image, the Kubernetes administrator can update the deployment.
 
     kubectl edit deployment/dep-account
 
-Now replace the line
+Replace the line
 
       - image: us.icr.io/cas2019jd40/account:1
 
@@ -500,9 +501,9 @@ with
 
       - image: us.icr.io/cas2019jd40/account:2
 
-save then close the file.
+Save then close the file.
 
-You should see the image version reflected in the deployment:
+4. You should see the image version reflected in the deployment:
 
     kubectl get deployments -o wide
     
@@ -512,7 +513,7 @@ As well as the old pod will terminate, and you will see that a new one will be c
 
     kubectl get pods
 
-In order to prove that the new application code is running, view the log message for the account pod like we did earlier.
+5. In order to prove that the new application code is running, view the log message for the account pod like we did earlier.
 
     kubectl get pods -o wide
     kubectl logs -f <provider pod name>
@@ -541,13 +542,13 @@ Let's finally see how we can reapply the configuration easily in a new cluster.
    kubectl get all  -o json > myproject.json
    ```
 
-1. Delete all the deployments and services
+2. Delete all the deployments and services
    ```
    kubectl delete --all deployments
    kubectl delete --all services
    ```
 
-1. In your new cluster you can reapply your configuration with this command
+3. In your new cluster you can reapply your configuration with this command
    ```
    kubectl apply -f myproject.json
    ```
@@ -569,7 +570,7 @@ work in the same way, but the values are usually passwords or tokens that should
    kubectl create configmap myconfigmap --from-literal=value1=testvalue1 --from-literal=value2=testvalue2
    ```
 
-1.  Next edit the deployment so that the pods will be exposed to these new config map values.
+2.  Next edit the deployment so that the pods will be exposed to these new config map values.
 
    ```
   template:
@@ -587,7 +588,7 @@ work in the same way, but the values are usually passwords or tokens that should
             name: myconfigmap
    ```
 
-1. Then delete the account pod to allow it to pick up the values, check the new pod that is regenerated, and check the environment variables.
+3. Then delete the account pod to allow it to pick up the values, check the new pod that is regenerated, and check the environment variables.
 
    ```
    kubectl delete pod dep-account-???
@@ -603,7 +604,7 @@ You should see the environment variables for value1 and value2.
 
 You can also use Kubernetes Namespace.  This allows us to group all our Kubernetes objects together under our project, and separate
 them from other potential projects on the same cluster.  By default, the *default* namespace is used, but by using a custom one, it gives us 
-flexibility in managing it later.  When we use a non-default namespace, we need to migrate all the secrets over so that the tokens use to authenticate
+flexibility in managing it later.  When we use a non-default namespace, we need to migrate all the secrets over so that the tokens used to authenticate
 against the Cloud Container Registry are available when we pull images.  Normally this would have been done before any deployments were created.
 
 <details>
@@ -618,7 +619,7 @@ against the Cloud Container Registry are available when we pull images.  Normall
     kubectl get secrets -n default -o yaml | sed 's/default/cas2019ns/g' | kubectl -n cas2019ns create -f -
     ```
 
-1. Update the imagePullSecrets
+2. Update the imagePullSecrets
 
 Because we are using a non-default namespace for Kubernetes, the credentials to pull images from the Container Registry are not specified in this namespace.  
 We need to update the deployment so that the correct secret is used.  You can add the imagePullSecrets key by updating the deployment descriptors:
