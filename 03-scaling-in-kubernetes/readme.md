@@ -316,37 +316,38 @@ It may take some time for the autoscaler to calculate cpu usage for the resource
 
 i.  The resource-consumer deployment also has a service created with a nodeport.  Examine it and note the external port:
 
-    ```
-    kubectl get service resource-consumer
-    ```
+ ```
+kubectl get service resource-consumer
+```
 
 ii. This resource-consumer image allows us to simulate load 
 
-    ```
-    curl --data "millicores=600&durationSec=60" http://<EXTERNAL-IP>:<SERVICE_PORT>/ConsumeCPU
-    ```
+```
+curl --data "millicores=600&durationSec=60" http://<EXTERNAL-IP>:<SERVICE_PORT>/ConsumeCPU
+```
 
 iii. After a few moments, you can check how many resource-consumer pods there are, and how much cpu is being consumed.
 
-    ```
-    kubectl get hpa
-    kubectl top pods
-    ```
+```
+kubectl get hpa
+kubectl top pods
+```
 
-    ```
-    NAME                REFERENCE                      TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
-    resource-consumer   Deployment/resource-consumer   54%/5%    1         10        4          4m49s
-    ```
+```
+NAME                REFERENCE                      TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
+resource-consumer   Deployment/resource-consumer   54%/5%    1         10        4          4m49s
+```
 
 In our example, there are now a total of 4 replicas.  You may see many more resource-consumer pods being instantiated, but stuck in Pending State.  This is because of the initial requested cpu of the pod (0.5 core) cannot be allocated, because we only have 2 CPU cores to share amongst all pods.
 
-4. Finally lets clean up this example
 
-    ```
-    kubectl delete hpa resource-consumer
-    kubectl delete deployment resource-consumer
-    kubectl delete svc resource-consumer
-    ```
+4. Finally, lets clean up.
+
+```
+kubectl delete hpa resource-consumer
+kubectl delete deployment resource-consumer
+kubectl delete svc resource-consumer
+```
 
 </details>
 
