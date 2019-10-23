@@ -630,9 +630,10 @@ You will see that only the pods for this namespace is shown.  You can the pods f
 
     kubectl get pods -A    
 
-3. Switch back to the default context
+3. Remove the pod we just created and switch back to the default context
 
     ```
+    kubectl delete pod nginx
     kubectl config set-context --current --namespace=default
     kubectl config get-contexts
     ```
