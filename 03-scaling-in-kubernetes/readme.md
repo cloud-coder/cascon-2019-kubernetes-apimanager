@@ -1,4 +1,4 @@
-# 3. Scaling Microservices in Kubernetes
+# Lab 3: Scaling Microservices in Kubernetes
 In this lab, learn how to scale a microservice running in Kubernetes using replicas and how to safely roll up an update to the number of replicas.
 
 Deployments in Kubernetes can be horizontally scaled using replicas. A replica is a copy of a pod that contains a running service. To scale your Kubernetes application horizontally, create multiple replicas which ensure that multiple running copies of your application are available to handled increased workloads.  
