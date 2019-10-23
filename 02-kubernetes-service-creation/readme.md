@@ -626,7 +626,7 @@ against the Cloud Container Registry are available when we pull images.  Normall
     kubectl get pods
     ```
 
-You will see that only the pods for this namespace is shown.  You can the pods for all namespaces with
+You will see that only the pods for this namespace is shown.  You can get the pods for all namespaces with
 
     kubectl get pods -A    
 
@@ -655,7 +655,7 @@ If you wish to use a non-default namespace for Kubernetes, the credentials to pu
       imagePullSecrets:
       - name: default-us-icr-io
 
-As we have already created all the pods in the default namespace, we will not modify this at this time.
+As we have already created all the pods in the default namespace, we will not modify them at this time.
 
 </details>
 </details>
