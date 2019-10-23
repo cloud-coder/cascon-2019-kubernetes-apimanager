@@ -627,7 +627,7 @@ against the Cloud Container Registry are available when we pull images.  Normall
     kubectl get pods
     ```
 
-The *kubectl run* is a versatile command which can creates pods quickly and possibly set up default deployments and replications.  You can use this to build initial resources and modify the default values when building your cluster.
+The *kubectl run* is a versatile command which can create pods quickly and possibly set up default deployments and replications.  You can use this to build initial resources and modify the default values when building your cluster.
 
 You will see that only the pods for this namespace is shown.  You can get the pods for all namespaces with
 
