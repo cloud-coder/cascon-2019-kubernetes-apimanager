@@ -282,7 +282,8 @@ is that pods should reference the appropriate services by name.  Kubernetes by d
 <details>
 <summary>DNS support</summary>
 
-For instance, the *account* service can be accessed via any of the following hostnames:
+For instance, the *account* service can be accessed via any of the following host
+:
 
     account-service.default.svc.cluster.local
     account-service.default.svc
@@ -625,6 +626,8 @@ against the Cloud Container Registry are available when we pull images.  Normall
     kubectl run nginx --image=nginx -n cas2019ns --restart=Never
     kubectl get pods
     ```
+
+The *kubectl run* is a versatile command which can creates pods quickly and possibly set up default deployments and replications.  You can use this to build initial resources and modify the default values when building your cluster.
 
 You will see that only the pods for this namespace is shown.  You can get the pods for all namespaces with
 
