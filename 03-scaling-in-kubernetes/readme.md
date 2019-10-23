@@ -64,7 +64,7 @@ kubectl delete pods dep-account-xxx
 ```
 
 
-iv. Kubernetes will delete the pod and re-create a new one to satisfy the deployment configuration that specified 2 replicas for the deployment, dep-account. Verify this by running
+iv. Kubernetes will delete the pod and re-create a new one to satisfy the deployment configuration that specified 2     replicas for the deployment, dep-account. Verify this by running
 
 
 ```
@@ -273,6 +273,7 @@ needed, and may cause an overuse of resources, as well as a maintenance headache
 <details>
 <summary>Instructions</summary>
 
+  
 In order for Kubernetes to make the most efficient use of resources, it must understand the resource needs for your pods so that it will know when scaling should occur.  These fields can be updated in your pod definition
 to provide this information, resources and limits.  
 
@@ -283,7 +284,9 @@ to provide this information, resources and limits.
 | Limits - cpu | Limits describes the maximum amount of cpu allowed. | 
 | Limits - memory | Limits describes the maximum amount of memory allowed. | 
 
-The cpu is measured in cores, so 100m would be equivalent to 0.1 core.  
+
+The cpu is measured in cores, so 100m would be equivalent to 0.1 core.
+
 
 1. To check how many cpu cores and memory we have, you can check the nodes in your cluster:
 
@@ -291,9 +294,12 @@ The cpu is measured in cores, so 100m would be equivalent to 0.1 core.
     kubectl get nodes -o=jsonpath='{.items[0].status.capacity}'
     ```
 
-    map[cpu:2 ephemeral-storage:101330012Ki hugepages-1Gi:0 hugepages-2Mi:0 memory:4041540Ki pods:110]
+    This output shows there are 2 CPU cores, and a total of 4Gb of memory available to us:
 
-This output shows there are 2 CPU cores, and a total of 4Gb of memory available to us.
+    ```
+    map[cpu:2 ephemeral-storage:101330012Ki hugepages-1Gi:0 hugepages-2Mi:0 memory:4041540Ki pods:110]
+    ```
+
 
 2. Let us create a different deployment from a different image which has an initial request of 0.5 of a core, and 256 Mb of memory, and display how much cpu is in use currently.
 
@@ -301,7 +307,7 @@ This output shows there are 2 CPU cores, and a total of 4Gb of memory available 
     kubectl run resource-consumer --image=gcr.io/kubernetes-e2e-test-images/resource-consumer:1.4 --expose --service-overrides='{ "spec": { "type": "NodePort" } }' --port 8080 --requests='cpu=500m,memory=256Mi'
     ```
 
-3. Create a Horizonal Pod Autoscaler
+3. Create a Horizontal Pod Autoscaler (HPA) as follows:
 
     ```
     kubectl autoscale deploy resource-consumer --min=1 --max=10 --cpu-percent=5
@@ -309,45 +315,47 @@ This output shows there are 2 CPU cores, and a total of 4Gb of memory available 
     kubectl get hpa
     ```
 
-It may take some time for the autoscaler to calculate cpu usage for the resource-consumer.  It should appear similar to this:
+    It may take some time for the autoscaler to calculate cpu usage for the resource-consumer.  It should appear similar to this:
 
+    ```
     NAME                REFERENCE                      TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
     resource-consumer   Deployment/resource-consumer   0%/5%     1         10        1          39s
+    ```
+    
+    i.  The resource-consumer deployment also has a service created with a nodeport.  Examine it and note the external port:
 
-i.  The resource-consumer deployment also has a service created with a nodeport.  Examine it and note the external port:
+    ```
+    kubectl get service resource-consumer
+    ```
 
- ```
-kubectl get service resource-consumer
-```
+    ii. This resource-consumer image allows us to simulate load 
 
-ii. This resource-consumer image allows us to simulate load 
+    ```
+    curl --data "millicores=600&durationSec=60" http://<EXTERNAL-IP>:<SERVICE_PORT>/ConsumeCPU
+    ```
 
-```
-curl --data "millicores=600&durationSec=60" http://<EXTERNAL-IP>:<SERVICE_PORT>/ConsumeCPU
-```
+    iii. After a few moments, you can check how many resource-consumer pods there are, and how much cpu is being consumed.
 
-iii. After a few moments, you can check how many resource-consumer pods there are, and how much cpu is being consumed.
+    ```
+    kubectl get hpa
+    kubectl top pods
+    ```
 
-```
-kubectl get hpa
-kubectl top pods
-```
+    ```
+    NAME                REFERENCE                      TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
+    resource-consumer   Deployment/resource-consumer   54%/5%    1         10        4          4m49s
+    ```
 
-```
-NAME                REFERENCE                      TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
-resource-consumer   Deployment/resource-consumer   54%/5%    1         10        4          4m49s
-```
-
-In our example, there are now a total of 4 replicas.  You may see many more resource-consumer pods being instantiated, but stuck in Pending State.  This is because of the initial requested cpu of the pod (0.5 core) cannot be allocated, because we only have 2 CPU cores to share amongst all pods.
+    In our example, there are now a total of 4 replicas.  You may see many more resource-consumer pods being instantiated, but stuck in Pending State.  This is because of the initial requested cpu of the pod (0.5 core) cannot be allocated, because we only have 2 CPU cores to share amongst all pods.
 
 
 4. Finally, lets clean up.
 
-```
-kubectl delete hpa resource-consumer
-kubectl delete deployment resource-consumer
-kubectl delete svc resource-consumer
-```
+    ```
+    kubectl delete hpa resource-consumer
+    kubectl delete deployment resource-consumer
+    kubectl delete svc resource-consumer
+    ```
 
 </details>
 
