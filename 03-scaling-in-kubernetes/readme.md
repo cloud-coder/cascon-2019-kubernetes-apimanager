@@ -9,23 +9,27 @@ By default when a deployment is created, a single pod is created.  The deploymen
 
 <details>
 <summary>Instructions</summary>
+  
+  
+You can scale your Kubernetes application running on the IBM Cloud Kubernetes service by specifying the number of replicas via:
 
-You can scale your Kubernetes application running on the IBM Cloud Kubernetes service by specifying the number of replicas by:
+  * Running the ```kubectl scale``` command
+  * Using a deployment configuration file
+  * Navigating to the deployments view in the IBM Cloud Kubernetes service dashboard and modifying the configuration
 
-* Running the ```kubectl scale``` command
-* Using a deployment configuration file
-* Navigating to the deployments view in the IBM Cloud Kubernetes service dashboard and modifying the configuration
 
 Let's go ahead and scale the *account*, *provider* and *cost* service deployments.
 
+
 1. In this step you will scale the *account* deployment by adding 2 replicas, the *provider* deploment with 4 replicas and the *cost* deployment with 8 replicas
 
-1.1. Scale the dep-account deployment by adding 2 replicas ***using the kubectl scale command*** 
+
 
 <details>
-<summary>Instructions</summary>
+<summary>1.1. Scale the dep-account deployment by adding 2 replicas using the kubectl scale command </summary>
   
-Note: If you modified the Kubernetes namespace in the last lab, set it back to the default by executing the following command:
+
+Note: If you modified the Kubernetes namespace in the last lab, you need to first set it back to the default namespace by executing the following command:
 
 ```
 $ kubectl config set-context --current --namespace=default
@@ -38,19 +42,25 @@ $ kubectl scale --replicas=2 deployment dep-account
 deployment "dep-account" scaled 
 ```
   
-Kubernetes will now add 2 new pods for the dep-account service. You can verify this by running the command
+Kubernetes will now add 2 new pods for the dep-account service. Verify this by running the command
+
 
 ``` kubectl get pods```
 
+
 Notice that 2 new pods for the dep-account got created. 
 
-Now try deleting one of the account pods. 
+
+Now let's try deleting one of the account pods. 
 
 ```kubectl delete pods dep-account-xxx```
 
-Kubernetes will delete the pod and re-create a new one to satisfy the deployment configuration that specified 2 replicas for the deployment, dep-account. You can verify this by running
+
+Kubernetes will delete the pod and re-create a new one to satisfy the deployment configuration that specified 2 replicas for the deployment, dep-account. Verify this by running
+
 
 ``` kubectl get pods``` 
+
 
 Notice the name of the newly created dep-account-xxx pod.
 
@@ -58,11 +68,13 @@ Notice the name of the newly created dep-account-xxx pod.
 
 Scaling on the command line is a quick way to add additional pods but perhaps it is not the best way because the modification of the deployment is only temporary.  Ideally you'd likely want to have the number of replicas specified in a configuration file.
 
-1.2.  Scale the dep-provider deployment to 4 replicas by ***editing the deployment configuration***. 
+ 
 
 
 <details>
-<summary>Instructions</summary>
+<summary>1.2.  Scale the dep-provider deployment to 4 replicas by editing the deployment configuration</summary>
+  
+  
 
 Run the command below and modifying the *replicas* property value under the *spec* property. You can also edit the deployment configuration via the Kubernetes dashboard.
  
@@ -103,11 +115,13 @@ Verify that 4 new provider service pods were created
 
 </details>
 
-1.3. Scale the dep-cost service to 8 replicas via the ***IBM Cloud Kubernetes Dashboard***
+
 
 
 <details>
-<summary>Instructions</summary>
+<summary>1.3. Scale the dep-cost service to 8 replicas via the IBM Cloud Kubernetes Dashboard</summary>
+  
+  
 
 Launch the dashboard from your Kubernetes service cluster and navigate to the Deployments view. 
 ![](./images/kube-cluster.png)  
