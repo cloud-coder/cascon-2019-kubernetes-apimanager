@@ -68,12 +68,30 @@ $ curl http://173.197.99.247:32482
 **Note:** If you are using a Mac, do not use Safari as the browser as it seems to have issues and does not allow all the steps to be completed fully.
 
 In your IBM Cloud account, 
-- Top left menu, then select *API Management*
+
+1. Expand the menu from the top left icon. Select __API Management__.
+
 ![](images/01-API-Management.png)
-- Then in the left menu select *Managed APIs*
+
+2. From the left menu select __Managed APIs__
+
 ![](images/02-Managed-APIs.png)
-- On the right click the blue button *Create Managed API* and select the *API Proxy* option.  An API proxy is a simple reverse proxy which creates a readable URL to point at a backend service.  In our case we're going to point it at the service deployed in Kubernetes.
+
+Note: If you are accessing this for the first time, you may encounter the following error. 
+
+![](images/01-API-Management-FirstTime.png)
+
+If so, select:
+  * `Dallas` from the *REGION* dropdown
+  * your id under the *CLOUD FOUNDRY ORG* dropdown
+  * `dev` under *CLOUD FOUNDRY SPACE*
+
+This should take you to the main API Management page.
+
+3. Click the blue `Create Managed API` button and select the __API Proxy__ option.  An API proxy is a simple reverse proxy which creates a readable URL to point at a backend service. In our case, we're going to point it at the service deployed in Kubernetes.
+
 ![](images/03-API-Proxy.png)
+
 
 ### Creating your first API proxy
 
