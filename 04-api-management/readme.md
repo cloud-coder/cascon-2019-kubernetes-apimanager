@@ -388,8 +388,10 @@ This is what you need to do to enable rate limiting
 - Enable the *Limit API call rate on a per-key basis*
   - Maximum calls: 5
   - Unit of time: Minute
+- Scroll to the bottom and click *Save*
 
 ![](images/08-Rate-Limiting.png)
+
 
 Now if you execute the command:
 `curl https://1883da9e.us-south.apiconnect.appdomain.cloud/v1 -H "X-IBM-Client-Id: <API_KEY>"`
