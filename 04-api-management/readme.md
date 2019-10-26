@@ -304,7 +304,7 @@ Apply this new whitelist by executing the command `calicoctl apply -f whitelist.
 Now if you try to connect using the API Management URL we received in the previous step that connection should successfully connect to the service.
 
 If you need help finding the IP addresses for API Management, refer to this document: 
-[Finding the IP of API Management for Calico](04c-finding-the-ip-of-api-management.md)
+[Finding the IP of API Management for Calico](finding-the-ip-of-api-management.md)
 
 ### Removing our own IP from the configuration
 
