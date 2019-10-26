@@ -142,7 +142,9 @@ We need to secure cluster network access and only allow traffic to contact our s
 <details>
 <summary>Securing the App With Calico</summary>
 
-So in the previous steps, we started securing our API, but realized that someone who finds the public ip and port of our cluster would still be able to access the API by bypassing our API Management. When using Kubernetes clusters we can protect our cluster by using some plugins.
+![](images/MicroservicesK8SWorkshop-APIM-Actual.png)
+
+In the previous steps, we started securing our API, but realized that someone who finds the public ip and port of our cluster would still be able to access the API by bypassing our API Management. When using Kubernetes clusters we can protect our cluster by using some plugins.
 
 In this case we will be using a plugin called Calico to enable some networking policies.
 
