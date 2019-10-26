@@ -1,15 +1,17 @@
 # Lab 4 API Management
 
-## A. Summary of previous steps
-
-<details>
-<summary>Ensure our Service is Running</summary>
-
 So far, we have created services, deployed them to a kubernetes cluster and we have exposed them via a NodePort which assigns a random port to the service.
 
-In this part of the workshop, we will use the IBM Cloud API Management to secure the cost service so that we can eventually control who has access and impose API limits to the calls to that service.  The same techniques could be applied to any service which is exposed with a NodePort.
+In this part of the workshop, we will use the IBM Cloud API Management to secure the cost service so that we can eventually control who has access and impose API limits to the calls to that service. The same techniques could be applied to any service which is exposed with a NodePort.
 
-### Pre-requisites
+## A. Summary of previous steps
+
+This diagram illustrates our starting point
+
+![](images/MicroservicesK8SWorkshop-APIM-Start.png)
+
+<details>
+<summary>Gather information require for next steps</summary>
 
 In order to be able to configure API management you will need some pieces of information about your cluster. Run the two commands below.
 
@@ -61,9 +63,12 @@ $ curl http://173.197.99.247:32482
 
 ## B. Accessing API Management
 
-<details>
-<summary>Instructions</summary>
+Our goal is to start using the API Management to secure our API from being used without permission.
 
+![](images/MicroservicesK8SWorkshop-APIM-Configured.png)
+
+<details>
+<summary>Instructions to configure API Management</summary>
 
 **Note:** If you are using a Mac, do not use Safari as the browser as it seems to have issues and does not allow all the steps to be completed fully.
 
@@ -88,7 +93,7 @@ If so, select:
 
 This should take you to the main API Management page.
 
-3. Click the blue `Create Managed API` button and select the __API Proxy__ option.  An API proxy is a simple reverse proxy which creates a readable URL to point at a backend service. In our case, we're going to point it at the service deployed in Kubernetes.
+3. Click the blue `Create Managed API` button and select the __API Proxy__ option. An API proxy is a simple reverse proxy which creates a readable URL to point at a backend service. In our case, we're going to point it at the service deployed in Kubernetes.
 
 ![](images/03-API-Proxy.png)
 
@@ -103,7 +108,7 @@ The page that comes up allows you to create an API proxy. The simplest way to ac
 
 **Note**: that our apps currently redirect the `/` to `/cost` by default. To avoid this redirect we should specify the end point directly
 
-With those pieces of information filled in, scroll to the bottom and click the blue *Create* button.  For now, you can ignore the Security and Rate Limiting section.
+With those pieces of information filled in, scroll to the bottom and click the blue *Create* button. For now, you can ignore the Security and Rate Limiting section.
 
 If you go on the *Summary* tab, you will see the Route you have just created.
 ![](images/05-Summary.png)
@@ -117,7 +122,9 @@ curl https://1883da9e.us-south.apiconnect.appdomain.cloud/v1/cost/123
 
 </details>
 
-Is our API secure? Well.... Not really.  We've created a new URL based endpoint via API Management which we can supply to others to contact the service.  However, the API can still be accessed directly via the IP address if it's known.  This will bypass all the features that API Management is offering.
+<details>
+<summary>Is our API secure?</summary>
+ Well.... Not really. We've created a new URL based endpoint via API Management which we can supply to others to contact the service. However, the API can still be accessed directly via the IP address if it's known. This will bypass all the features that API Management is offering.
 
 If you run the following command
 
@@ -125,9 +132,12 @@ If you run the following command
 
 You can still access the API.
 
+![](images/MicroservicesK8SWorkshop-APIM-Actual.png)
+</details>
+
 ## C. Securing your API with Calico
 
-We need to secure cluster network access and only allow traffic to contact our service from API Management and not directly.  
+We need to secure cluster network access and only allow traffic to contact our service from API Management and not directly. 
 
 <details>
 <summary>Securing the App With Calico</summary>
@@ -184,7 +194,7 @@ As you may see in the above policy:
 - We deny all incoming TCP traffic on ports 30000 to 32767
 - We deny all incoming UDP traffic on ports 30000 to 32767
 
-You can find this policy in a file called `deny-nodeports.yaml` in the repository.  Navigate to the cascon-2019-kubernetes-apimanager/04-api-management directory on your computer which you cloned from GitHub in the previous labs.
+You can find this policy in a file called `deny-nodeports.yaml` in the repository. Navigate to the cascon-2019-kubernetes-apimanager/04-api-management directory on your computer which you cloned from GitHub in the previous labs.
 
 Run the command: 
 
@@ -192,13 +202,17 @@ Run the command:
     
 You should get confirmation that the policy was applied.
 
-Now try connecting to your service using the curl command again.  It now will not connect due to the network policy.
+Now try connecting to your service using the curl command again. It now will not connect due to the network policy.
+
+We now have the following configuration:
+
+![](images/MicroservicesK8SWorkshop-denied.png)
 
 ### Accepting incoming connections using a whitelist
 
 Now that all traffic going to those ports has been blocked our API is secured, but also is unusable by anyone.
 
-For testing purposes we will want to open up access to our IP address.  Open the file whitelist.yaml and update the IP address to be your external IP address.  You can obtain this IP (my_ip_address) from the command:
+For testing purposes we will want to open up access to our IP address. Open the file whitelist.yaml and update the IP address to be your external IP address. You can obtain this IP (my_ip_address) from the command:
 
     curl https://ifconfig.me
     
@@ -251,7 +265,7 @@ You should get confirmation that the policy was applied.
 
 Try accessing your service again using the command we used before and the direct IP address - the connection should work. Ask a friend to try to connect and the connection should fail.
 
-Obviously this is not achieving what we ultimately want yet because we are only allowing traffic from our own computer.  
+Obviously this is not achieving what we ultimately want yet because we are only allowing traffic from our own computer. 
 
 If you try to connect using the API Management URL we received in the previous step, that connection should still fail.
 
@@ -259,13 +273,14 @@ If you try to connect using the API Management URL we received in the previous s
 
 The API Management actually uses multiple IP addresses to connect to the service, so we need to add all of them to our whitelist. Open up the whitelist.yaml file again and add these entries:
 
-    - 169.46.64.77/32
-    - 169.48.97.212/32
-    - 169.48.246.130/32
-    - 169.48.246.131/32
-    - 169.48.97.211/32
-    - 169.60.186.186/32
-    - 169.46.27.162/32
+  - 169.46.16.165/32
+  - 169.46.27.162/32
+  - 169.46.64.77/32
+  - 169.48.97.211/32
+  - 169.48.97.212/32
+  - 169.48.246.130/32
+  - 169.48.246.131/32
+  - 169.60.186.186/32
 
 ```yaml
  apiVersion: projectcalico.org/v3
@@ -285,13 +300,14 @@ The API Management actually uses multiple IP addresses to connect to the service
      protocol: TCP
      source:
        nets:
+       - 169.46.16.165/32
+       - 169.46.27.162/32
        - 169.46.64.77/32
+       - 169.48.97.211/32
        - 169.48.97.212/32
        - 169.48.246.130/32
        - 169.48.246.131/32
-       - 169.48.97.211/32
        - 169.60.186.186/32
-       - 169.46.27.162/32
        - <my_ip_address>/32
    selector: ibm.role=='worker_public'
    order: 500
@@ -310,16 +326,18 @@ If you need help finding the IP addresses for API Management, refer to this docu
 
 Now that we have enabled the IPs for the API Management, you should remove your own IP from the whitelist so that all traffic can only come through the API Management link.
 
+We should now have the following configuration:
+
+![](images/MicroservicesK8SWorkshop-whitelist.png)
+
 </details>
 
 ## D. Improving the API Management Security
 
 So we now have a microservice that is accessible only via the API management url. We can now turn our focus to improving the security of the API.
 
-### Enabling Security using API Keys
-
 <details>
-<summary>Instructions</summary>
+<summary>Enabling Security using API Keys</summary>
 
 Now that our API is accessible via the API Management, we can start enabling some of the security features included.
 
@@ -331,7 +349,7 @@ Now that our API is accessible via the API Management, we can start enabling som
     - Parameter name of API key: X-IBM-Client-Id
 - Scroll to the bottom and click *Save*
 
-Back in the terminal if you re-run the curl command for the service you will get an authorization error.  Example:
+Back in the terminal if you re-run the curl command for the service you will get an authorization error. Example:
 ```
 curl https://1883da9d.us-south.apiconnect.appdomain.cloud/v1/cost/123
 {"status":401,"message":"Error: Unauthorized"}
@@ -360,9 +378,8 @@ The curl command would look something like:
 `curl https://1883da9e.us-south.apiconnect.appdomain.cloud/v1/cost -H "X-IBM-Client-Id: <API_KEY>"`
 
 Great! our API call worked!
-- 
 
-The Lite API Management feature in IBM Cloud allows up to 5 keys to be added per API.  These could be used to offer integration access to your API to different users or applications.
+The Lite API Management feature in IBM Cloud allows up to 5 keys to be added per API. These could be used to offer integration access to your API to different users or applications.
 
 ### Discussion on API Key and Secret
 
@@ -380,7 +397,7 @@ Depending on your specific use case, you may need to limit the number of calls c
 - Your infrastructure can only support X calls per second before seeing performance degradation
 
 <details>
-<summary>Instructions</summary>
+<summary>Enabling rate limiting</summary>
 
 This is what you need to do to enable rate limiting
 
@@ -402,16 +419,16 @@ it will work for the first 5 calls, but will respond with a
 ```
 error once you have exceeded the number of calls in that particular minute.
 
-Of course this configuration is mostly for demonstration purposes and you would want to configure it to your specific requirements.  Rate limiting can apply differently to different API's and also to different keys.  So you could limit certain API's and specific keys at a higher or lower rate.
+Of course this configuration is mostly for demonstration purposes and you would want to configure it to your specific requirements. Rate limiting can apply differently to different API's and also to different keys. So you could limit certain API's and specific keys at a higher or lower rate.
 
 </details>
 
 ## F. Configuring the other end points
 
-So far we have worked with a single service, the *cost* service.
+So far we have worked with a single service, the *cost* service. In practice you will likely want to configure multiple endpoints, possibly with different API Keys or rate limits for each end point.
 
 <details>
-<summary>Instructions</summary>
+<summary>Enabling API Management for account and provider services</summary>
 
 We have 2 other services that we can also configure, the *account* and the *provider* services.
 
@@ -442,10 +459,14 @@ Your `whitelist.yaml` should look like:
      protocol: TCP
      source:
        nets:
+       - 169.46.16.165/32
+       - 169.46.27.162/32
        - 169.46.64.77/32
+       - 169.48.97.211/32
        - 169.48.97.212/32
        - 169.48.246.130/32
-       - 169.48.97.211/32
+       - 169.48.246.131/32
+       - 169.60.186.186/32
        - <my_ip_address>/32
    selector: ibm.role=='worker_public'
    order: 500
@@ -474,10 +495,13 @@ $ curl https://1883da9d.us-south.apiconnect.appdomain.cloud/v1/provider/bell
 100    44  100    44    0     0    100      0 --:--:-- --:--:-- --:--:--   100{"provider_id":"bell","cost":15.99,"term":2}
 
 ```
+</details>
 
 ### Next level of configuration
 
-Here, take some time on your own to configure the API's in different ways.  In addition to being able to add an API Key as we did in the cost service, we can experiment with:
+<details>
+<summary>Experimenting with API Management features</summary>
+Here, take some time on your own to configure the API's in different ways. In addition to being able to add an API Key as we did in the cost service, we can experiment with:
 - configuring some of the API's with API keys and some without
 - Having a different Rate Limits per API
 - Using API Keys and Secret: https://cloud.ibm.com/docs/services/api-management?topic=api-management-keys_secrets
@@ -486,5 +510,5 @@ Here, take some time on your own to configure the API's in different ways.  In a
 
 ## G. API Logging
 
-Lastly, the API Managememt interface also allows you to view some logs of API usage.  On the Summary tab for the API you can view the number of calls to the API, the average response time and even individual API responses.  This is a handy tool to determine usage.
+Lastly, the API Managememt interface also allows you to view some logs of API usage. On the Summary tab for the API you can view the number of calls to the API, the average response time and even individual API responses. This is a handy tool to determine usage.
 
