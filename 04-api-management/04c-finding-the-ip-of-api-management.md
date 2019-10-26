@@ -39,3 +39,5 @@ Using the list of IPs gathered above,:
 - Try connecting to the service using the API Management url
 
 When you connect successfully, try calling the API multiple times to make sure you have all the required IPs in your configuration. Make adjustments as necessary.
+
+Back to [Lab 4 API Management](readme.md)
