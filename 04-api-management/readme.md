@@ -208,7 +208,7 @@ Now try connecting to your service using the curl command again. It now will not
 
 We now have the following configuration:
 
-![](images/MicroservicesK8SWorkshop-denied.png)
+![](images/MicroservicesK8SWorkshop-Denied.png)
 
 ### Accepting incoming connections using a whitelist
 
