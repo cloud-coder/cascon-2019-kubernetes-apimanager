@@ -1,1 +1,0 @@
-## Scaling in Kubernetes TBD

@@ -1,0 +1,13 @@
+{
+  "name": "cost-service",
+  "private": false,
+  "version": "0.0.1",
+  "description": "Cost Service provides total cost for all providers for a particular account",
+  "dependencies": {
+    "dotenv": "^8.1.0",
+    "express": "4.x",
+    "liquidjs": "^9.1.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4"
+  }
+}
