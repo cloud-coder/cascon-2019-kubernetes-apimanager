@@ -371,8 +371,17 @@ kubectl get pods
 
 </details>
 
+## Section 4 - Install Calico CLI
 
-## Section 4 - Other Tools
+The IBM Cloud Kubernetes Service cluster is pre-installed with a network plugin called Calico.  Calico allows administrators to set up custom network policies in the Cluster.  In order to administer the Calico policies from a remote computer you first need to install the Calico Command Line Interface.
+
+Go to the following URL and follow the instructions to install Calico CLI
+
+https://cloud.ibm.com/docs/containers?topic=containers-network_policies#cli_install
+
+Ensure that steps 1-6 on the above page are completed.
+
+## Section 5 - Other Tools
 
 Here's some recommended tools you can download and install ahead of time for working with the labs:
 
