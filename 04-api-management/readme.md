@@ -152,7 +152,7 @@ In this case we will be using a plugin called Calico to enable some networking p
 
 Calico enables networking and network policy in Kubernetes clusters. In IBM Cloud, Calico is pre-installed which allows us to configure network policies in our cluster. But before we do that, we need to install the Calico command line interface (CLI).
 
-Go to the following URL and follow the instructions to install Calico CLI
+If you have not already installed the Calico CLI as part of the Setup Lab then go to the following URL and follow the instructions to install Calico CLI
 
 https://cloud.ibm.com/docs/containers?topic=containers-network_policies#cli_install
 
