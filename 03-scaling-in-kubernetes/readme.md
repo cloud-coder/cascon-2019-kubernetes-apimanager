@@ -76,10 +76,10 @@ Notice the name of the newly created dep-account-xxx pod.
 
 </details>
 
-Scaling on the command line is a quick way to add additional pods but perhaps it is not the best way because the modification of the deployment is only temporary.  Ideally you'd likely want to have this done permanently. This can be achieved by updating the number of replicas in the deployment configuration file.
+You can see that scaling on the command line is a quick way to add additional pods. Next we will explore scaling by editing the .yaml file directly.
+
 
  
-
 
 <details>
 <summary>1.2.  Scale the dep-provider deployment to 4 replicas by editing the deployment configuration</summary>
@@ -132,6 +132,7 @@ kubectl get pods
 </details>
 
 
+You may notice that the `kubectl scale` command essentially does the exact same thing as updating the deployment descriptor file directly. If you open the deployment descriptor of account, you will see its replica count is 2 even though we didn’t explicitly update the deployment descriptor when we performed the steps in section 1.1.
 
 
 <details>
@@ -156,7 +157,7 @@ iii. Enter 8 in the *Scale a Deployment* dialog and click `Ok`.
 </details>
 
 
-2. Next let's proceed to view the rollout status. 
+2. We can check the status of the rollouts.
 
 
 i. Run
@@ -259,7 +260,13 @@ eg. http://<external ip>:<cost service port>/cost/123
 
 Notice that each time you hit the same service, the service request might be handled by a different pod running the service. This can be verified by checking the hostname from the service response. The external IP address and port remain the same but based on load, the requests may end up on different pods.
 
-Just as you scaled up the number of replicas, you can also scale them down in the same manner.
+Just as you scaled up the number of replicas, you can also scale them down in the same manner. Feel free to experiment with this on your own.
+
+The above scaling exercises are only good for the current deployment. It is not permanent in the sense that they would be lost with subsequent deployments if the deployment configuration file is not persisted to be reused.
+
+For the same changes to take effect in future deployments, you would need to ensure that the deployment configuration file with the desired number of replicas is redeployed (best to check in as a permanent config in your code repository).
+
+Otherwise these manual steps would have to be performed every time a new deployment is done.
 
 </details>
 
@@ -311,8 +318,11 @@ The cpu is measured in cores, so 100m would be equivalent to 0.1 core.
 
     ```
     kubectl autoscale deploy resource-consumer --min=1 --max=10 --cpu-percent=5
-    kubectl get horizontalpodautoscaler
     kubectl get hpa
+    
+    or
+    
+    kubectl get horizontalpodautoscaler
     ```
 
     It may take some time for the autoscaler to calculate cpu usage for the resource-consumer.  It should appear similar to this:
