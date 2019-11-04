@@ -276,8 +276,10 @@ If you try to connect using the API Management URL we received in the previous s
 The API Management actually uses multiple IP addresses to connect to the service, so we need to add all of them to our whitelist. Open up the whitelist.yaml file again and add these entries:
 
   - 169.46.16.165/32
+  - 169.46.16.175/32
   - 169.46.27.162/32
   - 169.46.64.77/32
+  - 169.48.97.210/32
   - 169.48.97.211/32
   - 169.48.97.212/32
   - 169.48.246.130/32
@@ -303,8 +305,10 @@ The API Management actually uses multiple IP addresses to connect to the service
      source:
        nets:
        - 169.46.16.165/32
+       - 169.46.16.175/32
        - 169.46.27.162/32
        - 169.46.64.77/32
+       - 169.48.97.210/32
        - 169.48.97.211/32
        - 169.48.97.212/32
        - 169.48.246.130/32
